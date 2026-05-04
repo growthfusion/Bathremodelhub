@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Get free quotes from top-rated local bathroom remodeling pros near you. Compare estimates for bath &amp; shower remodeling, vanity installation, walk-in conversions and more.">
 
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-M8VC8STX');</script>
+    <!-- End Google Tag Manager -->
+
     <link rel="stylesheet" href="/css/fonts.css">
     <link rel="stylesheet" href="/css/style.service.css">
     <link rel="stylesheet" href="/css/index.css">
@@ -14,7 +22,7 @@
     <link rel="stylesheet" href="/css/quotes.css">
 
     <title>BathRemodelHub – Find the Best Bathroom Pros Near You</title>
-    <link rel="icon" href="/images/BathRemodelHub.svg" type="image/svg+xml" sizes="any">
+    <link rel="icon" href="/images/bathremodelhub-favicon.svg" type="image/svg+xml" sizes="any">
 
     <!-- vc-btn global style -->
     <style>
@@ -32,22 +40,34 @@
             box-shadow: 0 6px 20px rgba(91,70,243,0.35);
             transform: translateY(-1px);
         }
+        .hero-x__favicon {
+            display: inline-block;
+            height: 70px;
+            width: 80px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        @media (max-width: 600px) {
+            .hero-x__favicon { height: 28px; width: 28px; margin-right: 8px; }
+        }
     </style>
 </head>
 
 <body class="__className_2dbf9b">
 
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M8VC8STX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<script type="text/javascript" src="https://tk.trkfy.us/track.js"></script>
+<?php $key="";if(isset($_GET["lpkeyua"])){ list($hash, $hashTime)=explode('.',$_GET[ "lpkeyua"]); $genHash=md5($key.$hashTime.$_SERVER["HTTP_USER_AGENT"]).".".$hashTime; if($genHash!==$_GET["lpkeyua"] || $hashTime < time()) { exit(0);}} else {exit(0);}?>
+
 <!-- HERO SPLIT -->
 <section class="hero-x" id="cta-search">
     <div class="hero-x__navbar">
-        <a class="homecrew-logo" href="/">
-            <span class="hc-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 11H3v10h6v-10zM21 11h-6v10h6V11zM12 3l-9 8h18l-9-8z"/>
-                    <rect x="10" y="15" width="4" height="6" rx="0.5" fill="#fff" stroke="none"/>
-                    <path d="M8 7h1M15 7h1" stroke="#fff" stroke-width="1"/>
-                </svg>
-            </span>
+        <a class="homecrew-logo" href="/" aria-label="BathRemodelHub home">
+            <img src="/images/bathremodelhub-favicon.svg" alt="" class="hero-x__favicon" />
             BathRemodelHub
         </a>
     </div>
@@ -71,7 +91,7 @@
                         <div class="hero-x__field">
                             <input id="hero-zip" name="zip" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 10001" autocomplete="off" maxlength="5" />
                         </div>
-                        <button type="submit" class="hero-x__btn vc-btn">Get Bathroom Quotes &rarr;</button>
+                        <button type="submit" class="hero-x__btn vc-btn zip-btn">Get Bathroom Quotes &rarr;</button>
                     </form>
                 </div>
             </div>
