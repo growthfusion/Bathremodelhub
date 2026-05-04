@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7C6FF7"/>
+      <stop offset="100%" style="stop-color:#5B46F3"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="96" fill="url(#bg)"/>
+  <!-- Bathtub silhouette -->
+  <!-- Tub base -->
+  <rect x="38" y="108" width="124" height="40" rx="20" fill="#fff" opacity="0.95"/>
+  <!-- Tub rim -->
+  <rect x="34" y="100" width="132" height="16" rx="8" fill="#fff"/>
+  <!-- Faucet vertical pipe -->
+  <rect x="90" y="60" width="8" height="44" rx="4" fill="#fff" opacity="0.9"/>
+  <!-- Faucet head horizontal -->
+  <rect x="76" y="56" width="48" height="10" rx="5" fill="#fff" opacity="0.9"/>
+  <!-- Water drops -->
+  <ellipse cx="94" cy="106" rx="4" ry="6" fill="#A89CF7"/>
+  <ellipse cx="106" cy="112" rx="3" ry="4.5" fill="#A89CF7" opacity="0.7"/>
+  <!-- Leg left -->
+  <rect x="50" y="146" width="10" height="18" rx="5" fill="#fff" opacity="0.7"/>
+  <!-- Leg right -->
+  <rect x="140" y="146" width="10" height="18" rx="5" fill="#fff" opacity="0.7"/>
+</svg>

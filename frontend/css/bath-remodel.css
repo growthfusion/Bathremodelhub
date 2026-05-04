@@ -1,0 +1,42 @@
+:root {
+    --panel-gradient: linear-gradient(0deg, rgb(238 240 255 / 10%), rgb(238 240 255 / 90%));
+    --panel-image: url(../images/bg_bathmodel3.jpg);
+}
+
+@media (max-width: 767px) {
+    .d-block { display: block; }
+}
+@media (min-width: 768px) {
+    .d-md-none { display: none; }
+}
+
+.css-1yiz2lt {
+    padding: 60px 0 72px;
+    background-image: var(--panel-gradient), var(--panel-image);
+    background-size: cover;
+    background-position: bottom;
+}
+
+/* === HERO SPLIT service overrides === */
+.svc-hero-right {
+    background-image: url('../images/bg_bathmodel3.jpg') !important;
+    background-size: cover !important;
+    background-position: center top !important;
+    justify-content: flex-end !important;
+}
+.svc-hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(170deg, rgba(238, 240, 255, 0.18) 0%, rgba(15, 23, 42, 0.28) 100%);
+    z-index: 0;
+}
+.svc-hero-right > * { position: relative; z-index: 1; }
+.svc-hero-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #64748B; margin: 0 0 8px;
+}
+.svc-hero-title {
+    font-size: clamp(22px, 3vw, 34px); font-weight: 800;
+    color: #0F172A; line-height: 1.15; letter-spacing: -.025em; margin: 0 0 20px;
+}

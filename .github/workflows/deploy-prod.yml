@@ -1,0 +1,75 @@
+name: Deploy Production Environment
+
+on:
+  push:
+    branches: [main]
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REGION: us-central1
+  SERVICE: bathremodelhub-frontend-prod
+  IMAGE: bathremodelhub-frontend-prod
+  DOMAIN: bathremodelhub.com
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Install gcloud beta component
+        run: gcloud components install beta --quiet
+
+      - name: Build Docker image
+        run: |
+          gcloud builds submit . \
+            --tag gcr.io/$PROJECT_ID/$IMAGE \
+            --project $PROJECT_ID
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy $SERVICE \
+            --image gcr.io/$PROJECT_ID/$IMAGE \
+            --platform managed \
+            --region $REGION \
+            --allow-unauthenticated \
+            --port 8080 \
+            --set-env-vars "NODE_ENV=production,API_BASE_URL=${{ secrets.API_BASE_URL }},TOKEN_URL=${{ secrets.TOKEN_URL }},CLIENT_ID=${{ secrets.CLIENT_ID }},CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" \
+            --project $PROJECT_ID
+
+      - name: Map custom domain
+        run: |
+          if ! gcloud beta run domain-mappings describe \
+              --domain $DOMAIN \
+              --region $REGION \
+              --project $PROJECT_ID 2>/dev/null; then
+            gcloud beta run domain-mappings create \
+              --service $SERVICE \
+              --domain $DOMAIN \
+              --region $REGION \
+              --project $PROJECT_ID
+          else
+            echo "Domain mapping for $DOMAIN already exists. Skipping."
+          fi
+
+      - name: Print DNS records
+        run: |
+          echo "========================================"
+          echo "  DNS records required at your registrar"
+          echo "========================================"
+          gcloud beta run domain-mappings describe \
+            --domain $DOMAIN \
+            --region $REGION \
+            --project $PROJECT_ID \
+            --format="table(status.resourceRecords[].name, status.resourceRecords[].type, status.resourceRecords[].rrdata)"

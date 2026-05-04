@@ -1,0 +1,81 @@
+:root {
+    /* === PURPLE PALETTE === */
+    --blue-50:   #F5F6FA;
+    --blue-100:  #EEF0FF;
+    --blue-200:  #EEF0FF;
+    --blue-300:  #CBD5E1;
+    --blue-400:  #A89CF7;
+    --blue-500:  #7C6FF7;
+    --blue-600:  #5B46F3;
+    --blue-700:  #5B46F3;
+    --blue-800:  #4633E0;
+    --blue-900:  #4633E0;
+    --blue-950:  #0F172A;
+
+    /* === NEUTRAL GRAYS === */
+    --gray-900:  #0F172A;
+    --gray-700:  #1E293B;
+    --gray-500:  #64748B;
+    --gray-300:  #CBD5E1;
+    --gray-200:  #E2E8F0;
+    --gray-100:  #F1F5F9;
+    --gray-50:   #F5F6FA;
+
+    /* === SEMANTIC — PURPLE === */
+    --color-primary:        #5B46F3;
+    --color-primary-border: #E2E8F0;
+    --color-primary-hover:  #4633E0;
+    --color-primary-dark:   #4633E0;
+    --color-primary-text:   #ffffff;
+
+    --color-accent:         #A89CF7;
+    --color-accent-strong:  #7C6FF7;
+    --color-secondary:      #7C6FF7;
+    --color-secondary-dark: #5B46F3;
+    --color-tertiary:       #0F172A;
+    --color-tertiary-light: #F1F5F9;
+
+    /* === TEXT === */
+    --text-title:       #0F172A;
+    --text-sub:         #1E293B;
+    --color-text:       #1E293B;
+    --color-text-dark:  #1E293B;
+    --ink:              #1E293B;
+    --text-highlight:   #5B46F3;
+    --company:          #5B46F3;
+
+    /* === BACKGROUNDS === */
+    --bg-badge:         #ffffff;
+    --bg-color-main:    #F5F6FA;
+    --bg-input:         #ffffff;
+    --bg-color2:        #0F172A;
+    --bg-color3:        #F1F5F9;
+    --bg-footer:        #0F172A;
+    --text-footer:      #CBD5E1;
+    --top-bar:          #ffffff;
+
+    /* === UI TOKENS === */
+    --card:     #ffffff;
+    --icon-bg:  #EEF0FF;
+    --shadow:   0 2px 16px rgba(0,0,0,0.07);
+    --radius:   10px;
+    --border:   1.5px solid #E2E8F0;
+    --focus:    0 0 0 3px rgba(91,70,243,0.20);
+
+    /* Typography */
+    --font-body: 'Poppins', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: 'Poppins', ui-monospace, monospace;
+
+    /* Legacy violet aliases */
+    --violet-950:  #0F172A;
+    --violet-900:  #0F172A;
+    --violet-800:  #5B46F3;
+    --violet-700:  #5B46F3;
+    --violet-600:  #7C6FF7;
+    --violet-500:  #A89CF7;
+    --violet-400:  #CBD5E1;
+    --violet-300:  #CBD5E1;
+    --violet-200:  #EEF0FF;
+    --violet-100:  #EEF0FF;
+    --violet-50:   #F5F6FA;
+}

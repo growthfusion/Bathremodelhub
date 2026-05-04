@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Local Bathroom Pros Near You | BathRemodelHub</title>
+    <link rel="icon" href="/images/BathRemodelHub.svg" type="image/svg+xml" sizes="any">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "brand-navy":   "#1a3a5c",
+                        "brand-violet": "#5B46F3",
+                        "brand-orange": "#ff6b35",
+                        "brand-light":  "#f0f7ff",
+                    },
+                    fontFamily: {
+                        headline: ["Manrope", "sans-serif"],
+                        body:     ["Inter",   "sans-serif"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .star-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
+        .biz-card {
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+            transition: box-shadow 0.22s ease, transform 0.22s ease;
+        }
+        .biz-card:hover {
+            box-shadow: 0 10px 36px rgba(91,70,243,0.15), 0 2px 8px rgba(0,0,0,0.07);
+            transform: translateY(-4px);
+        }
+        .biz-card__cta {
+            background: linear-gradient(135deg, #7C6FF7 0%, #5B46F3 100%);
+            transition: background 0.18s ease, box-shadow 0.18s ease;
+        }
+        .biz-card__cta:hover {
+            background: linear-gradient(135deg, #5B46F3 0%, #4432D4 100%);
+            box-shadow: 0 4px 16px rgba(91,70,243,0.4);
+        }
+        .loading-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #5B46F3;
+            animation: ldot 1.2s ease-in-out infinite;
+        }
+        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes ldot {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+            40%            { transform: scale(1);   opacity: 1;   }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+</head>
+<body class="font-body text-gray-800 bg-gray-50 min-h-screen">
+
+    <!-- Navbar -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50" style="box-shadow:0 1px 4px rgba(0,0,0,0.06)">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2 no-underline">
+                <div style="width:34px;height:34px;border-radius:9px;background:#5B46F3;display:flex;align-items:center;justify-content:center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H3v10h6v-10zM21 11h-6v10h6V11zM12 3l-9 8h18l-9-8z"/><rect x="10" y="15" width="4" height="6" rx="0.5" fill="#fff" stroke="none"/></svg>
+                </div>
+                <span class="font-headline font-extrabold text-xl" style="color:#1E293B;">Bath<span style="color:#5B46F3;">RemodelHub</span></span>
+            </a>
+            <button onclick="history.back()" class="flex items-center gap-1.5 text-sm font-medium transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-100" style="color:#6B7280">
+                <span class="material-symbols-outlined" style="font-size:16px">arrow_back</span> Back
+            </button>
+        </div>
+    </header>
+
+    <!-- Results Banner -->
+    <div id="results-banner" class="bg-white border-b border-gray-100">
+        <div class="h-1 w-full" style="background: linear-gradient(90deg, #7C6FF7 0%, #5B46F3 60%, #4432D4 100%);"></div>
+        <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-1.5 mb-2">
+                    <span class="material-symbols-outlined" style="font-size:13px;color:#5B46F3">search</span>
+                    <p class="text-xs font-bold uppercase tracking-widest" style="color:#9CA3AF">Search Results</p>
+                </div>
+                <h1 id="banner-heading" class="font-headline font-extrabold text-2xl md:text-3xl leading-tight" style="color:#1a3a5c">Local Bathroom Pros Near You</h1>
+                <p id="banner-sub" class="text-sm mt-1 font-medium" style="color:#6B7280"></p>
+            </div>
+            <div class="shrink-0">
+                <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl" style="background:#F8F9FF;border:1.5px solid #E8E5FD">
+                    <span class="material-symbols-outlined" style="font-size:16px;color:#5B46F3">location_on</span>
+                    <span id="banner-zip" class="font-bold text-sm" style="color:#1a3a5c">—</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <main class="max-w-5xl mx-auto px-4 py-10">
+
+        <!-- Loading -->
+        <div id="results-loading" class="flex flex-col items-center justify-center py-24">
+            <div class="flex items-center gap-2 mb-6">
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+            </div>
+            <p class="text-gray-700 text-base font-bold mb-1">Finding local bathroom pros near you…</p>
+            <p class="text-gray-400 text-sm">This usually takes just a second</p>
+        </div>
+
+        <!-- Results Grid -->
+        <div id="results-grid" class="hidden"></div>
+
+        <!-- Error -->
+        <div id="results-error" class="hidden flex flex-col items-center justify-center py-24 text-center">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style="background:rgba(91,70,243,0.08)">
+                <span class="material-symbols-outlined text-4xl" style="color:#5B46F3">search_off</span>
+            </div>
+            <p id="results-error-msg" class="text-gray-700 font-bold text-lg mb-2">Something went wrong</p>
+            <p class="text-gray-400 text-sm mb-6">Please go back and try again.</p>
+            <button onclick="history.back()" class="font-bold px-6 py-3 rounded-xl transition-colors text-sm text-white" style="background:#5B46F3;">Go Back</button>
+        </div>
+
+        <!-- Empty -->
+        <div id="results-empty" class="hidden flex flex-col items-center justify-center py-24 text-center">
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style="background:rgba(255,107,53,0.08)">
+                <span class="material-symbols-outlined text-4xl" style="color:#ff6b35">person_search</span>
+            </div>
+            <p class="text-gray-700 font-bold text-lg mb-2">No pros found in this area</p>
+            <p class="text-gray-400 text-sm mb-6">Try a different service or ZIP code.</p>
+            <button onclick="history.back()" class="text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm" style="background:#ff6b35;">Change Search</button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-white py-8 px-4 mt-8" style="background: linear-gradient(135deg, #5B46F3 0%, #4432D4 100%);">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="flex flex-wrap justify-center gap-6 text-sm mb-4">
+                <a href="/privacy-policy.html" class="text-white/70 hover:text-white transition-colors">Privacy Policy</a>
+                <span class="text-white/30">|</span>
+                <a href="/terms-of-use.html" class="text-white/70 hover:text-white transition-colors">Terms of Use</a>
+            </div>
+            <p class="text-white/50 text-xs">&copy; 2026 BathRemodelHub &ndash; All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    (function () {
+        var params      = new URLSearchParams(window.location.search);
+        var searchQuery = params.get('searchQuery') || '';
+        var zipCode     = params.get('zipCode')     || '';
+
+        var elLoading = document.getElementById('results-loading');
+        var elGrid    = document.getElementById('results-grid');
+        var elError   = document.getElementById('results-error');
+        var elErrMsg  = document.getElementById('results-error-msg');
+        var elEmpty   = document.getElementById('results-empty');
+        var elSub     = document.getElementById('banner-sub');
+        var elZip     = document.getElementById('banner-zip');
+        var elHeading = document.getElementById('banner-heading');
+
+        function show(el) { el.classList.remove('hidden'); }
+        function hide(el) { el.classList.add('hidden'); }
+
+        function esc(s) {
+            return String(s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function setContent(el, html) {
+            var clean = DOMPurify.sanitize(html, {
+                ALLOWED_TAGS: ['div','p','h2','h3','h4','span','a','strong','br','img','button'],
+                ALLOWED_ATTR: ['class','href','src','alt','style','target','rel','type','data-quote-name','data-quote-url']
+            });
+            var doc = new DOMParser().parseFromString(clean, 'text/html');
+            while (el.firstChild) { el.removeChild(el.firstChild); }
+            Array.from(doc.body.childNodes).forEach(function (n) { el.appendChild(n); });
+        }
+
+        if (searchQuery) {
+            elHeading.textContent = searchQuery;
+            document.title = searchQuery + ' | BathRemodelHub';
+        }
+        if (zipCode) {
+            elZip.textContent = zipCode;
+            elSub.textContent = 'Showing results near ' + zipCode;
+        }
+
+        if (!searchQuery || !zipCode) {
+            hide(elLoading);
+            show(elError);
+            elErrMsg.textContent = 'Missing search parameters.';
+            return;
+        }
+
+        fetch('/api/businesses', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ searchQuery: searchQuery, zipCode: zipCode, utmData: { utm_source: 'cma-growthfusion' } })
+        })
+        .then(function (res) {
+            if (!res.ok) {
+                return res.json().catch(function () { return {}; }).then(function (j) {
+                    throw new Error(j.error || ('Server error ' + res.status));
+                });
+            }
+            return res.json();
+        })
+        .then(function (data) {
+            var businesses = Array.isArray(data)            ? data
+                           : Array.isArray(data.data)       ? data.data
+                           : Array.isArray(data.businesses) ? data.businesses
+                           : Array.isArray(data.results)    ? data.results : [];
+
+            businesses = businesses.slice().sort(function (a, b) {
+                var rA = parseFloat(a.rating) || 0;
+                var rB = parseFloat(b.rating) || 0;
+                return rB - rA;
+            });
+
+            hide(elLoading);
+            if (!businesses.length) { show(elEmpty); return; }
+
+            var countLabel = businesses.length + ' professional' + (businesses.length !== 1 ? 's' : '')
+                + ' found for ' + searchQuery + ' near ' + zipCode;
+            elSub.textContent = countLabel;
+
+            setContent(elGrid,
+                '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">'
+                + esc(countLabel) + '</p>'
+                + '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">'
+                + businesses.map(bizCard).join('')
+                + '</div>'
+            );
+            show(elGrid);
+        })
+        .catch(function (e) {
+            hide(elLoading);
+            show(elError);
+            elErrMsg.textContent = e.message || 'Could not load results.';
+        });
+
+        function stars(rating) {
+            var r = parseFloat(rating);
+            var full = Math.floor(r);
+            var half = r - full >= 0.5;
+            var s = '';
+            for (var i = 0; i < 5; i++) {
+                if (i < full) {
+                    s += '<span class="material-symbols-outlined star-filled" style="font-size:14px;color:#FBBF24">star</span>';
+                } else if (i === full && half) {
+                    s += '<span class="material-symbols-outlined" style="font-size:14px;color:#FBBF24">star_half</span>';
+                } else {
+                    s += '<span class="material-symbols-outlined" style="font-size:14px;color:#E5E7EB">star</span>';
+                }
+            }
+            return s;
+        }
+
+        function bizCard(biz) {
+            var name      = esc(biz.businessName || 'Local Pro');
+            var address   = esc(biz.businessLocation || '');
+            var rating    = biz.rating ? parseFloat(biz.rating) : null;
+            var reviewCnt = biz.numberOfReviews || null;
+            var imgURL    = esc(biz.businessImageURL || '');
+            var isTopPro  = !!biz.isTopPro;
+            var signal    = biz.opinionatedSignal ? esc(biz.opinionatedSignal) : '';
+            var years     = biz.yearsInBusiness   || null;
+            var hires     = biz.numberOfHires     || null;
+            var rawIntro  = biz.businessIntroduction || '';
+            var intro     = rawIntro ? esc(rawIntro.slice(0, 140)) + (rawIntro.length > 140 ? '…' : '') : '';
+            var ctaURL    = esc((biz.widgets && biz.widgets.requestFlowURL) || biz.servicePageURL || '#');
+
+            var imgEl = imgURL
+                ? '<img src="' + imgURL + '" alt="' + name + '" class="w-full h-full object-cover" />'
+                : '<div class="w-full h-full flex items-center justify-center" style="background:linear-gradient(135deg,#7C6FF7 0%,#5B46F3 100%)">'
+                + '<span class="material-symbols-outlined text-white" style="font-size:52px">bathtub</span></div>';
+
+            var topProImg = isTopPro
+                ? '<div class="absolute top-3 left-3 flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full shadow-md" style="background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff">'
+                + '<span class="material-symbols-outlined star-filled" style="font-size:11px">star</span>Top Pro</div>' : '';
+
+            var starRow = rating
+                ? '<div class="flex items-center gap-1.5 mt-2">'
+                + '<div class="flex items-center">' + stars(rating) + '</div>'
+                + '<span class="font-bold text-gray-900 text-sm">' + rating.toFixed(1) + '</span>'
+                + (reviewCnt ? '<span class="text-gray-400 text-xs">· ' + esc(String(reviewCnt)) + ' reviews</span>' : '')
+                + '</div>' : '';
+
+            var badgesEl = '';
+            if (isTopPro || signal) {
+                badgesEl = '<div class="flex flex-wrap gap-1.5 mt-2">';
+                if (isTopPro) badgesEl += '<span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:#FEF3C7;color:#B45309;border:1px solid #FDE68A"><span class="material-symbols-outlined star-filled" style="font-size:11px;color:#D97706">star</span>Top Pro</span>';
+                if (signal)   badgesEl += '<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:rgba(91,70,243,0.08);color:#5B46F3;border:1px solid rgba(91,70,243,0.2)">' + signal + '</span>';
+                badgesEl += '</div>';
+            }
+
+            var addrEl = address
+                ? '<div class="flex items-center gap-1 text-gray-400 text-xs mt-1.5">'
+                + '<span class="material-symbols-outlined" style="font-size:13px">location_on</span>'
+                + address + '</div>' : '';
+
+            var metaParts = [];
+            if (years) metaParts.push('<span class="flex items-center gap-1"><span class="material-symbols-outlined" style="font-size:13px;color:#9CA3AF">schedule</span>' + esc(String(years)) + ' yrs</span>');
+            if (hires) metaParts.push('<span class="flex items-center gap-1" style="color:#059669"><span class="material-symbols-outlined" style="font-size:13px;color:#10B981">check_circle</span>' + esc(String(hires)) + ' hired</span>');
+            var metaEl = metaParts.length
+                ? '<div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 font-medium mt-2">' + metaParts.join('<span style="color:#E5E7EB">·</span>') + '</div>' : '';
+
+            var introEl = intro
+                ? '<p class="text-gray-500 text-xs leading-relaxed mt-3 pt-3" style="border-top:1px solid #F3F4F6;line-height:1.65">' + intro + '</p>' : '';
+
+            return '<div class="biz-card">'
+                + '<div class="relative overflow-hidden" style="height:182px">'
+                + imgEl + topProImg
+                + '</div>'
+                + '<div class="p-5 flex flex-col flex-1">'
+                + '<h3 class="font-headline font-bold text-base leading-snug" style="color:#1a3a5c">' + name + '</h3>'
+                + starRow + badgesEl + addrEl + metaEl + introEl
+                + '<div class="flex-1" style="min-height:14px"></div>'
+                + '<button type="button" data-quote-name="' + esc(biz.businessName || 'Local Pro') + '" data-quote-url="' + ctaURL + '"'
+                + ' class="biz-card__cta js-quote-btn vc-btn mt-4 flex items-center justify-center gap-2 w-full text-white font-bold py-3 rounded-xl text-sm" style="border:none;cursor:pointer;">'
+                + '<span class="material-symbols-outlined" style="font-size:16px">send</span>Compare Free Quote</button>'
+                + '</div>'
+                + '</div>';
+        }
+    })();
+    </script>
+
+    <!-- Thumbtack Request Flow Widget — Popup -->
+    <div id="brh-popup-backdrop" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;padding:16px;">
+        <div id="brh-popup-card" style="background:#fff;border-radius:12px;width:860px;max-width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.25);animation:brhPopIn 0.2s ease;">
+            <iframe id="brh-popup-iframe"
+                width="860"
+                height="760"
+                style="width:860px;height:760px;max-width:100%;display:block;border:none;"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+                src="">
+            </iframe>
+        </div>
+    </div>
+
+    <style>
+        @keyframes brhPopIn { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
+        @media (max-width: 660px) {
+            #brh-popup-backdrop { padding:0; align-items:flex-end; }
+            #brh-popup-card     { width:100%; border-radius:16px 16px 0 0; animation:brhSlideUp 0.25s ease; }
+            #brh-popup-iframe   { width:100% !important; height:90vh !important; }
+        }
+        @keyframes brhSlideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+    </style>
+
+    <script>
+    (function () {
+        var backdrop = document.getElementById('brh-popup-backdrop');
+        var iframeEl = document.getElementById('brh-popup-iframe');
+
+        // Listen for postMessage events from Thumbtack's Request Flow Widget
+        window.addEventListener('message', function (e) {
+            if (!e.origin || e.origin.indexOf('thumbtack.com') === -1) return;
+
+            var raw  = typeof e.data === 'string'
+                         ? e.data.toLowerCase()
+                         : JSON.stringify(e.data || '').toLowerCase();
+            var msg  = (typeof e.data === 'object' && e.data !== null) ? e.data : {};
+            var type = String(msg.type || msg.event || msg.action || msg.name || e.data || '').toLowerCase();
+
+            if (type.indexOf('close') !== -1 || raw.indexOf('close') !== -1) {
+                closePopup();
+                return;
+            }
+            if (type.indexOf('submit') !== -1 || type.indexOf('complete') !== -1 ||
+                raw.indexOf('submit') !== -1  || raw.indexOf('complete') !== -1) {
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({ event: 'QuoteSubmitted', rfwData: msg.data || {} });
+                return;
+            }
+            if (type.indexOf('resize') !== -1 && msg.height) {
+                iframeEl.style.height = msg.height + 'px';
+                iframeEl.setAttribute('height', msg.height);
+            }
+        });
+
+        function openPopup(url, bizName) {
+            url = (url || '').replace('staging-partner.thumbtack.com', 'thumbtack.com');
+            backdrop.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            iframeEl.src = url;
+
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ event: 'CompareQuoteOpen', businessName: bizName || '' });
+        }
+
+        function closePopup() {
+            backdrop.style.display = 'none';
+            document.body.style.overflow = '';
+            iframeEl.src = '';
+        }
+
+        backdrop.addEventListener('click', function (e) { if (e.target === backdrop) closePopup(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePopup(); });
+
+        document.addEventListener('click', function (e) {
+            var btn = e.target.closest('.js-quote-btn');
+            if (!btn) return;
+            e.preventDefault();
+            openPopup(btn.dataset.quoteUrl, btn.dataset.quoteName);
+        });
+    })();
+    </script>
+
+    <!-- Scroll to top -->
+    <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="display:none;position:fixed;bottom:28px;right:28px;z-index:9999;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#7C6FF7,#5B46F3);box-shadow:0 4px 20px rgba(91,70,243,0.45);align-items:center;justify-content:center;transition:opacity 0.25s,transform 0.25s;" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    </button>
+    <script>
+    (function () {
+        var btn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', function () {
+            var scrolled = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            btn.style.display = scrolled > 0.5 ? 'flex' : 'none';
+        }, { passive: true });
+    })();
+    </script>
+
+</body>
+</html>
