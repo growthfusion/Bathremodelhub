@@ -120,4 +120,24 @@ router.post('/businesses', async function (req, res) {
     }
 });
 
+// GET /api/info  — prints current API config to browser console (no secrets exposed)
+router.get('/info', function (req, res) {
+    const nodeEnv = (process.env.NODE_ENV || '').toLowerCase();
+    const apiBase = process.env.API_BASE_URL || '';
+    const envName = nodeEnv === 'production' ? 'Production'
+                  : nodeEnv === 'staging'    ? 'Stage'
+                  : apiBase.indexOf('staging') !== -1 ? 'Stage'
+                  : apiBase ? 'Production'
+                  : 'Local';
+    const looksLikeAuthHost = !!apiBase && /(^|\/\/|\.)auth[.-]/i.test(apiBase);
+    res.json({
+        envName:     envName,
+        environment: process.env.NODE_ENV || 'development',
+        apiBaseUrl:  apiBase || '(not set)',
+        configError: looksLikeAuthHost
+            ? 'API_BASE_URL points at the AUTH host. It must be the API host (e.g. staging-api.thumbtack.com).'
+            : null
+    });
+});
+
 module.exports = router;

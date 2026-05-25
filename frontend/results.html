@@ -66,33 +66,43 @@
             flex-direction: column;
             border: 1px solid rgba(0,0,0,0.06);
             box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-            transition: box-shadow 0.22s ease, transform 0.22s ease;
+            transition: transform 0.22s ease;
+            will-change: transform;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
         }
-        .biz-card:hover {
-            box-shadow: 0 10px 36px rgba(91,70,243,0.15), 0 2px 8px rgba(0,0,0,0.07);
-            transform: translateY(-4px);
+        .biz-card:hover { transform: translateY(-4px); }
+        .js-card-trigger { cursor: pointer; text-decoration: none; }
+        .js-card-trigger:hover { text-decoration: none; }
+        h3.js-card-trigger:hover { color: #5B46F3 !important; }
+        .biz-img-wrap {
+            height: 182px;
+            aspect-ratio: 400 / 182;
+            overflow: hidden;
+            position: relative;
+            background: #EEF0FF;
         }
         .biz-card__cta {
+            position: relative;
+            overflow: hidden;
             background: linear-gradient(135deg, #7C6FF7 0%, #5B46F3 100%);
-            transition: background 0.18s ease, box-shadow 0.18s ease;
         }
-        .biz-card__cta:hover {
+        .biz-card__cta::after {
+            content: '';
+            position: absolute; inset: 0;
             background: linear-gradient(135deg, #5B46F3 0%, #4432D4 100%);
-            box-shadow: 0 4px 16px rgba(91,70,243,0.4);
+            opacity: 0;
+            transition: opacity 0.18s ease;
         }
+        .biz-card:hover .biz-card__cta::after { opacity: 1; }
+        .biz-card__cta > * { position: relative; z-index: 1; }
         .vc-btn {
-            background: linear-gradient(135deg, #7C6FF7 0%, #5B46F3 100%);
             color: #fff;
             border: none;
             cursor: pointer;
             font-family: 'Manrope', sans-serif;
             font-weight: 700;
-            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
-        }
-        .vc-btn:hover {
-            background: linear-gradient(135deg, #5B46F3 0%, #4432D4 100%);
-            box-shadow: 0 6px 20px rgba(91,70,243,0.35);
-            transform: translateY(-1px);
         }
 
         /* Loading pulse dots */
@@ -250,8 +260,8 @@
 
         function setContent(el, html) {
             var clean = DOMPurify.sanitize(html, {
-                ALLOWED_TAGS: ['div','p','h2','h3','h4','span','a','strong','br','img','button'],
-                ALLOWED_ATTR: ['class','href','src','alt','style','target','rel','type','data-quote-name','data-quote-url','width','height','loading','fetchpriority','decoding','role','tabindex']
+                ALLOWED_TAGS: ['div','p','h2','h3','h4','span','a','strong','br','img'],
+                ALLOWED_ATTR: ['class','href','src','alt','style','target','rel','data-biz-name','data-href','width','height','loading','fetchpriority','decoding','role','tabindex']
             });
             var doc = new DOMParser().parseFromString(clean, 'text/html');
             while (el.firstChild) { el.removeChild(el.firstChild); }
@@ -407,17 +417,17 @@
             var introEl = intro
                 ? '<p class="text-gray-500 text-xs leading-relaxed mt-3 pt-3" style="border-top:1px solid #F3F4F6;line-height:1.65">' + intro + '</p>' : '';
 
-            return '<div class="biz-card">'
-                + '<div class="relative overflow-hidden" style="height:182px">'
+            return '<div class="biz-card" data-href="' + ctaURL + '" data-biz-name="' + esc(biz.businessName || 'Local Pro') + '">'
+                + '<div class="biz-img-wrap">'
                 + imgEl + topProImg
                 + '</div>'
                 + '<div class="p-5 flex flex-col flex-1">'
-                + '<h3 class="font-headline font-bold text-base leading-snug" style="color:#1a3a5c">' + name + '</h3>'
+                + '<h3 class="font-headline font-bold text-base leading-snug js-card-trigger vc-btn" style="color:#1a3a5c;font-size:1rem;">' + name + '</h3>'
                 + starRow + badgesEl + addrEl + metaEl + introEl
                 + '<div class="flex-1" style="min-height:14px"></div>'
-                + '<button type="button" data-quote-name="' + esc(biz.businessName || 'Local Pro') + '" data-quote-url="' + ctaURL + '"'
-                + ' class="biz-card__cta js-quote-btn vc-btn mt-4 flex items-center justify-center gap-2 w-full text-white font-bold py-3 rounded-xl text-sm">'
-                + '<span class="material-symbols-outlined vc-btn" style="font-size:16px">send</span>Compare Free Quote</button>'
+                + '<div class="biz-card__cta mt-4 flex items-center justify-center w-full text-white font-bold py-3 rounded-xl text-sm js-card-trigger vc-btn" role="button" tabindex="0">'
+                + '<span style="position:relative;z-index:1;display:flex;align-items:center;gap:8px;color:#fff;pointer-events:none;">'
+                + '<span class="material-symbols-outlined" style="font-size:16px">send</span>Compare Free Quote</span></div>'
                 + '</div>'
                 + '</div>';
         }
@@ -487,7 +497,6 @@
                 console.warn('[BathRemodelHub] openPopup — no requestFlowURL returned by API.');
                 return;
             }
-            url = url.replace('staging-partner.thumbtack.com', 'thumbtack.com');
             backdrop.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             iframeEl.src = url;
@@ -519,18 +528,24 @@
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePopup(); });
 
         document.addEventListener('click', function (e) {
-            var btn = e.target.closest('.js-quote-btn');
-            if (!btn) return;
+            var trigger = e.target.closest('.js-card-trigger');
+            if (!trigger) return;
             e.preventDefault();
-            openPopup(btn.dataset.quoteUrl, btn.dataset.quoteName);
+            var card    = trigger.closest('.biz-card');
+            var url     = card ? card.getAttribute('data-href')  : '';
+            var bizName = card ? (card.dataset.bizName || '')     : '';
+            openPopup(url, bizName);
         });
 
         document.addEventListener('keydown', function (e) {
             if (e.key !== 'Enter' && e.key !== ' ') return;
-            var btn = e.target.closest('.js-quote-btn');
-            if (!btn) return;
+            var trigger = e.target.closest('.js-card-trigger');
+            if (!trigger) return;
             e.preventDefault();
-            openPopup(btn.dataset.quoteUrl, btn.dataset.quoteName);
+            var card    = trigger.closest('.biz-card');
+            var url     = card ? card.getAttribute('data-href')  : '';
+            var bizName = card ? (card.dataset.bizName || '')     : '';
+            openPopup(url, bizName);
         });
     })();
     </script>
