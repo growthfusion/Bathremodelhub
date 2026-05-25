@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(PYTHONIOENCODING=utf-8 python \"c:/Users/growt/OneDrive - GrowthFusion/Desktop/Bathremodelhub/_gen_docs.py\")"
+    ]
+  }
+}

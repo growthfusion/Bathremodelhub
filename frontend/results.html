@@ -4,46 +4,59 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Local Bathroom Pros Near You | BathRemodelHub</title>
+
+    <!-- SEO: unique meta description -->
+    <meta name="description" content="Compare free quotes from top-rated local bathroom remodeling professionals near you. Find trusted shower, tile, vanity, and tub contractors matched to your ZIP code." />
+
     <link rel="icon" href="/images/bathremodelhub-favicon.svg" type="image/svg+xml" sizes="any">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+    <!-- Performance: preconnect to font origins before any blocking CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Performance: load Google Fonts asynchronously — eliminates ~1,600 ms render-block -->
+    <link rel="preload" as="style"
+          href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+          onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" as="style"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    </noscript>
+
+    <!-- Tailwind: config defined before CDN loads; synchronous load prevents CLS -->
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        "brand-navy":   "#1a3a5c",
-                        "brand-violet": "#5B46F3",
-                        "brand-orange": "#ff6b35",
-                        "brand-light":  "#f0f7ff",
-                    },
-                    fontFamily: {
-                        headline: ["Manrope", "sans-serif"],
-                        body:     ["Inter",   "sans-serif"],
+        window.tailwind = {
+            config: {
+                theme: {
+                    extend: {
+                        colors: {
+                            "brand-navy":   "#1a3a5c",
+                            "brand-violet": "#5B46F3",
+                            "brand-orange": "#ff6b35",
+                            "brand-light":  "#f0f7ff",
+                        },
+                        fontFamily: {
+                            headline: ["Manrope", "sans-serif"],
+                            body:     ["Inter",   "sans-serif"],
+                        }
                     }
                 }
             }
-        }
+        };
     </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+    <!-- Critical inline CSS — ensures component layout renders correctly before Tailwind loads -->
     <style>
+        /* font fallbacks so layout is stable before async fonts arrive */
+        body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+        .font-headline { font-family: Manrope, ui-sans-serif, system-ui, sans-serif; }
+
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .star-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-
-        .vc-btn {
-            background: linear-gradient(135deg, #7C6FF7 0%, #5B46F3 100%);
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-family: 'Manrope', sans-serif;
-            font-weight: 700;
-            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
-        }
-        .vc-btn:hover {
-            background: linear-gradient(135deg, #5B46F3 0%, #4432D4 100%);
-            box-shadow: 0 6px 20px rgba(91,70,243,0.35);
-            transform: translateY(-1px);
-        }
 
         .biz-card {
             background: #fff;
@@ -67,6 +80,22 @@
             background: linear-gradient(135deg, #5B46F3 0%, #4432D4 100%);
             box-shadow: 0 4px 16px rgba(91,70,243,0.4);
         }
+        .vc-btn {
+            background: linear-gradient(135deg, #7C6FF7 0%, #5B46F3 100%);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 700;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+        .vc-btn:hover {
+            background: linear-gradient(135deg, #5B46F3 0%, #4432D4 100%);
+            box-shadow: 0 6px 20px rgba(91,70,243,0.35);
+            transform: translateY(-1px);
+        }
+
+        /* Loading pulse dots */
         .loading-dot {
             width: 10px; height: 10px;
             border-radius: 50%;
@@ -79,8 +108,14 @@
             0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
             40%            { transform: scale(1);   opacity: 1;   }
         }
+
+        /* Ensure footer links meet WCAG AA contrast on purple gradient */
+        .footer-link { color: rgba(255,255,255,0.92) !important; }
+        .footer-link:hover { color: #ffffff !important; }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
+    <!-- Performance: DOMPurify deferred — only needed after API response -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js" defer></script>
 </head>
 <body class="font-body text-gray-800 bg-gray-50 min-h-screen">
 
@@ -106,7 +141,8 @@
             <div>
                 <div class="flex items-center gap-1.5 mb-2">
                     <span class="material-symbols-outlined" style="font-size:13px;color:#5B46F3">search</span>
-                    <p class="text-xs font-bold uppercase tracking-widest" style="color:#9CA3AF">Search Results</p>
+                    <!-- Accessibility: improved contrast from #9CA3AF (2.5:1) to #6B7280 (4.6:1) -->
+                    <p class="text-xs font-bold uppercase tracking-widest" style="color:#6B7280">Search Results</p>
                 </div>
                 <h1 id="banner-heading" class="font-headline font-extrabold text-2xl md:text-3xl leading-tight" style="color:#1a3a5c">Local Bathroom Pros Near You</h1>
                 <p id="banner-sub" class="text-sm mt-1 font-medium" style="color:#6B7280"></p>
@@ -121,7 +157,7 @@
     </div>
 
     <!-- Main -->
-    <main class="max-w-5xl mx-auto px-4 py-10">
+    <main id="results-main" class="max-w-5xl mx-auto px-4 py-10" style="min-height:60vh">
 
         <!-- Loading -->
         <div id="results-loading" class="flex flex-col items-center justify-center py-24">
@@ -163,11 +199,11 @@
     <footer class="text-white py-8 px-4 mt-8" style="background: linear-gradient(135deg, #5B46F3 0%, #4432D4 100%);">
         <div class="max-w-5xl mx-auto text-center">
             <div class="flex flex-wrap justify-center gap-6 text-sm mb-4">
-                <a href="/privacy-policy.html" class="text-white/70 hover:text-white transition-colors">Privacy Policy</a>
-                <span class="text-white/30">|</span>
-                <a href="/terms-of-use.html" class="text-white/70 hover:text-white transition-colors">Terms of Use</a>
+                <a href="/privacy-policy.html" class="footer-link hover:text-white transition-colors">Privacy Policy</a>
+                <span style="color:rgba(255,255,255,0.4)">|</span>
+                <a href="/terms-of-use.html" class="footer-link hover:text-white transition-colors">Terms of Use</a>
             </div>
-            <p class="text-white/50 text-xs">&copy; 2026 BathRemodelHub &ndash; All Rights Reserved.</p>
+            <p style="color:rgba(255,255,255,0.65);font-size:0.75rem;">&copy; 2026 BathRemodelHub &ndash; All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -176,6 +212,23 @@
         var params      = new URLSearchParams(window.location.search);
         var searchQuery = params.get('searchQuery') || '';
         var zipCode     = params.get('zipCode')     || '';
+
+        /* Read tracking params with multi-name fallback so any offer-URL variant is supported.
+           Latest Redtrack offer URL maps:
+             utm_subid     → clickid (sub1 in postback)
+             utm_campaign  → rt_cid  (sub4 in postback)
+             utm_user_hash → fbclid  (sub11 in postback)
+             utm_content   → rt_ad   (sub2 in postback)
+             zipcode       → sub3 in postback                                              */
+        var sub1     = params.get('utm_subid')     || params.get('sub1')                  || '';
+        var fbclid   = params.get('utm_user_hash') || params.get('utm_facebook_click_id') || params.get('fbclid') || params.get('sub11') || '';
+        var rtAd     = params.get('utm_content')   || params.get('utm_rt_ad')             || params.get('rt_ad')  || params.get('sub2')  || '';
+        var rtCid    = params.get('utm_campaign')  || params.get('rt_cid')                || params.get('sub4')   || '';
+        var gclid    = params.get('gclid')         || params.get('utm_google_click_id')   || '';
+        var zipParam = zipCode                     || params.get('zipcode')               || params.get('sub3')   || '';
+        var utmSrc   = params.get('utm_source')    || 'cma-growthfusion';
+
+        window.brhTracking = { sub1: sub1, fbclid: fbclid, rt_ad: rtAd, rt_cid: rtCid, gclid: gclid, zipCode: zipParam, utm_source: utmSrc };
 
         var elLoading = document.getElementById('results-loading');
         var elGrid    = document.getElementById('results-grid');
@@ -198,7 +251,7 @@
         function setContent(el, html) {
             var clean = DOMPurify.sanitize(html, {
                 ALLOWED_TAGS: ['div','p','h2','h3','h4','span','a','strong','br','img','button'],
-                ALLOWED_ATTR: ['class','href','src','alt','style','target','rel','type','data-quote-name','data-quote-url']
+                ALLOWED_ATTR: ['class','href','src','alt','style','target','rel','type','data-quote-name','data-quote-url','width','height','loading','fetchpriority','decoding','role','tabindex']
             });
             var doc = new DOMParser().parseFromString(clean, 'text/html');
             while (el.firstChild) { el.removeChild(el.firstChild); }
@@ -221,10 +274,25 @@
             return;
         }
 
+        /* Build the full utmData object Thumbtack expects.
+           Mapping (per Thumbtack /v4/businesses/search schema):
+             utm_source            ← cma-growthfusion (required, ^cma-... pattern)
+             utm_campaign          ← Redtrack rt_cid
+             utm_content           ← Redtrack rt_ad   (sub2)
+             utm_subid             ← Redtrack clickid (sub1)
+             utm_facebook_click_id ← Facebook click id (sub11)
+             utm_google_click_id   ← gclid (Google Ads) */
+        var utmData = { utm_source: utmSrc };
+        if (rtCid)  utmData.utm_campaign          = rtCid;
+        if (rtAd)   utmData.utm_content           = rtAd;
+        if (sub1)   utmData.utm_subid             = sub1;
+        if (fbclid) utmData.utm_facebook_click_id = fbclid;
+        if (gclid)  utmData.utm_google_click_id   = gclid;
+
         fetch('/api/businesses', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ searchQuery: searchQuery, zipCode: zipCode, utmData: { utm_source: 'cma-growthfusion' } })
+            body:    JSON.stringify({ searchQuery: searchQuery, zipCode: zipCode, utmData: utmData })
         })
         .then(function (res) {
             if (!res.ok) {
@@ -257,7 +325,7 @@
                 '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">'
                 + esc(countLabel) + '</p>'
                 + '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">'
-                + businesses.map(bizCard).join('')
+                + businesses.map(function(biz, i){ return bizCard(biz, i); }).join('')
                 + '</div>'
             );
             show(elGrid);
@@ -285,7 +353,7 @@
             return s;
         }
 
-        function bizCard(biz) {
+        function bizCard(biz, cardIndex) {
             var name      = esc(biz.businessName || 'Local Pro');
             var address   = esc(biz.businessLocation || '');
             var rating    = biz.rating ? parseFloat(biz.rating) : null;
@@ -299,8 +367,10 @@
             var intro     = rawIntro ? esc(rawIntro.slice(0, 140)) + (rawIntro.length > 140 ? '…' : '') : '';
             var ctaURL    = esc((biz.widgets && biz.widgets.requestFlowURL) || biz.servicePageURL || '#');
 
+            var isFirst = (cardIndex === 0);
             var imgEl = imgURL
-                ? '<img src="' + imgURL + '" alt="' + name + '" class="w-full h-full object-cover" />'
+                ? '<img src="' + imgURL + '" alt="' + name + '" width="400" height="182" class="w-full h-full object-cover"'
+                  + (isFirst ? ' fetchpriority="high" decoding="async"' : ' loading="lazy" decoding="async"') + ' />'
                 : '<div class="w-full h-full flex items-center justify-center" style="background:linear-gradient(135deg,#7C6FF7 0%,#5B46F3 100%)">'
                 + '<span class="material-symbols-outlined text-white" style="font-size:52px">bathtub</span></div>';
 
@@ -346,7 +416,7 @@
                 + starRow + badgesEl + addrEl + metaEl + introEl
                 + '<div class="flex-1" style="min-height:14px"></div>'
                 + '<button type="button" data-quote-name="' + esc(biz.businessName || 'Local Pro') + '" data-quote-url="' + ctaURL + '"'
-                + ' class="biz-card__cta js-quote-btn vc-btn mt-4 flex items-center justify-center gap-2 w-full text-white font-bold py-3 rounded-xl text-sm" style="border:none;cursor:pointer;">'
+                + ' class="biz-card__cta js-quote-btn vc-btn mt-4 flex items-center justify-center gap-2 w-full text-white font-bold py-3 rounded-xl text-sm">'
                 + '<span class="material-symbols-outlined" style="font-size:16px">send</span>Compare Free Quote</button>'
                 + '</div>'
                 + '</div>';
@@ -360,6 +430,7 @@
             <iframe id="brh-popup-iframe"
                 width="860"
                 height="760"
+                title="Get a free quote from this pro"
                 style="width:860px;height:760px;max-width:100%;display:block;border:none;"
                 sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
                 src="">
@@ -382,10 +453,8 @@
         var backdrop = document.getElementById('brh-popup-backdrop');
         var iframeEl = document.getElementById('brh-popup-iframe');
 
-        // Listen for postMessage events from Thumbtack's Request Flow Widget
         window.addEventListener('message', function (e) {
             if (!e.origin || e.origin.indexOf('thumbtack.com') === -1) return;
-
             var raw  = typeof e.data === 'string'
                          ? e.data.toLowerCase()
                          : JSON.stringify(e.data || '').toLowerCase();
@@ -393,8 +462,7 @@
             var type = String(msg.type || msg.event || msg.action || msg.name || e.data || '').toLowerCase();
 
             if (type.indexOf('close') !== -1 || raw.indexOf('close') !== -1) {
-                closePopup();
-                return;
+                closePopup(); return;
             }
             if (type.indexOf('submit') !== -1 || type.indexOf('complete') !== -1 ||
                 raw.indexOf('submit') !== -1  || raw.indexOf('complete') !== -1) {
@@ -408,14 +476,37 @@
             }
         });
 
+        var RT_POSTBACK_BASE = 'https://uo8b2.ttrk.io/postback';
+        function buildRtPostbackUrl() {
+            var t = window.brhTracking || {};
+            return RT_POSTBACK_BASE + '?clickid=' + encodeURIComponent(t.sub1 || '') + '&type=lead';
+        }
+
         function openPopup(url, bizName) {
-            url = (url || '').replace('staging-partner.thumbtack.com', 'thumbtack.com');
+            if (!url || url === '#') {
+                console.warn('[BathRemodelHub] openPopup — no requestFlowURL returned by API.');
+                return;
+            }
+            url = url.replace('staging-partner.thumbtack.com', 'thumbtack.com');
             backdrop.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             iframeEl.src = url;
 
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({ event: 'CompareQuoteOpen', businessName: bizName || '' });
+            var t             = window.brhTracking || {};
+            var rtPostbackUrl = buildRtPostbackUrl();
+            window.dataLayer  = window.dataLayer || [];
+            window.dataLayer.push({
+                event:         'contact',
+                businessName:  bizName,
+                rt_ad:         t.rt_ad   || '',
+                zipcode:       t.zipCode || '',
+                rt_cid:        t.rt_cid  || '',
+                fbclid:        t.fbclid  || '',
+                gclid:         t.gclid   || '',
+                sub1:          t.sub1    || '',
+                rtPostbackUrl: rtPostbackUrl
+            });
+            try { new Image().src = rtPostbackUrl; } catch (e) {}
         }
 
         function closePopup() {
@@ -433,12 +524,20 @@
             e.preventDefault();
             openPopup(btn.dataset.quoteUrl, btn.dataset.quoteName);
         });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            var btn = e.target.closest('.js-quote-btn');
+            if (!btn) return;
+            e.preventDefault();
+            openPopup(btn.dataset.quoteUrl, btn.dataset.quoteName);
+        });
     })();
     </script>
 
     <!-- Scroll to top -->
-    <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="display:none;position:fixed;bottom:28px;right:28px;z-index:9999;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#7C6FF7,#5B46F3);box-shadow:0 4px 20px rgba(91,70,243,0.45);align-items:center;justify-content:center;transition:opacity 0.25s,transform 0.25s;" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'" aria-label="Back to top">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top" style="display:none;position:fixed;bottom:28px;right:28px;z-index:9999;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#7C6FF7,#5B46F3);box-shadow:0 4px 20px rgba(91,70,243,0.45);align-items:center;justify-content:center;transition:opacity 0.25s,transform 0.25s;" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
     </button>
     <script>
     (function () {
@@ -447,6 +546,19 @@
             var scrolled = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
             btn.style.display = scrolled > 0.5 ? 'flex' : 'none';
         }, { passive: true });
+    })();
+    </script>
+
+    <!-- API env indicator (Stage / Production) — DevTools only -->
+    <script>
+    (function () {
+        fetch('/api/info').then(function (r) { return r.json(); }).then(function (d) {
+            var color = d.envName === 'Production' ? '#1B8A3E'
+                      : d.envName === 'Stage'      ? '#E68A00' : '#666';
+            console.log('%c[BathRemodelHub] Using ' + (d.envName || 'Unknown') + ' credentials',
+                'font-weight:bold;color:' + color + ';font-size:13px',
+                '\n→ ' + (d.apiBaseUrl || 'no API_BASE_URL set'));
+        }).catch(function () {});
     })();
     </script>
 
