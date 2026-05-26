@@ -10,7 +10,7 @@ env:
   REGION: us-central1
   SERVICE: bathremodelhub-frontend-prod
   IMAGE: bathremodelhub-frontend-prod
-  DOMAIN: bathremodelhub.com
+  DOMAIN: bathremodelhub.us
 
 jobs:
   deploy:
@@ -46,72 +46,32 @@ jobs:
             --region $REGION \
             --allow-unauthenticated \
             --port 8080 \
+            --clear-secrets \
             --set-env-vars "NODE_ENV=production,API_BASE_URL=${{ secrets.API_BASE_URL }},TOKEN_URL=${{ secrets.TOKEN_URL }},CLIENT_ID=${{ secrets.CLIENT_ID }},CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" \
             --project $PROJECT_ID
 
       - name: Map custom domain
-        id: map_domain
-        continue-on-error: true
         run: |
-          set +e
-          if gcloud beta run domain-mappings describe \
-              --domain "$DOMAIN" \
-              --region "$REGION" \
-              --project "$PROJECT_ID" >/dev/null 2>&1; then
+          if ! gcloud beta run domain-mappings describe \
+              --domain $DOMAIN \
+              --region $REGION \
+              --project $PROJECT_ID 2>/dev/null; then
+            gcloud beta run domain-mappings create \
+              --service $SERVICE \
+              --domain $DOMAIN \
+              --region $REGION \
+              --project $PROJECT_ID
+          else
             echo "Domain mapping for $DOMAIN already exists. Skipping."
-            echo "mapped=true" >> $GITHUB_OUTPUT
-            exit 0
           fi
-
-          OUT=$(gcloud beta run domain-mappings create \
-              --service "$SERVICE" \
-              --domain "$DOMAIN" \
-              --region "$REGION" \
-              --project "$PROJECT_ID" 2>&1)
-          STATUS=$?
-          echo "$OUT"
-
-          if [ $STATUS -ne 0 ]; then
-            if echo "$OUT" | grep -q "does not appear to be verified"; then
-              echo "::warning::Domain $DOMAIN is not verified for this GCP account."
-              echo ""
-              echo "========================================================"
-              echo "  ONE-TIME DOMAIN VERIFICATION STEPS"
-              echo "========================================================"
-              echo "  1. On your local machine, run:"
-              echo "       gcloud domains verify $DOMAIN"
-              echo "  2. Google Search Console will open. Add the suggested"
-              echo "     TXT record at your DNS registrar (e.g. Cloudflare,"
-              echo "     GoDaddy, Namecheap)."
-              echo "  3. Click 'Verify' in Search Console."
-              echo "  4. Re-run this workflow — the mapping will succeed."
-              echo "========================================================"
-              echo "mapped=false" >> $GITHUB_OUTPUT
-              exit 0
-            fi
-            echo "::error::Domain mapping failed for an unexpected reason."
-            exit $STATUS
-          fi
-          echo "mapped=true" >> $GITHUB_OUTPUT
 
       - name: Print DNS records
-        if: steps.map_domain.outputs.mapped == 'true'
         run: |
           echo "========================================"
           echo "  DNS records required at your registrar"
           echo "========================================"
           gcloud beta run domain-mappings describe \
-            --domain "$DOMAIN" \
-            --region "$REGION" \
-            --project "$PROJECT_ID" \
+            --domain $DOMAIN \
+            --region $REGION \
+            --project $PROJECT_ID \
             --format="table(status.resourceRecords[].name, status.resourceRecords[].type, status.resourceRecords[].rrdata)"
-
-      - name: Print Cloud Run service URL
-        run: |
-          echo "========================================"
-          echo "  Service URL (always available)"
-          echo "========================================"
-          gcloud run services describe "$SERVICE" \
-            --region "$REGION" \
-            --project "$PROJECT_ID" \
-            --format="value(status.url)"
