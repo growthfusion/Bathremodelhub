@@ -32,6 +32,24 @@ document.addEventListener('DOMContentLoaded', function () {
             .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    // Carry tracking/UTM params from the landing URL through to /results.html
+    // so utmData can be forwarded to Thumbtack and click attribution is preserved.
+    function trackingParams() {
+        var p = new URLSearchParams(window.location.search);
+        var keys = [
+            'sub1', 'sub2', 'sub3', 'sub4', 'sub11',
+            'fbclid', 'rt_ad', 'rt_cid', 'zipcode',
+            'utm_source', 'utm_campaign', 'utm_content',
+            'utm_subid', 'utm_user_hash',
+            'utm_facebook_click_id', 'utm_rt_ad',
+            'gclid', 'ttclid', 'ScCid', 'source_id'
+        ];
+        return keys.reduce(function (s, k) {
+            var v = p.get(k);
+            return v ? s + '&' + k + '=' + encodeURIComponent(v) : s;
+        }, '');
+    }
+
     function setContent(el, html) {
         var clean = window.DOMPurify
             ? window.DOMPurify.sanitize(html, {
@@ -108,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 Search: kw
             });
             window.location.href = '/results.html?searchQuery=' + encodeURIComponent(kw)
-                + '&zipCode=' + encodeURIComponent(zip);
+                + '&zipCode=' + encodeURIComponent(zip) + trackingParams();
         });
 
         return card;
@@ -156,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             window.location.href = '/results.html?searchQuery=' + encodeURIComponent(heroSearchQuery)
-                + '&zipCode=' + encodeURIComponent(zip);
+                + '&zipCode=' + encodeURIComponent(zip) + trackingParams();
         });
     }
 
@@ -189,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         window.location.href = '/results.html?searchQuery=' + encodeURIComponent(searchQuery)
-            + '&zipCode=' + encodeURIComponent(zip);
+            + '&zipCode=' + encodeURIComponent(zip) + trackingParams();
     });
 
     document.querySelectorAll('.js-scroll-quote').forEach(function (btn) {

@@ -57,12 +57,38 @@ router.post('/businesses', async function (req, res) {
     }
 
     try {
-        const token     = await getToken();
-        const utmSource = (utmData && utmData.utm_source) ? utmData.utm_source : 'cma-growthfusion';
-        const payload   = {
+        const token = await getToken();
+
+        // Whitelist of UTM keys Thumbtack accepts.
+        // utm_medium and utm_tt_session are explicitly disallowed by Thumbtack.
+        const ALLOWED_UTM_KEYS = [
+            'utm_source',
+            'utm_campaign',
+            'utm_content',
+            'utm_subid',
+            'utm_facebook_click_id',
+            'utm_google_click_id'
+        ];
+
+        // Always force a valid utm_source (must match ^cma-[a-zA-Z0-9-_]+$, ≤48 chars).
+        const cleanUtm = { utm_source: 'cma-growthfusion' };
+        if (utmData && typeof utmData === 'object') {
+            ALLOWED_UTM_KEYS.forEach(function (k) {
+                const v = utmData[k];
+                if (typeof v === 'string' && v.trim()) {
+                    cleanUtm[k] = v.trim().slice(0, 200);
+                }
+            });
+            // Re-validate utm_source against Thumbtack's pattern; fall back if invalid.
+            if (!/^cma-[a-zA-Z0-9-_]{1,44}$/.test(cleanUtm.utm_source)) {
+                cleanUtm.utm_source = 'cma-growthfusion';
+            }
+        }
+
+        const payload = {
             searchQuery: String(searchQuery).slice(0, 200),
             zipCode:     cleanZip,
-            utmData:     { utm_source: utmSource }
+            utmData:     cleanUtm
         };
         console.log('[businesses] → upstream:', JSON.stringify(payload));
 
@@ -92,6 +118,26 @@ router.post('/businesses', async function (req, res) {
         console.error('[businesses]', err.message);
         res.status(502).json({ error: err.message });
     }
+});
+
+// GET /api/info  — prints current API config to browser console (no secrets exposed)
+router.get('/info', function (req, res) {
+    const nodeEnv = (process.env.NODE_ENV || '').toLowerCase();
+    const apiBase = process.env.API_BASE_URL || '';
+    const envName = nodeEnv === 'production' ? 'Production'
+                  : nodeEnv === 'staging'    ? 'Stage'
+                  : apiBase.indexOf('staging') !== -1 ? 'Stage'
+                  : apiBase ? 'Production'
+                  : 'Local';
+    const looksLikeAuthHost = !!apiBase && /(^|\/\/|\.)auth[.-]/i.test(apiBase);
+    res.json({
+        envName:     envName,
+        environment: process.env.NODE_ENV || 'development',
+        apiBaseUrl:  apiBase || '(not set)',
+        configError: looksLikeAuthHost
+            ? 'API_BASE_URL points at the AUTH host. It must be the API host (e.g. staging-api.thumbtack.com).'
+            : null
+    });
 });
 
 module.exports = router;
