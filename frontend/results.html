@@ -250,6 +250,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var gclid    = params.get('gclid')         || params.get('utm_google_click_id')   || '';
         var zipParam = zipCode                     || params.get('zipcode')               || params.get('sub3')   || '';
         var utmSrc   = params.get('utm_source')    || 'cma-growthfusion';
+        var designVariant = (params.get('design') || 'A').toUpperCase();
+        var useDesignB = designVariant === 'B';
 
         window.brhTracking = { sub1: sub1, fbclid: fbclid, rt_ad: rtAd, rt_cid: rtCid, gclid: gclid, zipCode: zipParam, utm_source: utmSrc };
 
@@ -344,13 +346,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 + ' found for ' + searchQuery + ' near ' + zipCode;
             elSub.textContent = countLabel;
 
-            setContent(elGrid,
-                '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">'
-                + esc(countLabel) + '</p>'
-                + '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">'
-                + businesses.map(function(biz, i){ return bizCard(biz, i); }).join('')
-                + '</div>'
-            );
+            if (useDesignB) {
+                var headerHTML = headerDesignB(countLabel, searchQuery, zipCode);
+                document.getElementById('results-banner').style.display = 'none';
+
+                var bizCardFunction = bizCardDesignB;
+                var gridHTML = '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">'
+                    + esc(countLabel) + '</p>'
+                    + '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">'
+                    + businesses.map(function(biz, i){ return bizCardFunction(biz, i); }).join('')
+                    + '</div>';
+
+                var resultsMain = document.getElementById('results-main');
+                var tempDiv = document.createElement('div');
+                var clean = DOMPurify.sanitize(headerHTML + gridHTML, {
+                    ALLOWED_TAGS: ['div','p','h1','h3','span','img','button','a','strong','br'],
+                    ALLOWED_ATTR: ['class','href','src','alt','style','data-href','data-biz-name','width','height','loading','fetchpriority','decoding','role','tabindex']
+                });
+                tempDiv.innerHTML = clean;
+                while (resultsMain.firstChild) resultsMain.removeChild(resultsMain.firstChild);
+                Array.from(tempDiv.childNodes).forEach(function(n) { resultsMain.appendChild(n); });
+            } else {
+                setContent(elGrid,
+                    '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">'
+                    + esc(countLabel) + '</p>'
+                    + '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">'
+                    + businesses.map(function(biz, i){ return bizCard(biz, i); }).join('')
+                    + '</div>'
+                );
+            }
             show(elGrid);
         })
         .catch(function (e) {
@@ -374,6 +398,89 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 }
             }
             return s;
+        }
+
+        function headerDesignB(countLabel, searchQuery, zipCode) {
+            return '<div class="text-center py-12 px-4" style="background: linear-gradient(135deg, #E0F4FE 0%, #F0F7FF 100%); border-bottom: 1px solid #D1E9F6;">'
+                + '<div class="max-w-3xl mx-auto">'
+                + '<div class="flex items-center justify-center gap-2 mb-4">'
+                + '<div style="width:32px;height:32px;border-radius:50%;background:#10B981;display:flex;align-items:center;justify-content:center;">'
+                + '<span class="material-symbols-outlined" style="color:#fff;font-size:18px">done</span>'
+                + '</div>'
+                + '<p class="text-sm font-bold uppercase tracking-widest" style="color:#059669">Congratulations!</p>'
+                + '</div>'
+                + '<h1 class="font-headline font-extrabold text-3xl md:text-4xl leading-tight mb-3" style="color:#1a3a5c">'
+                + 'We Found Trusted <span style="color:#5B46F3">' + esc(searchQuery) + '</span> Pros Near You'
+                + '</h1>'
+                + '<p class="text-gray-600 text-base md:text-lg mb-6">Compare local pros and get your best quote in minutes.</p>'
+                + '<div class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl" style="background:#fff;border:1.5px solid #E8E5FD">'
+                + '<span class="material-symbols-outlined" style="font-size:16px;color:#5B46F3">location_on</span>'
+                + '<span class="font-bold text-sm" style="color:#1a3a5c">' + esc(zipCode) + '</span>'
+                + '</div>'
+                + '</div>'
+                + '</div>';
+        }
+
+        function bizCardDesignB(biz, cardIndex) {
+            var name      = esc(biz.businessName || 'Local Pro');
+            var address   = esc(biz.businessLocation || '');
+            var rating    = biz.rating ? parseFloat(biz.rating) : null;
+            var reviewCnt = biz.numberOfReviews || null;
+            var imgURL    = esc(biz.businessImageURL || '');
+            var isTopPro  = !!biz.isTopPro;
+            var signal    = biz.opinionatedSignal ? esc(biz.opinionatedSignal) : '';
+            var years     = biz.yearsInBusiness   || null;
+            var hires     = biz.numberOfHires     || null;
+            var rawIntro  = biz.businessIntroduction || '';
+            var testimonial = rawIntro ? esc(rawIntro.slice(0, 120)) + (rawIntro.length > 120 ? '…' : '') : '';
+            var ctaURL    = esc((biz.widgets && biz.widgets.requestFlowURL) || biz.servicePageURL || '#');
+
+            var isFirst = (cardIndex === 0);
+
+            var avatarEl = imgURL
+                ? '<img src="' + imgURL + '" alt="' + name + '" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.1);"'
+                  + (isFirst ? ' fetchpriority="high" decoding="async"' : ' loading="lazy" decoding="async"') + ' />'
+                : '<div style="width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#7C6FF7 0%,#5B46F3 100%);display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.1);">'
+                + '<span class="material-symbols-outlined text-white" style="font-size:52px">bathtub</span></div>';
+
+            var starRow = rating
+                ? '<div class="flex items-center gap-1.5 mt-3">'
+                + '<div class="flex items-center">' + stars(rating) + '</div>'
+                + '<span class="font-bold text-gray-900 text-sm">' + rating.toFixed(1) + '</span>'
+                + (reviewCnt ? '<span class="text-gray-400 text-xs">· ' + esc(String(reviewCnt)) + ' reviews</span>' : '')
+                + '</div>' : '';
+
+            var badgesEl = '';
+            if (isTopPro || signal) {
+                badgesEl = '<div class="flex flex-wrap gap-1.5 mt-2">';
+                if (isTopPro) badgesEl += '<span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:#FEF3C7;color:#B45309;border:1px solid #FDE68A"><span class="material-symbols-outlined star-filled" style="font-size:11px;color:#D97706">star</span>Top Pro</span>';
+                if (signal)   badgesEl += '<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:rgba(91,70,243,0.08);color:#5B46F3;border:1px solid rgba(91,70,243,0.2)">' + signal + '</span>';
+                badgesEl += '</div>';
+            }
+
+            var addrEl = address
+                ? '<div class="flex items-center gap-1 text-gray-400 text-xs mt-2">'
+                + '<span class="material-symbols-outlined" style="font-size:13px">location_on</span>'
+                + address + '</div>' : '';
+
+            var metaParts = [];
+            if (years) metaParts.push('<span class="flex items-center gap-1"><span class="material-symbols-outlined" style="font-size:13px;color:#9CA3AF">schedule</span>' + esc(String(years)) + ' years</span>');
+            if (hires) metaParts.push('<span class="flex items-center gap-1" style="color:#059669"><span class="material-symbols-outlined" style="font-size:13px;color:#10B981">check_circle</span>' + esc(String(hires)) + ' hired</span>');
+            var metaEl = metaParts.length
+                ? '<div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 font-medium mt-3">' + metaParts.join('<span style="color:#E5E7EB">·</span>') + '</div>' : '';
+
+            var testimonialEl = testimonial
+                ? '<p class="text-gray-600 text-xs italic leading-relaxed mt-4 pt-4" style="border-top:1px solid #F3F4F6;line-height:1.6;color:#6B7280">"' + testimonial + '"</p>' : '';
+
+            return '<div class="biz-card flex flex-col items-center" data-href="' + ctaURL + '" data-biz-name="' + esc(biz.businessName || 'Local Pro') + '" style="padding:24px;">'
+                + '<div class="mb-4">' + avatarEl + '</div>'
+                + '<h3 class="font-headline font-bold text-base leading-snug js-card-trigger vc-btn text-center" style="color:#1a3a5c;font-size:1.05rem;">' + name + '</h3>'
+                + starRow + badgesEl + addrEl + metaEl + testimonialEl
+                + '<div class="flex-1" style="min-height:16px"></div>'
+                + '<div class="biz-card__cta mt-6 flex items-center justify-center w-full text-white font-bold py-3 rounded-xl text-sm js-card-trigger vc-btn" role="button" tabindex="0">'
+                + '<span style="position:relative;z-index:1;display:flex;align-items:center;gap:8px;color:#fff;pointer-events:none;">'
+                + '<span class="material-symbols-outlined" style="font-size:16px">send</span>Compare Free Quote</span></div>'
+                + '</div>';
         }
 
         function bizCard(biz, cardIndex) {
