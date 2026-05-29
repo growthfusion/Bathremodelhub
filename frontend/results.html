@@ -307,7 +307,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
              utm_subid             ← Redtrack clickid (sub1)
              utm_facebook_click_id ← Facebook click id (sub11)
              utm_google_click_id   ← gclid (Google Ads) */
-        var utmData = { utm_source: utmSrc };
+        var utmData = { utm_source: utmSrc, utm_vertical: 'BRH' };
         if (rtCid)  utmData.utm_campaign          = rtCid;
         if (rtAd)   utmData.utm_content           = rtAd;
         if (sub1)   utmData.utm_subid             = sub1;
