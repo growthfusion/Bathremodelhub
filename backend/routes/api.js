@@ -67,7 +67,8 @@ router.post('/businesses', async function (req, res) {
             'utm_content',
             'utm_subid',
             'utm_facebook_click_id',
-            'utm_google_click_id'
+            'utm_google_click_id',
+            'utm_vertical'
         ];
 
         // Always force a valid utm_source (must match ^cma-[a-zA-Z0-9-_]+$, ≤48 chars).
