@@ -8,7 +8,7 @@
     <!-- SEO: unique meta description -->
     <meta name="description" content="Compare free quotes from top-rated local bathroom remodeling professionals near you. Find trusted shower, tile, vanity, and tub contractors matched to your ZIP code." />
 
-    <link rel="icon" href="/images/bathremodelhub-favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="icon" href="/bath/images/bathremodelhub-favicon.svg" type="image/svg+xml" sizes="any">
 
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -584,7 +584,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var iframeEl = document.getElementById('brh-popup-iframe');
 
         window.addEventListener('message', function (e) {
-            if (!e.origin || e.origin.indexOf('thumbtack.com') === -1) return;
+            var _allowed = new Set(['https://www.thumbtack.com','https://thumbtack.com','https://pro.thumbtack.com','https://staging.thumbtack.com']);
+            if (!e.origin || !_allowed.has(e.origin)) return;
             var raw  = typeof e.data === 'string'
                          ? e.data.toLowerCase()
                          : JSON.stringify(e.data || '').toLowerCase();
@@ -617,6 +618,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 console.warn('[BathRemodelHub] openPopup — no requestFlowURL returned by API.');
                 return;
             }
+            try {
+                var parsed = new URL(url);
+                if (parsed.protocol !== 'https:') { console.warn('[BathRemodelHub] openPopup — blocked non-https URL:', parsed.protocol); return; }
+                var host = parsed.hostname.toLowerCase().replace(/\.$/, '');
+                if (host !== 'thumbtack.com' && !host.endsWith('.thumbtack.com')) { console.warn('[BathRemodelHub] openPopup — blocked non-Thumbtack host:', host); return; }
+                url = parsed.href;
+            } catch (e) { console.warn('[BathRemodelHub] openPopup — invalid URL'); return; }
             backdrop.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             iframeEl.src = url;

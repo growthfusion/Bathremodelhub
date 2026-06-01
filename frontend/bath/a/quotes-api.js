@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 answer_text: kw,
                 Search: kw
             });
-            window.location.href = '/results.html?searchQuery=' + encodeURIComponent(kw)
+            window.location.href = '/bath/a/results.html?searchQuery=' + encodeURIComponent(kw)
                 + '&zipCode=' + encodeURIComponent(zip) + trackingParams();
         });
 
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 Search: heroSearchQuery
             });
 
-            window.location.href = '/results.html?searchQuery=' + encodeURIComponent(heroSearchQuery)
+            window.location.href = '/bath/a/results.html?searchQuery=' + encodeURIComponent(heroSearchQuery)
                 + '&zipCode=' + encodeURIComponent(zip) + trackingParams();
         });
     }
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
             Search: searchQuery
         });
 
-        window.location.href = '/results.html?searchQuery=' + encodeURIComponent(searchQuery)
+        window.location.href = '/bath/a/results.html?searchQuery=' + encodeURIComponent(searchQuery)
             + '&zipCode=' + encodeURIComponent(zip) + trackingParams();
     });
 

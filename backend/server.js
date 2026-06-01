@@ -16,6 +16,9 @@ app.use(express.json());
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 app.use(blockSensitiveFiles);
 
+// ── Default page: redirect root to /bath ─────────────────────────────────────
+app.get('/', (req, res) => res.redirect(301, '/bath'));
+
 // ── Strip /index.html → clean URL redirect ────────────────────────────────────
 app.use(function (req, res, next) {
     if (req.path.endsWith('/index.html')) {
