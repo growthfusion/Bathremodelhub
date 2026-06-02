@@ -409,15 +409,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var searchQuery = params.get('searchQuery') || '';
         var zipCode     = params.get('zipCode')     || '';
 
-        var sub1     = params.get('utm_subid')     || params.get('sub1')                  || '';
-        var fbclid   = params.get('utm_user_hash') || params.get('utm_facebook_click_id') || params.get('fbclid') || params.get('sub11') || '';
-        var rtAd     = params.get('utm_content')   || params.get('utm_rt_ad')             || params.get('rt_ad')  || params.get('sub2')  || '';
-        var rtCid    = params.get('utm_campaign')  || params.get('rt_cid')                || params.get('sub4')   || '';
-        var gclid    = params.get('gclid')         || params.get('utm_google_click_id')   || '';
-        var zipParam = zipCode                     || params.get('zipcode')               || params.get('sub3')   || '';
-        var utmSrc   = params.get('utm_source')    || 'cma-growthfusion';
+        var sub1       = params.get('utm_subid')     || params.get('sub1')                  || '';
+        var fbclid     = params.get('utm_user_hash') || params.get('utm_facebook_click_id') || params.get('fbclid') || params.get('sub11') || '';
+        var rtCampaign = params.get('utm_content')   || '';
+        var rtCid      = params.get('utm_campaign')  || params.get('rt_cid')                || params.get('sub4')   || '';
+        var gclid      = params.get('gclid')         || params.get('utm_google_click_id')   || '';
+        var zipParam   = zipCode                     || params.get('zipcode')               || params.get('sub3')   || '';
+        var utmSrc     = params.get('utm_source')    || 'cma-growthfusion';
+        var sourceId   = params.get('source_id')     || '';
 
-        window.brhTracking = { sub1: sub1, fbclid: fbclid, rt_ad: rtAd, rt_cid: rtCid, gclid: gclid, zipCode: zipParam, utm_source: utmSrc };
+        window.brhTracking = { sub1: sub1, fbclid: fbclid, rt_campaign: rtCampaign, rt_cid: rtCid, gclid: gclid, zipCode: zipParam, utm_source: utmSrc, source_id: sourceId };
 
         var elLoading = document.getElementById('results-loading');
         var elGrid    = document.getElementById('results-grid');
@@ -557,11 +558,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         /* ── Build UTM payload ─────────────────────────────────────────── */
         var utmData = { utm_source: utmSrc, utm_vertical: 'BRH' };
-        if (rtCid)  utmData.utm_campaign          = rtCid;
-        if (rtAd)   utmData.utm_content           = rtAd;
-        if (sub1)   utmData.utm_subid             = sub1;
-        if (fbclid) utmData.utm_facebook_click_id = fbclid;
-        if (gclid)  utmData.utm_google_click_id   = gclid;
+        if (rtCid)      utmData.utm_campaign        = rtCid;
+        if (rtCampaign) utmData.rt_campaign         = rtCampaign;
+        if (sub1)       utmData.utm_subid           = sub1;
+        if (fbclid)     utmData.utm_user_hash       = fbclid;
+        if (gclid)      utmData.utm_google_click_id = gclid;
+        if (sourceId)   utmData.source_id           = sourceId;
 
         /* ── Fetch businesses ──────────────────────────────────────────── */
         fetch('/api/businesses', {
@@ -693,9 +695,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
                 event: 'contact', businessName: bizName,
-                rt_ad: t.rt_ad || '', zipcode: t.zipCode || '',
+                rt_campaign: t.rt_campaign || '', zipcode: t.zipCode || '',
                 rt_cid: t.rt_cid || '', fbclid: t.fbclid || '',
                 gclid: t.gclid || '', sub1: t.sub1 || '',
+                source_id: t.source_id || '',
                 rtPostbackUrl: buildRtPostbackUrl()
             });
             try { new Image().src = buildRtPostbackUrl(); } catch (e) {}

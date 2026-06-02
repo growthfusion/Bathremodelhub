@@ -238,22 +238,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         /* Read tracking params with multi-name fallback so any offer-URL variant is supported.
            Latest Redtrack offer URL maps:
-             utm_subid     → clickid (sub1 in postback)
-             utm_campaign  → rt_cid  (sub4 in postback)
-             utm_user_hash → fbclid  (sub11 in postback)
-             utm_content   → rt_ad   (sub2 in postback)
-             zipcode       → sub3 in postback                                              */
-        var sub1     = params.get('utm_subid')     || params.get('sub1')                  || '';
-        var fbclid   = params.get('utm_user_hash') || params.get('utm_facebook_click_id') || params.get('fbclid') || params.get('sub11') || '';
-        var rtAd     = params.get('utm_content')   || params.get('utm_rt_ad')             || params.get('rt_ad')  || params.get('sub2')  || '';
-        var rtCid    = params.get('utm_campaign')  || params.get('rt_cid')                || params.get('sub4')   || '';
-        var gclid    = params.get('gclid')         || params.get('utm_google_click_id')   || '';
-        var zipParam = zipCode                     || params.get('zipcode')               || params.get('sub3')   || '';
-        var utmSrc   = params.get('utm_source')    || 'cma-growthfusion';
+             utm_subid     → clickid    (sub1 in postback)
+             utm_campaign  → rt_cid
+             utm_user_hash → fbclid     (sub11 in postback)
+             utm_content   → rt_campaign
+             zipcode       → sub3 in postback
+             source_id     → gf1 (static source identifier)                               */
+        var sub1       = params.get('utm_subid')     || params.get('sub1')                  || '';
+        var fbclid     = params.get('utm_user_hash') || params.get('utm_facebook_click_id') || params.get('fbclid') || params.get('sub11') || '';
+        var rtCampaign = params.get('utm_content')   || '';
+        var rtCid      = params.get('utm_campaign')  || params.get('rt_cid')                || params.get('sub4')   || '';
+        var gclid      = params.get('gclid')         || params.get('utm_google_click_id')   || '';
+        var zipParam   = zipCode                     || params.get('zipcode')               || params.get('sub3')   || '';
+        var utmSrc     = params.get('utm_source')    || 'cma-growthfusion';
+        var sourceId   = params.get('source_id')     || '';
         var designVariant = (params.get('design') || 'A').toUpperCase();
         var useDesignB = designVariant === 'B';
 
-        window.brhTracking = { sub1: sub1, fbclid: fbclid, rt_ad: rtAd, rt_cid: rtCid, gclid: gclid, zipCode: zipParam, utm_source: utmSrc };
+        window.brhTracking = { sub1: sub1, fbclid: fbclid, rt_campaign: rtCampaign, rt_cid: rtCid, gclid: gclid, zipCode: zipParam, utm_source: utmSrc, source_id: sourceId };
 
         var elLoading = document.getElementById('results-loading');
         var elGrid    = document.getElementById('results-grid');
@@ -301,18 +303,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         /* Build the full utmData object Thumbtack expects.
            Mapping (per Thumbtack /v4/businesses/search schema):
-             utm_source            ← cma-growthfusion (required, ^cma-... pattern)
-             utm_campaign          ← Redtrack rt_cid
-             utm_content           ← Redtrack rt_ad   (sub2)
-             utm_subid             ← Redtrack clickid (sub1)
-             utm_facebook_click_id ← Facebook click id (sub11)
-             utm_google_click_id   ← gclid (Google Ads) */
+             utm_source          ← cma-growthfusion (required, ^cma-... pattern)
+             utm_campaign        ← Redtrack rt_cid
+             rt_campaign         ← utm_content value
+             utm_subid           ← Redtrack clickid (sub1)
+             utm_user_hash       ← Facebook click id (sub11)
+             utm_google_click_id ← gclid (Google Ads)
+             source_id           ← static source identifier                        */
         var utmData = { utm_source: utmSrc, utm_vertical: 'BRH' };
-        if (rtCid)  utmData.utm_campaign          = rtCid;
-        if (rtAd)   utmData.utm_content           = rtAd;
-        if (sub1)   utmData.utm_subid             = sub1;
-        if (fbclid) utmData.utm_facebook_click_id = fbclid;
-        if (gclid)  utmData.utm_google_click_id   = gclid;
+        if (rtCid)      utmData.utm_campaign        = rtCid;
+        if (rtCampaign) utmData.rt_campaign         = rtCampaign;
+        if (sub1)       utmData.utm_subid           = sub1;
+        if (fbclid)     utmData.utm_user_hash       = fbclid;
+        if (gclid)      utmData.utm_google_click_id = gclid;
+        if (sourceId)   utmData.source_id           = sourceId;
 
         fetch('/api/businesses', {
             method:  'POST',
@@ -635,12 +639,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             window.dataLayer.push({
                 event:         'contact',
                 businessName:  bizName,
-                rt_ad:         t.rt_ad   || '',
-                zipcode:       t.zipCode || '',
-                rt_cid:        t.rt_cid  || '',
-                fbclid:        t.fbclid  || '',
-                gclid:         t.gclid   || '',
-                sub1:          t.sub1    || '',
+                rt_campaign:   t.rt_campaign || '',
+                zipcode:       t.zipCode     || '',
+                rt_cid:        t.rt_cid      || '',
+                fbclid:        t.fbclid      || '',
+                gclid:         t.gclid       || '',
+                sub1:          t.sub1        || '',
+                source_id:     t.source_id   || '',
                 rtPostbackUrl: rtPostbackUrl
             });
             try { new Image().src = rtPostbackUrl; } catch (e) {}
