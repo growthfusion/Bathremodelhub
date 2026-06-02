@@ -1,0 +1,13 @@
+# Exclude git history and local-only files
+.git/
+.gitignore
+
+# Exclude local env secrets (real env vars are set in Cloud Run)
+.env
+.env.local
+.env.*.local
+
+# Exclude dev dependencies and local tooling
+node_modules/
+.DS_Store
+*.log
