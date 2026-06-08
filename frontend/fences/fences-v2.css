@@ -1,4 +1,4 @@
-/* === HERO SPLIT — legacy variant, unused === */
+﻿/* === HERO SPLIT — legacy variant, unused === */
 .svc-hero-right {
     background-image: url('../fences/images/bg_fence_01.jpg') !important;
     background-size: cover !important;
@@ -82,7 +82,7 @@
     content: '✦  Trusted Local Professionals';
     display: inline-flex; align-items: center;
     background: rgba(99,102,241,0.08);
-    color: #6366F1; font-size: 12px; font-weight: 600;
+    color: #3b82f6; font-size: 12px; font-weight: 600;
     letter-spacing: 0.03em; border-radius: 20px;
     padding: 6px 14px; margin-bottom: 22px;
     font-family: var(--font-body, 'Poppins', sans-serif);
@@ -96,7 +96,7 @@
     letter-spacing: -0.035em; color: #0F172A;
     margin: 0 0 16px; max-width: 520px;
 }
-.ph-title span { color: #6366F1; }
+.ph-title span { color: #3b82f6; }
 .ph-accent      { position: static; white-space: normal; }
 .ph-underline   { display: none; }
 
@@ -129,7 +129,7 @@
     transition: border-color .2s, box-shadow .2s;
 }
 .ph-form__field:focus-within {
-    border-color: #6366F1;
+    border-color: #3b82f6;
     box-shadow: 0 0 0 4px rgba(99,102,241,0.10);
 }
 .ph-form__field svg {
@@ -151,7 +151,7 @@
     border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center; gap: 8px;
     width: 100%;
-    background: #6366F1;
+    background: #3b82f6;
     color: #ffffff; font-weight: 700; font-size: 16px;
     padding: 18px 28px; border-radius: 14px;
     font-family: var(--font-body, 'Poppins', sans-serif);
@@ -833,7 +833,7 @@ section.va-hero-section::after {
     text-align: center;
     margin: 48px 24px 0;
 }
-.ip2-grid-note .highlight1 { color: #5B46F3; font-weight: 600; }
+.ip2-grid-note .highlight1 { color: #3b82f6; font-weight: 600; }
 
 @media (max-width: 860px) {
     .ip2-grid { grid-template-columns: repeat(2, 1fr); padding: 0 24px; gap: 20px; }
@@ -986,17 +986,17 @@ section.va-hero-section::after {
     font-size: 17px; font-weight: 600; color: #0F172A;
     transition: color .2s;
 }
-.ip2-acc__btn:hover { color: #5B46F3; }
+.ip2-acc__btn:hover { color: #3b82f6; }
 
 .ip2-acc__icon {
     width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
-    border: 2px solid #5B46F3; color: #5B46F3;
+    border: 2px solid #3b82f6; color: #3b82f6;
     font-size: 20px; font-weight: 400; line-height: 1;
     display: flex; align-items: center; justify-content: center;
     transition: background .2s, color .2s, transform .3s;
 }
 .ip2-acc__btn[aria-expanded="true"] .ip2-acc__icon {
-    background: #5B46F3; color: #fff; transform: rotate(45deg);
+    background: #3b82f6; color: #fff; transform: rotate(45deg);
 }
 
 .ip2-acc__body {
@@ -1016,7 +1016,7 @@ section.va-hero-section::after {
 
 /* ── ⑤ FINAL CTA BAND ── */
 .ip2-cta {
-    background: linear-gradient(135deg, #3A57E0 0%, #5B46F3 100%);
+    background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
     padding: 90px 24px;
 }
 .ip2-cta__inner { max-width: 640px; margin: 0 auto; text-align: center; }
@@ -1038,7 +1038,7 @@ section.va-hero-section::after {
 .ip2-cta__field {
     display: flex; align-items: center; gap: 10px; flex: 1; padding: 0 18px;
 }
-.ip2-cta__field svg { width: 18px; height: 18px; color: #5B46F3; flex: none; }
+.ip2-cta__field svg { width: 18px; height: 18px; color: #3b82f6; flex: none; }
 .ip2-cta__field input {
     border: none; outline: none; font-size: 16px;
     color: #0F172A; width: 100%; background: transparent; padding: 18px 0;
@@ -1047,13 +1047,13 @@ section.va-hero-section::after {
 .ip2-cta__field input::placeholder { color: #94A3B8; }
 .ip2-cta__btn {
     border: none; cursor: pointer; white-space: nowrap;
-    background: #5B46F3; color: #fff;
+    background: #3b82f6; color: #fff;
     font-family: var(--font-body, 'Poppins', sans-serif);
     font-weight: 700; font-size: 15px;
     padding: 18px 30px; border-radius: 0;
     transition: background .2s ease;
 }
-.ip2-cta__btn:hover { background: #4633E0; }
+.ip2-cta__btn:hover { background: #2563eb; }
 .ip2-cta__hint {
     font-family: var(--font-body, 'Poppins', sans-serif);
     font-size: 13px; color: rgba(255,255,255,0.65);

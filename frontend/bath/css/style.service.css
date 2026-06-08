@@ -1,4 +1,4 @@
-@-webkit-keyframes mui-auto-fill {
+﻿@-webkit-keyframes mui-auto-fill {
     from {
         display: block;
     }
@@ -84,11 +84,11 @@ footer a:visited, footer  a:active {
     font-family: var(--font-body);
     font-size: 32px;
     font-weight: 900;
-    background: linear-gradient(135deg, #5B46F3 0%, #7C6FF7 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    color: #5B46F3;
+    color: #3b82f6;
     letter-spacing: -0.04em;
     text-decoration: none;
     display: inline-block;
@@ -126,7 +126,7 @@ footer a:visited, footer  a:active {
     justify-content: center;
     width: 44px;
     height: 44px;
-    background: #5B46F3;
+    background: #3b82f6;
     border-radius: 12px;
     flex-shrink: 0;
 }
@@ -178,7 +178,7 @@ footer a:visited, footer  a:active {
 .css-1lnrx9k {
     -webkit-text-decoration: underline;
     text-decoration: underline;
-    text-decoration-color: rgba(91, 70, 243, 0.4);
+    text-decoration-color: rgba(59, 130, 246, 0.4);
     display: inline-block;
     line-height: 1;
 }
@@ -247,8 +247,8 @@ footer a:visited, footer  a:active {
     padding: 24px;
     background: #ffffff;
     border-radius: 20px;
-    border: 1.5px solid rgba(91, 70, 243, 0.18);
-    box-shadow: 0 2px 10px rgba(91, 70, 243, 0.06);
+    border: 1.5px solid rgba(59, 130, 246, 0.18);
+    box-shadow: 0 2px 10px rgba(59, 130, 246, 0.06);
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
@@ -258,8 +258,8 @@ footer a:visited, footer  a:active {
 }
 
 .gridset:hover {
-    border-color: rgba(91, 70, 243, 0.4);
-    box-shadow: 0 6px 20px rgba(91, 70, 243, 0.13);
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.13);
     transform: translateY(-2px);
 }
 @media (max-width: 767px) {
@@ -655,7 +655,7 @@ footer a:visited, footer  a:active {
 }
 
 .css-1v4ccyo.Mui-error .MuiOutlinedInput-notchedOutline {
-    border-color: #5B46F3;
+    border-color: #3b82f6;
 }
 
 .css-1v4ccyo.Mui-disabled .MuiOutlinedInput-notchedOutline {
@@ -889,7 +889,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
 .body-button {
     font-weight: 700;
     color: #ffffff;
-    background: #5B46F3;
+    background: #3b82f6;
     padding: 14px 32px;
     border: none;
     border-radius: 12px;
@@ -906,12 +906,12 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
 .css-2i2sy2:hover {
     -webkit-text-decoration: none;
     text-decoration: none;
-    background-color: #4633E0;
+    background-color: #2563eb;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .body-button:hover {
-    background: #4633E0 !important;
+    background: #2563eb !important;
     color: #ffffff !important;
     border: none !important;
 }
@@ -1387,23 +1387,23 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
     box-sizing: border-box;
     margin-bottom: 12px;
     border-radius: 20px;
-    border: 1.5px solid rgba(91, 70, 243, 0.18);
+    border: 1.5px solid rgba(59, 130, 246, 0.18);
     background: #ffffff;
-    box-shadow: 0 2px 10px rgba(91, 70, 243, 0.05);
+    box-shadow: 0 2px 10px rgba(59, 130, 246, 0.05);
     transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
     min-height: unset;
     display: block;
 }
 
 .css-mrshpo .css-16wondw.gridset:hover {
-    border-color: rgba(91, 70, 243, 0.4);
-    box-shadow: 0 4px 16px rgba(91, 70, 243, 0.12);
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.12);
     transform: translateY(-1px);
 }
 
 .css-mrshpo .css-16wondw.gridset.accordion-item.is-open {
-    border-color: #5B46F3;
-    box-shadow: 0 4px 20px rgba(91, 70, 243, 0.15);
+    border-color: #3b82f6;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
 }
 
 @media (max-width: 767px) {
@@ -1495,7 +1495,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
     height: 36px;
     border-radius: 50%;
     background: #EEF0FF;
-    color: #5B46F3;
+    color: #3b82f6;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1503,7 +1503,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
     font-family: sans-serif;
 }
 .accordion-item.is-open .accordion-icon {
-    background: #5B46F3;
+    background: #3b82f6;
     color: #ffffff;
     transform: rotate(45deg);
 }
@@ -1524,7 +1524,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
    CTA QUOTE SECTION
    ============================================ */
 .cta-quote-section {
-    background: linear-gradient(135deg, #7C6FF7 0%, #5B46F3 60%, #4432D4 100%);
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 60%, #2563eb 100%);
     padding: 72px 24px;
     text-align: center;
     opacity: 0.9;
@@ -1601,7 +1601,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
     height: 54px;
     padding: 0 32px;
     background: #ffffff;
-    color: #5B46F3;
+    color: #3b82f6;
     border: 2px solid #ffffff;
     border-radius: 50px;
     font-family: var(--font-body);
@@ -1712,11 +1712,11 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
 }
 
 .css-ci3sp7.Mui-selected {
-    background-color: rgba(91, 70, 243, 0.08);
+    background-color: rgba(59, 130, 246, 0.08);
 }
 
 .css-ci3sp7.Mui-selected.Mui-focusVisible {
-    background-color: rgba(91, 70, 243, 0.2);
+    background-color: rgba(59, 130, 246, 0.2);
 }
 
 .css-ci3sp7.Mui-disabled {
@@ -1743,7 +1743,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
 }
 
 .css-1tcjpox:hover {
-    color: #A89CF7;
+    color: #93c5fd;
     text-decoration: none;
 }
 
@@ -1781,11 +1781,11 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
 }
 
 .css-huzvfi.Mui-selected {
-    background-color: rgba(91, 70, 243, 0.08);
+    background-color: rgba(59, 130, 246, 0.08);
 }
 
 .css-huzvfi.Mui-selected.Mui-focusVisible {
-    background-color: rgba(91, 70, 243, 0.2);
+    background-color: rgba(59, 130, 246, 0.2);
 }
 
 .css-huzvfi.Mui-disabled {
@@ -2296,7 +2296,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
 .form-group textarea:focus {
     outline: none;
     border-color: #1E293B;
-    box-shadow: 0 0 0 2px rgba(91, 70, 243, 0.2);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
 .form-feedback {
@@ -2309,7 +2309,7 @@ label[data-shrink=false]+.MuiInputBase-formControl .css-1x5jdmq:focus::-ms-input
 /* Highlight invalid fields */
 .contact-form .invalid {
     border-color: #e74c3c !important;
-    box-shadow: 0 0 0 2px rgba(91, 70, 243, 0.2);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
 /* Optional: Remove highlight as soon as user corrects it */

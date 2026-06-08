@@ -1,4 +1,4 @@
-/* ── Quotes / Keywords flow styles ─────────────────────────────────────────── */
+﻿/* ── Quotes / Keywords flow styles ─────────────────────────────────────────── */
 
 .hidden { display: none !important; }
 
@@ -87,7 +87,7 @@
 .keyword-chip:focus-visible {
     background: #fff;
     border-color: #fff;
-    color: #5B46F3;
+    color: #3b82f6;
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
     outline: none;
@@ -132,14 +132,14 @@
     justify-content: center;
     gap: 10px;
     padding: 20px 0 16px;
-    color: #5B46F3;
+    color: #3b82f6;
     font-size: 14px;
     font-weight: 500;
 }
 
 .hero-kw-loading .kw-spinner {
-    border-color: rgba(91, 70, 243, 0.25);
-    border-top-color: #5B46F3;
+    border-color: rgba(59, 130, 246, 0.25);
+    border-top-color: #3b82f6;
 }
 
 .hero-kw-content {
@@ -158,10 +158,10 @@
 .hero-kw-error {
     padding: 12px 16px;
     margin: 16px 0 4px;
-    background: rgba(91, 70, 243, 0.06);
-    border: 1px solid rgba(91, 70, 243, 0.18);
+    background: rgba(59, 130, 246, 0.06);
+    border: 1px solid rgba(59, 130, 246, 0.18);
     border-radius: 10px;
-    color: #4432D4;
+    color: #2563eb;
     font-size: 14px;
     text-align: center;
 }
@@ -191,10 +191,10 @@
 
 .hero-kw-card:hover,
 .hero-kw-card:focus-visible {
-    background: #5B46F3;
-    border-color: #5B46F3;
+    background: #3b82f6;
+    border-color: #3b82f6;
     transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(91, 70, 243, 0.25);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25);
     outline: none;
 }
 
@@ -205,7 +205,7 @@
     width: 46px;
     height: 46px;
     border-radius: 12px;
-    background: rgba(91, 70, 243, 0.08);
+    background: rgba(59, 130, 246, 0.08);
     margin-bottom: 10px;
     flex-shrink: 0;
     transition: background 0.18s ease;
@@ -213,7 +213,7 @@
 
 .hero-kw-card__icon .material-symbols-outlined {
     font-size: 22px;
-    color: #5B46F3;
+    color: #3b82f6;
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     transition: color 0.18s ease;
 }

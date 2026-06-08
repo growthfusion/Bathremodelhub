@@ -1,4 +1,4 @@
-/* ===================================================================
+﻿/* ===================================================================
    BATH — Variant A Hero (light, full-bleed illustration)
    Mirrors fences-v2.css — bath-hero.png desktop, bath-mobile-hero.png mobile
    =================================================================== */
@@ -472,7 +472,7 @@ section.va-hero-section::after {
     text-align: center;
     margin: 48px 24px 0;
 }
-.ip2-grid-note .highlight1 { color: #5B46F3; font-weight: 600; }
+.ip2-grid-note .highlight1 { color: #3b82f6; font-weight: 600; }
 
 @media (max-width: 860px) {
     .ip2-grid { grid-template-columns: repeat(2, 1fr); padding: 0 24px; gap: 20px; }
@@ -636,7 +636,7 @@ section.va-hero-section::after {
 
 /* ── ⑤ FINAL CTA BAND ── */
 .ip2-cta {
-    background: linear-gradient(135deg, #3A57E0 0%, #5B46F3 100%);
+    background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
     padding: 90px 24px;
 }
 .ip2-cta__inner { max-width: 640px; margin: 0 auto; text-align: center; }
@@ -658,7 +658,7 @@ section.va-hero-section::after {
 .ip2-cta__field {
     display: flex; align-items: center; gap: 10px; flex: 1; padding: 0 18px;
 }
-.ip2-cta__field svg { width: 18px; height: 18px; color: #5B46F3; flex: none; }
+.ip2-cta__field svg { width: 18px; height: 18px; color: #3b82f6; flex: none; }
 .ip2-cta__field input {
     border: none; outline: none; font-size: 16px;
     color: #0F172A; width: 100%; background: transparent; padding: 18px 0;
@@ -667,13 +667,13 @@ section.va-hero-section::after {
 .ip2-cta__field input::placeholder { color: #94A3B8; }
 .ip2-cta__btn {
     border: none; cursor: pointer; white-space: nowrap;
-    background: #5B46F3; color: #fff;
+    background: #3b82f6; color: #fff;
     font-family: var(--font-body, 'Poppins', sans-serif);
     font-weight: 700; font-size: 15px;
     padding: 18px 30px; border-radius: 0;
     transition: background .2s ease;
 }
-.ip2-cta__btn:hover { background: #4633E0; }
+.ip2-cta__btn:hover { background: #2563eb; }
 .ip2-cta__hint {
     font-family: var(--font-body, 'Poppins', sans-serif);
     font-size: 13px; color: rgba(255,255,255,0.65);

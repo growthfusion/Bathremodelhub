@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -32,7 +32,7 @@
       display: inline-flex; align-items: center; gap: 8px;
       font-weight: 800; font-size: 18px; color: #0F172A; text-decoration: none;
     }
-    .hc-nav-logo span { color: #5B46F3; }
+    .hc-nav-logo span { color: #3b82f6; }
 
     /* ── BANNER ── */
     .hc-banner {
@@ -77,11 +77,11 @@
     .biz-img-wrap { height: 182px; overflow: hidden; position: relative; background: #EEF0FF; }
     .biz-card__cta {
       position: relative; overflow: hidden;
-      background: linear-gradient(135deg, #7C6FF7 0%, #5B46F3 100%);
+      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
     }
     .biz-card__cta::after {
       content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, #5B46F3 0%, #4432D4 100%);
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       opacity: 0; transition: opacity 0.18s ease;
     }
     .biz-card:hover .biz-card__cta::after { opacity: 1; }
@@ -90,7 +90,7 @@
     /* loading dots */
     .loading-dot {
       width: 10px; height: 10px; border-radius: 50%;
-      background: #5B46F3; animation: ldot 1.2s ease-in-out infinite;
+      background: #3b82f6; animation: ldot 1.2s ease-in-out infinite;
     }
     .loading-dot:nth-child(2) { animation-delay: 0.2s; }
     .loading-dot:nth-child(3) { animation-delay: 0.4s; }
@@ -155,12 +155,12 @@
 
     <!-- Error -->
     <div id="results-error" class="hidden flex flex-col items-center justify-center py-24 text-center">
-      <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style="background:rgba(91,70,243,0.08)">
-        <span class="material-symbols-outlined text-4xl" style="color:#5B46F3">search_off</span>
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style="background:rgba(59,130,246,0.08)">
+        <span class="material-symbols-outlined text-4xl" style="color:#3b82f6">search_off</span>
       </div>
       <p id="results-error-msg" class="text-gray-700 font-bold text-lg mb-2">Something went wrong</p>
       <p class="text-gray-400 text-sm mb-6">Please go back and try again.</p>
-      <button onclick="history.back()" class="font-bold px-6 py-3 rounded-xl text-sm text-white" style="background:#5B46F3;">Go Back</button>
+      <button onclick="history.back()" class="font-bold px-6 py-3 rounded-xl text-sm text-white" style="background:#3b82f6;">Go Back</button>
     </div>
 
     <!-- Empty -->
@@ -310,7 +310,7 @@
 
     var imgEl = imgURL
       ? '<img src="' + imgURL + '" alt="' + name + '" width="400" height="182" class="w-full h-full object-cover"' + (idx===0?' fetchpriority="high"':' loading="lazy"') + ' decoding="async" />'
-      : '<div class="w-full h-full flex items-center justify-center" style="background:linear-gradient(135deg,#7C6FF7,#5B46F3)"><span class="material-symbols-outlined text-white" style="font-size:52px">fence</span></div>';
+      : '<div class="w-full h-full flex items-center justify-center" style="background:linear-gradient(135deg,#60a5fa,#3b82f6)"><span class="material-symbols-outlined text-white" style="font-size:52px">fence</span></div>';
 
     var topProBadge = isTopPro
       ? '<div class="absolute top-3 left-3 flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full shadow-md" style="background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff"><span class="material-symbols-outlined star-filled" style="font-size:11px">star</span>Top Pro</div>' : '';
@@ -324,7 +324,7 @@
     var badgesEl = (isTopPro || signal)
       ? '<div class="flex flex-wrap gap-1.5 mt-2">'
         + (isTopPro ? '<span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:#FEF3C7;color:#B45309;border:1px solid #FDE68A"><span class="material-symbols-outlined star-filled" style="font-size:11px;color:#D97706">star</span>Top Pro</span>' : '')
-        + (signal   ? '<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:rgba(91,70,243,0.08);color:#5B46F3;border:1px solid rgba(91,70,243,0.2)">' + signal + '</span>' : '')
+        + (signal   ? '<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:rgba(59,130,246,0.08);color:#3b82f6;border:1px solid rgba(59,130,246,0.2)">' + signal + '</span>' : '')
         + '</div>' : '';
 
     var addrEl = address
