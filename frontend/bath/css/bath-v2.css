@@ -423,32 +423,66 @@ section.va-hero-section::after {
     line-height: 1.6;
 }
 
-.ip2-grid {
+/* ── BENTO GRID ── */
+.ip2-bento {
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 40px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
+    grid-auto-rows: 1fr;
+    gap: 20px;
 }
 
-.ip2-card {
+/* Row 1: wide(2) + narrow(1)  →  cards 1 & 2 */
+/* Row 2: narrow(1) + wide(2)  →  cards 3 & 4 */
+/* Row 3: wide(2) + narrow(1)  →  cards 5 & 6 */
+.ip2-bento__card:nth-child(1) { grid-column: span 2; }
+.ip2-bento__card:nth-child(2) { grid-column: span 1; }
+.ip2-bento__card:nth-child(3) { grid-column: span 1; }
+.ip2-bento__card:nth-child(4) { grid-column: span 2; }
+.ip2-bento__card:nth-child(5) { grid-column: span 2; }
+.ip2-bento__card:nth-child(6) { grid-column: span 1; }
+
+.ip2-bento__card {
     background: #ffffff;
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.22s ease;
 }
-.ip2-card__img {
+.ip2-bento__card:hover {
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+.ip2-bento__img {
+    overflow: hidden;
+    flex-shrink: 0;
+}
+/* Narrow cards get a square-ish image */
+.ip2-bento__card:not(.ip2-bento__card--wide) .ip2-bento__img {
     aspect-ratio: 4 / 3;
-    overflow: hidden;
 }
-.ip2-card__img img {
+/* Wide cards get a cinematic image */
+.ip2-bento__card--wide .ip2-bento__img {
+    aspect-ratio: 16 / 7;
+}
+
+.ip2-bento__img img {
     display: block;
     width: 100%; height: 100%;
     object-fit: cover;
+    transition: transform 0.5s ease;
 }
-.ip2-card__body { padding: 20px 22px 24px; }
-.ip2-card__body h3 {
+.ip2-bento__card:hover .ip2-bento__img img { transform: scale(1.04); }
+
+.ip2-bento__body {
+    padding: 20px 22px 24px;
+    flex: 1;
+}
+.ip2-bento__body h3 {
     font-family: var(--font-body, 'Poppins', sans-serif);
     font-size: 16px;
     font-weight: 700;
@@ -456,7 +490,8 @@ section.va-hero-section::after {
     margin: 0 0 8px;
     line-height: 1.3;
 }
-.ip2-card__body p {
+.ip2-bento__card--wide .ip2-bento__body h3 { font-size: 18px; }
+.ip2-bento__body p {
     font-family: var(--font-body, 'Poppins', sans-serif);
     font-size: 14px;
     color: #64748B;
@@ -475,12 +510,24 @@ section.va-hero-section::after {
 .ip2-grid-note .highlight1 { color: #3b82f6; font-weight: 600; }
 
 @media (max-width: 860px) {
-    .ip2-grid { grid-template-columns: repeat(2, 1fr); padding: 0 24px; gap: 20px; }
+    .ip2-bento {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 24px;
+        gap: 16px;
+    }
+    .ip2-bento__card:nth-child(1),
+    .ip2-bento__card:nth-child(2),
+    .ip2-bento__card:nth-child(3),
+    .ip2-bento__card:nth-child(4),
+    .ip2-bento__card:nth-child(5),
+    .ip2-bento__card:nth-child(6) { grid-column: span 1; }
+    .ip2-bento__card--wide .ip2-bento__img { aspect-ratio: 4 / 3; }
+    .ip2-bento__card--wide .ip2-bento__body h3 { font-size: 16px; }
     .ip2-grid-head { padding: 0 24px; margin-bottom: 36px; }
 }
 @media (max-width: 560px) {
     .ip2-grid-section { padding: 56px 0 64px; }
-    .ip2-grid { grid-template-columns: 1fr; padding: 0 20px; }
+    .ip2-bento { grid-template-columns: 1fr; padding: 0 20px; }
     .ip2-grid-head { padding: 0 20px; }
 }
 
