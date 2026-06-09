@@ -1,0 +1,394 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fence Pros Near You | HouseCrew</title>
+  <link rel="icon" href="/images/HouseCrew.svg" type="image/svg+xml" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  </noscript>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js" defer></script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #F0F4F8; margin: 0; }
+    .font-headline { font-family: Manrope, ui-sans-serif, system-ui, sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+    .star-filled { font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24; }
+
+    /* ── NAV ── */
+    .hc-nav {
+      background: #fff; border-bottom: 1px solid #E5E7EB;
+      padding: 0 24px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .hc-nav-logo {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-weight: 800; font-size: 18px; color: #0F172A; text-decoration: none;
+    }
+    .hc-nav-logo span { color: #3b82f6; }
+
+    /* ── BANNER ── */
+    .hc-banner {
+      position: relative; overflow: hidden;
+      background: url('/fence/images/fences-hero-image.png') right top / cover no-repeat;
+      border-bottom: 1px solid #b8d0ec;
+      display: flex; align-items: center;
+      height: 320px;
+    }
+    .hc-banner::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(218,234,248,0.95) 0%, rgba(218,234,248,0.85) 45%, rgba(218,234,248,0.10) 100%);
+    }
+    .hc-banner-content { position: relative; z-index: 2; padding: 44px 40px; max-width: 560px; }
+    @media (max-width: 600px) {
+      .hc-banner-content { padding: 32px 20px; }
+      .hc-banner::before { background: rgba(218,234,248,0.90); }
+    }
+    .hc-congrats-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .hc-check-icon {
+      width: 28px; height: 28px; border-radius: 50%; background: #22c55e;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 10px rgba(34,197,94,.38); flex-shrink: 0;
+    }
+    .hc-congrats-text { font-weight: 700; font-size: 14px; color: #15803d; }
+    .hc-banner-heading {
+      margin: 0; font-size: clamp(22px, 3.2vw, 34px);
+      font-weight: 800; color: #0f172a; line-height: 1.18;
+      font-family: Manrope, sans-serif;
+    }
+    .hc-banner-heading span { color: #2563EB; }
+
+    /* ── CARDS ── */
+    .biz-card {
+      background: #fff; border-radius: 18px; overflow: hidden;
+      display: flex; flex-direction: column;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      text-decoration: none; color: inherit; cursor: pointer;
+    }
+    .js-card-trigger { cursor: pointer; text-decoration: none; }
+    .biz-img-wrap { height: 182px; overflow: hidden; position: relative; background: #EEF0FF; }
+    .biz-card__cta {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    }
+    .biz-card__cta::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      opacity: 0; transition: opacity 0.18s ease;
+    }
+    .biz-card:hover .biz-card__cta::after { opacity: 1; }
+    .biz-card__cta > * { position: relative; z-index: 1; }
+
+    /* loading dots */
+    .loading-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #3b82f6; animation: ldot 1.2s ease-in-out infinite;
+    }
+    .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes ldot {
+      0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
+      40%          { transform: scale(1);   opacity: 1;   }
+    }
+
+    /* ── FOOTER ── */
+    .hc-footer {
+      padding: 20px 24px; margin-top: 16px;
+      border-top: 1px solid #E5E7EB;
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      flex-wrap: wrap; font-size: 12px; color: #9CA3AF;
+    }
+    .hc-footer a { color: #9CA3AF; text-decoration: underline; text-underline-offset: 2px; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="hc-nav">
+    <a href="/" class="hc-nav-logo">
+      <img src="/images/HouseCrew.svg" alt="HouseCrew" height="28" style="height:28px;width:auto;">
+      House<span>Crew</span>
+    </a>
+  </nav>
+
+  <!-- BANNER -->
+  <div class="hc-banner">
+    <div class="hc-banner-content">
+      <div class="hc-congrats-row">
+        <div class="hc-check-icon">
+          <svg viewBox="0 0 20 20" fill="none" width="14" height="14">
+            <path d="M4 10l4 4 8-8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="hc-congrats-text">Congratulations!</span>
+      </div>
+      <h1 class="hc-banner-heading">
+        We Found Trusted <span>Fence Installation</span> Pros Near You
+      </h1>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="max-w-5xl mx-auto px-4 py-10" style="min-height:60vh">
+
+    <!-- Loading -->
+    <div id="results-loading" class="flex flex-col items-center justify-center py-24">
+      <div class="flex items-center gap-2 mb-6">
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+      </div>
+      <p class="text-gray-700 text-base font-bold mb-1">Finding local pros near you…</p>
+      <p class="text-gray-400 text-sm">This usually takes just a second</p>
+    </div>
+
+    <!-- Grid -->
+    <div id="results-grid" class="hidden"></div>
+
+    <!-- Error -->
+    <div id="results-error" class="hidden flex flex-col items-center justify-center py-24 text-center">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style="background:rgba(59,130,246,0.08)">
+        <span class="material-symbols-outlined text-4xl" style="color:#3b82f6">search_off</span>
+      </div>
+      <p id="results-error-msg" class="text-gray-700 font-bold text-lg mb-2">Something went wrong</p>
+      <p class="text-gray-400 text-sm mb-6">Please go back and try again.</p>
+      <button onclick="history.back()" class="font-bold px-6 py-3 rounded-xl text-sm text-white" style="background:#3b82f6;">Go Back</button>
+    </div>
+
+    <!-- Empty -->
+    <div id="results-empty" class="hidden flex flex-col items-center justify-center py-24 text-center">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style="background:rgba(255,107,53,0.08)">
+        <span class="material-symbols-outlined text-4xl" style="color:#ff6b35">person_search</span>
+      </div>
+      <p class="text-gray-700 font-bold text-lg mb-2">No pros found in this area</p>
+      <p class="text-gray-400 text-sm mb-6">Try a different ZIP code.</p>
+      <button onclick="history.back()" class="text-white font-bold px-6 py-3 rounded-xl text-sm" style="background:#ff6b35;">Change Search</button>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="hc-footer">
+    <span>&copy; <span id="yr"></span> HouseCrew &mdash; All Rights Reserved.</span>
+    <a href="/privacy-policy/">Privacy Policy</a>
+    <a href="/terms-of-use/">Terms of Use</a>
+  </footer>
+
+  <!-- Popup iframe -->
+  <div id="hc-popup-backdrop" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;padding:16px;">
+    <div id="hc-popup-card" style="background:#fff;border-radius:12px;width:860px;max-width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.25);animation:hcPopIn 0.2s ease;">
+      <iframe id="hc-popup-iframe" width="860" height="760" title="Get a free quote from this pro"
+        style="width:860px;height:760px;max-width:100%;display:block;border:none;"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" src="">
+      </iframe>
+    </div>
+  </div>
+  <style>
+    @keyframes hcPopIn { from { opacity:0;transform:scale(0.95) translateY(10px); } to { opacity:1;transform:scale(1) translateY(0); } }
+    @media (max-width:660px) {
+      #hc-popup-backdrop { padding:0; align-items:flex-end; }
+      #hc-popup-card { width:100%; border-radius:16px 16px 0 0; }
+      #hc-popup-iframe { width:100%!important; height:90vh!important; }
+    }
+  </style>
+
+<script>
+(function () {
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  var params      = new URLSearchParams(window.location.search);
+  var zipCode     = params.get('zip') || params.get('zipCode') || '';
+  var searchQuery = params.get('searchQuery') || 'fence installation';
+  var sub1        = params.get('utm_subid')      || params.get('sub1')                  || '';
+  var fbclid      = params.get('utm_user_hash')  || params.get('utm_facebook_click_id') || params.get('fbclid') || params.get('sub11') || '';
+  var rtCampaign  = params.get('utm_content')    || '';
+  var rtCid       = params.get('utm_campaign')   || params.get('rt_cid') || params.get('sub4') || '';
+  var utmSrc      = params.get('utm_source')     || 'cma-growthfusion';
+
+  window.hcTracking = { sub1: sub1, fbclid: fbclid, rt_campaign: rtCampaign, rt_cid: rtCid, zipCode: zipCode, utm_source: utmSrc };
+
+  var elLoading = document.getElementById('results-loading');
+  var elGrid    = document.getElementById('results-grid');
+  var elError   = document.getElementById('results-error');
+  var elErrMsg  = document.getElementById('results-error-msg');
+  var elEmpty   = document.getElementById('results-empty');
+
+  function show(el) { el.classList.remove('hidden'); }
+  function hide(el) { el.classList.add('hidden'); }
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function setContent(el, html) {
+    var clean = (window.DOMPurify ? DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: ['div','p','h2','h3','h4','span','a','strong','br','img'],
+      ALLOWED_ATTR: ['class','href','src','alt','style','target','rel','data-biz-name','data-href','width','height','loading','fetchpriority','decoding','role','tabindex']
+    }) : html.replace(/<script[\s\S]*?<\/script>/gi,''));
+    var doc = new DOMParser().parseFromString(clean, 'text/html');
+    while (el.firstChild) el.removeChild(el.firstChild);
+    Array.from(doc.body.childNodes).forEach(function(n){ el.appendChild(n); });
+  }
+
+  if (!zipCode) {
+    hide(elLoading); show(elError);
+    elErrMsg.textContent = 'Missing ZIP code.';
+    return;
+  }
+
+  var utmData = { utm_source: utmSrc };
+  if (rtCid)      utmData.utm_campaign  = rtCid;
+  if (rtCampaign) utmData.rt_campaign   = rtCampaign;
+  if (sub1)       utmData.utm_subid     = sub1;
+  if (fbclid)     utmData.utm_user_hash = fbclid;
+
+  fetch('/api/businesses', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ searchQuery: searchQuery, zipCode: zipCode, utmData: utmData })
+  })
+  .then(function(res) {
+    if (!res.ok) return res.json().catch(function(){ return {}; }).then(function(j){ throw new Error(j.error || ('Server error ' + res.status)); });
+    return res.json();
+  })
+  .then(function(data) {
+    var businesses = Array.isArray(data) ? data
+                   : Array.isArray(data.data) ? data.data
+                   : Array.isArray(data.businesses) ? data.businesses
+                   : Array.isArray(data.results) ? data.results : [];
+
+    businesses = businesses.slice().sort(function(a,b){ return (parseFloat(b.rating)||0) - (parseFloat(a.rating)||0); });
+
+    hide(elLoading);
+    if (!businesses.length) { show(elEmpty); return; }
+
+    var label = businesses.length + ' professional' + (businesses.length !== 1 ? 's' : '') + ' found near ' + zipCode;
+    setContent(elGrid,
+      '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">' + esc(label) + '</p>'
+      + '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">'
+      + businesses.map(function(biz, i){ return bizCard(biz, i); }).join('')
+      + '</div>'
+    );
+    show(elGrid);
+  })
+  .catch(function(e) {
+    hide(elLoading); show(elError);
+    elErrMsg.textContent = e.message || 'Could not load results.';
+  });
+
+  function stars(rating) {
+    var r = parseFloat(rating), full = Math.floor(r), half = r - full >= 0.5, s = '';
+    for (var i = 0; i < 5; i++) {
+      if (i < full)               s += '<span class="material-symbols-outlined star-filled" style="font-size:14px;color:#FBBF24">star</span>';
+      else if (i === full && half) s += '<span class="material-symbols-outlined" style="font-size:14px;color:#FBBF24">star_half</span>';
+      else                         s += '<span class="material-symbols-outlined" style="font-size:14px;color:#E5E7EB">star</span>';
+    }
+    return s;
+  }
+
+  function bizCard(biz, idx) {
+    var name     = esc(biz.businessName || 'Local Pro');
+    var address  = esc(biz.businessLocation || '');
+    var rating   = biz.rating ? parseFloat(biz.rating) : null;
+    var revCnt   = biz.numberOfReviews || null;
+    var imgURL   = esc(biz.businessImageURL || '');
+    var isTopPro = !!biz.isTopPro;
+    var signal   = biz.opinionatedSignal ? esc(biz.opinionatedSignal) : '';
+    var years    = biz.yearsInBusiness || null;
+    var hires    = biz.numberOfHires   || null;
+    var raw      = biz.businessIntroduction || '';
+    var intro    = raw ? esc(raw.slice(0,140)) + (raw.length > 140 ? '…' : '') : '';
+    var ctaURL   = esc((biz.widgets && biz.widgets.requestFlowURL) || biz.servicePageURL || '#');
+
+    var imgEl = imgURL
+      ? '<img src="' + imgURL + '" alt="' + name + '" width="400" height="182" class="w-full h-full object-cover"' + (idx===0?' fetchpriority="high"':' loading="lazy"') + ' decoding="async" />'
+      : '<div class="w-full h-full flex items-center justify-center" style="background:linear-gradient(135deg,#60a5fa,#3b82f6)"><span class="material-symbols-outlined text-white" style="font-size:52px">fence</span></div>';
+
+    var topProBadge = isTopPro
+      ? '<div class="absolute top-3 left-3 flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full shadow-md" style="background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff"><span class="material-symbols-outlined star-filled" style="font-size:11px">star</span>Top Pro</div>' : '';
+
+    var starRow = rating
+      ? '<div class="flex items-center gap-1.5 mt-2"><div class="flex items-center">' + stars(rating) + '</div>'
+        + '<span class="font-bold text-gray-900 text-sm">' + rating.toFixed(1) + '</span>'
+        + (revCnt ? '<span class="text-gray-400 text-xs">· ' + esc(String(revCnt)) + ' reviews</span>' : '')
+        + '</div>' : '';
+
+    var badgesEl = (isTopPro || signal)
+      ? '<div class="flex flex-wrap gap-1.5 mt-2">'
+        + (isTopPro ? '<span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:#FEF3C7;color:#B45309;border:1px solid #FDE68A"><span class="material-symbols-outlined star-filled" style="font-size:11px;color:#D97706">star</span>Top Pro</span>' : '')
+        + (signal   ? '<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:rgba(59,130,246,0.08);color:#3b82f6;border:1px solid rgba(59,130,246,0.2)">' + signal + '</span>' : '')
+        + '</div>' : '';
+
+    var addrEl = address
+      ? '<div class="flex items-center gap-1 mt-1.5" style="color:#6B7280;font-size:0.75rem;"><span class="material-symbols-outlined" style="font-size:13px">location_on</span>' + address + '</div>' : '';
+
+    var metaParts = [];
+    if (years) metaParts.push('<span class="flex items-center gap-1"><span class="material-symbols-outlined" style="font-size:13px;color:#9CA3AF">schedule</span>' + esc(String(years)) + ' yrs</span>');
+    if (hires) metaParts.push('<span class="flex items-center gap-1" style="color:#059669"><span class="material-symbols-outlined" style="font-size:13px;color:#10B981">check_circle</span>' + esc(String(hires)) + ' hired</span>');
+    var metaEl = metaParts.length ? '<div class="flex flex-wrap items-center gap-3 text-xs font-medium mt-2" style="color:#6B7280;">' + metaParts.join('<span style="color:#E5E7EB">·</span>') + '</div>' : '';
+
+    var introEl = intro ? '<p class="text-xs leading-relaxed mt-3 pt-3" style="color:#6B7280;border-top:1px solid #F3F4F6;line-height:1.65">' + intro + '</p>' : '';
+
+    return '<div class="biz-card" data-href="' + ctaURL + '" data-biz-name="' + esc(biz.businessName||'Local Pro') + '">'
+      + '<div class="biz-img-wrap">' + imgEl + topProBadge + '</div>'
+      + '<div class="p-5 flex flex-col flex-1">'
+      + '<h2 class="font-headline font-bold text-base leading-snug js-card-trigger" style="color:#1a3a5c;font-size:1rem;">' + name + '</h2>'
+      + starRow + badgesEl + addrEl + metaEl + introEl
+      + '<div class="flex-1" style="min-height:14px"></div>'
+      + '<div class="biz-card__cta mt-4 flex items-center justify-center w-full text-white font-bold py-3 rounded-xl text-sm js-card-trigger" role="button" tabindex="0">'
+      + '<span style="position:relative;z-index:1;display:flex;align-items:center;gap:8px;color:#fff;pointer-events:none;"><span class="material-symbols-outlined" style="font-size:16px">send</span>Compare Free Quote</span></div>'
+      + '</div></div>';
+  }
+
+  // ── Popup logic ──
+  var backdrop = document.getElementById('hc-popup-backdrop');
+  var iframeEl = document.getElementById('hc-popup-iframe');
+
+  window.addEventListener('message', function(e) {
+    if (!e.origin || e.origin.indexOf('thumbtack.com') === -1) return;
+    var raw  = typeof e.data === 'string' ? e.data.toLowerCase() : JSON.stringify(e.data||'').toLowerCase();
+    var msg  = (typeof e.data === 'object' && e.data !== null) ? e.data : {};
+    var type = String(msg.type||msg.event||msg.action||msg.name||e.data||'').toLowerCase();
+    if (type.indexOf('close') !== -1 || raw.indexOf('close') !== -1) { closePopup(); return; }
+    if (type.indexOf('resize') !== -1 && msg.height) { iframeEl.style.height = msg.height + 'px'; }
+  });
+
+  function openPopup(url, bizName) {
+    if (!url || url === '#') return;
+    backdrop.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    iframeEl.src = url;
+    var t = window.hcTracking || {};
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: 'contact', businessName: bizName, zipcode: t.zipCode||'', sub1: t.sub1||'', fbclid: t.fbclid||'' });
+    try { new Image().src = 'https://uo8b2.ttrk.io/postback?clickid=' + encodeURIComponent(t.sub1||'') + '&type=lead'; } catch(e){}
+  }
+
+  function closePopup() {
+    backdrop.style.display = 'none';
+    document.body.style.overflow = '';
+    iframeEl.src = '';
+  }
+
+  backdrop.addEventListener('click', function(e){ if (e.target === backdrop) closePopup(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closePopup(); });
+
+  document.addEventListener('click', function(e) {
+    var trigger = e.target.closest('.js-card-trigger');
+    if (!trigger) return;
+    e.preventDefault();
+    var card = trigger.closest('.biz-card');
+    openPopup(card ? card.getAttribute('data-href') : '', card ? (card.dataset.bizName||'') : '');
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,13 +1,13 @@
 ﻿:root {
-    /* === MONOCHROMATIC PALETTE (index page) â€” violet hue #7C6FF7 === */
-    --color-primary:        #7C6FF7;
+    /* === MONOCHROMATIC PALETTE (index page) â€” violet hue #60a5fa === */
+    --color-primary:        #60a5fa;
     --color-primary-border: #CBD5E1;
-    --color-primary-hover:  #5B46F3;
+    --color-primary-hover:  #3b82f6;
     --color-primary-dark:   #1E293B;
     --color-primary-text:   #ffffff;
 
-    --color-secondary:      #7C6FF7;
-    --color-secondary-dark: #5B46F3;
+    --color-secondary:      #60a5fa;
+    --color-secondary-dark: #3b82f6;
 
     --color-tertiary:       #0F172A;
     --color-tertiary-light: #F1F5F9;
@@ -17,14 +17,14 @@
     --text-sub:             #1E293B;
     --color-text:           #1E293B;
     --ink:                  #1E293B;
-    --text-highlight:       #7C6FF7;
+    --text-highlight:       #60a5fa;
 
     /* Backgrounds */
     --bg-input:             #F5F6FA;
     --bg-color2:            #0F172A;
     --bg-color3:            #F1F5F9;
     --icon-bg:              #CBD5E1;
-    --focus:                2px solid #7C6FF7;
+    --focus:                2px solid #60a5fa;
 
     /* Panel */
     --panel-gradient: linear-gradient(0deg, rgb(241 245 249 / 28%), rgb(241 245 249 / 98%));
@@ -103,8 +103,8 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 .hx-av:first-child { margin-left: 0; }
-.hx-av--1 { background: linear-gradient(135deg, #A89CF7, #5B46F3); }
-.hx-av--2 { background: linear-gradient(135deg, #7C6FF7, #4633E0); }
+.hx-av--1 { background: linear-gradient(135deg, #93c5fd, #3b82f6); }
+.hx-av--2 { background: linear-gradient(135deg, #60a5fa, #2563eb); }
 .hx-av--3 { background: linear-gradient(135deg, #94A3B8, #1E293B); }
 .hero-x__count-pill {
     width: 54px;
@@ -116,7 +116,7 @@
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    color: #5B46F3;
+    color: #3b82f6;
     font-size: 14px;
 }
 .hero-x__count-label {
@@ -140,7 +140,7 @@
     display: inline-block;
     padding: 8px 20px;
     background: #EEF0FF;
-    color: #5B46F3;
+    color: #3b82f6;
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 1.2px;
@@ -160,7 +160,7 @@
 }
 .hero-x__title-accent {
     display: block;
-    color: #5B46F3;
+    color: #3b82f6;
 }
 
 .hero-x__subhead {
@@ -211,8 +211,8 @@
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 .hero-x__field input:focus {
-    border-color: #5B46F3;
-    box-shadow: 0 0 0 3px rgba(91, 70, 243, 0.12);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
 }
 .hero-x__field input::placeholder {
     color: #94A3B8;
@@ -223,19 +223,19 @@
     width: 100%;
     height: 52px;
     border-radius: 10px;
-    background: #5B46F3;
+    background: #3b82f6;
     color: #ffffff;
     border: none;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 1px 2px rgba(91, 70, 243, 0.14);
+    box-shadow: 0 1px 2px rgba(59, 130, 246, 0.14);
     transition: background 0.2s;
     font-family: var(--font-body);
     margin-top: 8px;
     letter-spacing: 0.005em;
 }
-.hero-x__btn:hover { background: #4633E0; }
+.hero-x__btn:hover { background: #2563eb; }
 
 .hero-x__note {
     text-align: center;
@@ -268,7 +268,7 @@
     top: 70px;
     width: 30px;
     height: 380px;
-    background: #5B46F3;
+    background: #3b82f6;
     border-radius: 99px;
     z-index: 0;
 }
@@ -411,7 +411,7 @@
     display: inline-block;
     padding: 6px 16px;
     background: #EEF0FF;
-    color: #5B46F3;
+    color: #3b82f6;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1.5px;
@@ -455,8 +455,8 @@
 }
 
 .hero-min__form:focus-within {
-    border-color: #5B46F3;
-    box-shadow: 0 0 0 4px rgba(91, 70, 243, 0.12);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
 }
 
 .hero-min__zip,
@@ -488,7 +488,7 @@
 }
 
 .hero-min__btn {
-    background: #5B46F3;
+    background: #3b82f6;
     color: #ffffff;
     border: none;
     border-radius: 10px;
@@ -503,7 +503,7 @@
 }
 
 .hero-min__btn:hover {
-    background: #4633E0;
+    background: #2563eb;
 }
 
 .hero-min__trust {
@@ -523,7 +523,7 @@
 }
 
 .hero-min__trust .check {
-    color: #5B46F3;
+    color: #3b82f6;
     font-weight: 800;
     margin-right: 6px;
 }
@@ -540,7 +540,7 @@
     position: absolute;
     inset: auto 0 0 0;
     height: 65%;
-    background: radial-gradient(ellipse at 50% 100%, rgba(91, 70, 243, 0.10) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 50% 100%, rgba(59, 130, 246, 0.10) 0%, transparent 60%);
     z-index: 0;
 }
 
@@ -613,7 +613,7 @@
 .hero-split__headline {
     font-size: clamp(32px, 4vw, 52px);
     font-weight: 800;
-    color: #5B46F3;
+    color: #3b82f6;
     line-height: 1.1;
     letter-spacing: -0.03em;
     margin: 0 0 12px;
@@ -643,7 +643,7 @@
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: #5B46F3;
+    color: #3b82f6;
     margin: 0 0 20px;
 }
 
@@ -681,9 +681,9 @@
 
 .hif-input:focus {
     outline: none;
-    border-color: #5B46F3;
+    border-color: #3b82f6;
     background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(91, 70, 243, 0.15);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
 .hif-input::placeholder {
@@ -704,8 +704,8 @@
     color: #0F172A;
 }
 .hero-x__field #hero-zip:focus {
-    border-color: #5B46F3;
-    box-shadow: 0 0 0 3px rgba(91, 70, 243, 0.12);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
 }
 .hero-x__field #hero-zip::placeholder {
     color: #94A3B8;
@@ -719,7 +719,7 @@
     font-size: 16px;
     font-weight: 700;
     color: #ffffff;
-    background: #5B46F3;
+    background: #3b82f6;
     border: none;
     border-radius: 12px;
     cursor: pointer;
@@ -730,7 +730,7 @@
 }
 
 .hif-btn:hover {
-    background: #4633E0;
+    background: #2563eb;
 }
 
 /* RIGHT â€” D-shaped blob: stone bg + crew overlay */
@@ -749,8 +749,8 @@
     /* Clean 3D border â€” thin gradient outline + soft layered drop shadow */
     box-shadow:
         inset 0 0 0 1.5px rgba(255, 255, 255, 0.40),
-        0 0 0 2px rgba(91, 70, 243, 0.22),
-        0 8px 24px rgba(91, 70, 243, 0.14),
+        0 0 0 2px rgba(59, 130, 246, 0.22),
+        0 8px 24px rgba(59, 130, 246, 0.14),
         0 16px 40px rgba(15, 23, 42, 0.08);
 }
 
@@ -853,7 +853,7 @@
     width: 420px;
     height: 420px;
     border-radius: 50%;
-    background: radial-gradient(circle at center, rgba(124,111,247,0.35) 0%, rgba(91,70,243,0.18) 40%, transparent 70%);
+    background: radial-gradient(circle at center, rgba(96,165,250,0.35) 0%, rgba(59,130,246,0.18) 40%, transparent 70%);
     filter: blur(40px);
     z-index: 0;
     pointer-events: none;
@@ -868,7 +868,7 @@
     width: 360px;
     height: 360px;
     border-radius: 50%;
-    background: radial-gradient(circle at center, rgba(168,156,247,0.30) 0%, rgba(91,70,243,0.12) 45%, transparent 75%);
+    background: radial-gradient(circle at center, rgba(147,197,253,0.30) 0%, rgba(59,130,246,0.12) 45%, transparent 75%);
     filter: blur(40px);
     z-index: 0;
     pointer-events: none;
@@ -885,7 +885,7 @@
     right: -2%;
     width: 58%;
     bottom: 10px;
-    background: radial-gradient(ellipse at 70% 50%, rgba(124, 111, 247, 0.25) 0%, rgba(168, 156, 247, 0.12) 45%, transparent 70%);
+    background: radial-gradient(ellipse at 70% 50%, rgba(96, 165, 250, 0.25) 0%, rgba(147, 197, 253, 0.12) 45%, transparent 70%);
     filter: blur(28px);
     z-index: 0;
     pointer-events: none;
@@ -1034,7 +1034,7 @@
     }
     /* Service-page eyebrow + title - punchier on mobile */
     .svc-hero-eyebrow {
-        color: #5B46F3 !important;
+        color: #3b82f6 !important;
         letter-spacing: 2px;
     }
     .svc-hero-title {
@@ -1482,7 +1482,7 @@
     font-weight: 700;
     letter-spacing: 1.2px;
     text-transform: uppercase;
-    color: #5B46F3;
+    color: #3b82f6;
     background: #EEF0FF;
     padding: 8px 20px;
     border-radius: 20px;
@@ -1526,7 +1526,7 @@
 }
 
 .tpc-card:hover {
-    border-color: #A89CF7;
+    border-color: #93c5fd;
 }
 
 .tpc-card__img {
@@ -1557,7 +1557,7 @@
     font-family: var(--font-body);
     font-size: 13px;
     font-weight: 700;
-    color: #5B46F3;
+    color: #3b82f6;
     background: #EEF0FF;
     padding: 6px 14px;
     border-radius: 20px;
@@ -1575,7 +1575,7 @@
     font-family: var(--font-body);
     font-size: 17px;
     font-weight: 700;
-    background: #5B46F3;
+    background: #3b82f6;
     color: #ffffff;
     border: none;
     border-radius: 14px;
@@ -1585,7 +1585,7 @@
 }
 
 .tpc-btn:hover {
-    background: #4633E0;
+    background: #2563eb;
 }
 
 .tpc-btn.btn-border-reveal::after {
@@ -1650,7 +1650,7 @@
 
 .howitworks__sub {
     text-align: center;
-    color: #A89CF7;
+    color: #93c5fd;
     font-family: var(--font-body);
     font-size: 11px;
     font-weight: 700;
@@ -1687,11 +1687,11 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     padding: clamp(22px, 2.8vw, 36px);
     padding-bottom: clamp(22px, 2.8vw, 36px);
-    border-top: 4px solid #5B46F3;
+    border-top: 4px solid #3b82f6;
 }
 
-.step:nth-child(2) { border-top-color: #5B46F3; }
-.step:nth-child(3) { border-top-color: #5B46F3; }
+.step:nth-child(2) { border-top-color: #3b82f6; }
+.step:nth-child(3) { border-top-color: #3b82f6; }
 
 .step__row {
     display: grid;
@@ -1822,7 +1822,7 @@
 
 .iconGrid__card:hover {
     background: #F1F5F9;
-    border-color: #A89CF7;
+    border-color: #93c5fd;
 }
 
 .iconGrid__icon {
@@ -1931,7 +1931,7 @@
     font-weight: 700;
     letter-spacing: 2.5px;
     text-transform: uppercase;
-    color: #A89CF7;
+    color: #93c5fd;
     margin-bottom: 14px;
 }
 
@@ -2193,7 +2193,7 @@ outline: none !important; box-shadow: none !important;
 
 /* ============================================================
    MONOCHROMATIC CONTRAST SYSTEM
-   Single hue #7C6FF7 â€” contrast through value (dark â†” light)
+   Single hue #60a5fa â€” contrast through value (dark â†” light)
    and saturation (vivid â†” muted)
    Value Â· Size Â· Weight Â· Texture all preserved
    ============================================================ */
@@ -2203,7 +2203,7 @@ outline: none !important; box-shadow: none !important;
 /* PROJECT COSTS â€” handled by tpc-* rules above */
 
 /* ----------------------------------------------------------
-   HOW IT WORKS â€” Value: DARKEST (#4633E0) | Texture: dots
+   HOW IT WORKS â€” Value: DARKEST (#2563eb) | Texture: dots
    ---------------------------------------------------------- */
 .howitworks {
     background-color: #EEF0FF;
@@ -2220,7 +2220,7 @@ outline: none !important; box-shadow: none !important;
     margin-bottom: 40px;
 }
 .howitworks__sub {
-    color: #5B46F3;
+    color: #3b82f6;
     font-weight: 700;
     font-size: 12px;
     letter-spacing: 2.5px;
@@ -2250,7 +2250,7 @@ outline: none !important; box-shadow: none !important;
     right: 16px;
     font-size: 64px;
     font-weight: 900;
-    color: #5B46F3;
+    color: #3b82f6;
     opacity: 0.07;
     line-height: 1;
     letter-spacing: -0.05em;
@@ -2258,7 +2258,7 @@ outline: none !important; box-shadow: none !important;
     pointer-events: none;
 }
 .step:hover {
-    border-color: #A89CF7;
+    border-color: #93c5fd;
 }
 .step:nth-child(2) { border-top: none; }
 .step:nth-child(3) { border-top: none; }
@@ -2310,7 +2310,7 @@ outline: none !important; box-shadow: none !important;
     font-weight: 700;
     letter-spacing: 2.5px;
     text-transform: uppercase;
-    color: #5B46F3;
+    color: #3b82f6;
     background: #EEF0FF;
     padding: 5px 14px;
     border-radius: 20px;
@@ -2347,7 +2347,7 @@ outline: none !important; box-shadow: none !important;
     transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
 }
 .iconGrid__card:hover {
-    border-color: #5B46F3;
+    border-color: #3b82f6;
     transform: translateY(-5px);
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     background: #ffffff;
@@ -2376,11 +2376,11 @@ outline: none !important; box-shadow: none !important;
     line-height: 1.35;
 }
 .iconGrid__card:hover .iconGrid__title {
-    color: #5B46F3;
+    color: #3b82f6;
 }
 
 /* ----------------------------------------------------------
-   WHY CHOOSE â€” Value: DARK (#4633E0) | Texture: dots + photo
+   WHY CHOOSE â€” Value: DARK (#2563eb) | Texture: dots + photo
    ---------------------------------------------------------- */
 .feature-split {
     background-color: #0F172A;
@@ -2442,10 +2442,10 @@ outline: none !important; box-shadow: none !important;
 }
 
 /* ----------------------------------------------------------
-   SEARCH SERVICE â€” Value: medium-dark (#5B46F3) | Texture: dots
+   SEARCH SERVICE â€” Value: medium-dark (#3b82f6) | Texture: dots
    ---------------------------------------------------------- */
 .search-service {
-    background: linear-gradient(135deg, #5B46F3 0%, #4633E0 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     padding: 72px 12px;
     position: relative;
     overflow: hidden;
@@ -2475,7 +2475,7 @@ outline: none !important; box-shadow: none !important;
 .search-service .css-2i2sy2 {
     background: #ffffff !important;
     border-color: transparent !important;
-    color: #5B46F3 !important;
+    color: #3b82f6 !important;
     font-size: 17px;
     font-weight: 700;
     padding: 18px 52px;
@@ -2485,7 +2485,7 @@ outline: none !important; box-shadow: none !important;
 }
 .search-service .css-2i2sy2:hover {
     background: #EEF0FF !important;
-    color: #4633E0 !important;
+    color: #2563eb !important;
     border-color: transparent !important;
 }
 .search-service .btn-border-reveal::after {
@@ -2589,21 +2589,21 @@ outline: none !important; box-shadow: none !important;
 /* 2. EYEBROW BADGES — richer background color for better visibility */
 .hero-x__pill {
     background: #dde1ff;
-    color: #4633E0;
-    border: 1px solid rgba(91, 70, 243, 0.30);
+    color: #2563eb;
+    border: 1px solid rgba(59, 130, 246, 0.30);
 }
 
 .tpc-eyebrow {
     background: #dde1ff;
-    color: #4633E0;
-    border: 1px solid rgba(91, 70, 243, 0.30);
+    color: #2563eb;
+    border: 1px solid rgba(59, 130, 246, 0.30);
 }
 
 /* About Us badge (injected via ::before on .css-yftsim) */
 .css-yftsim::before {
     background: #dde1ff;
-    color: #4633E0;
-    border: 1px solid rgba(91, 70, 243, 0.30);
+    color: #2563eb;
+    border: 1px solid rgba(59, 130, 246, 0.30);
 }
 
 /* 3. HOW IT WORKS — larger cards and larger typography */
@@ -2699,11 +2699,11 @@ outline: none !important; box-shadow: none !important;
 
 .feature-split__eyebrow {
     display: inline-block !important;
-    color: #4633E0 !important;
+    color: #2563eb !important;
     background: #dde1ff !important;
     padding: 5px 14px !important;
     border-radius: 20px !important;
-    border: 1px solid rgba(91, 70, 243, 0.30) !important;
+    border: 1px solid rgba(59, 130, 246, 0.30) !important;
     font-size: 11px !important;
     font-weight: 700 !important;
     letter-spacing: 2.5px !important;
@@ -2775,11 +2775,11 @@ outline: none !important; box-shadow: none !important;
 }
 
 .css-1tcjpox {
-    color: #5B46F3 !important;
+    color: #3b82f6 !important;
 }
 
 .css-1tcjpox:hover {
-    color: #4633E0 !important;
+    color: #2563eb !important;
 }
 
 /* ============================================================
@@ -2805,9 +2805,9 @@ outline: none !important; box-shadow: none !important;
     font-weight: 700 !important;
     letter-spacing: 2px !important;
     text-transform: uppercase !important;
-    color: #4633E0 !important;
+    color: #2563eb !important;
     background: #dde1ff !important;
-    border: 1px solid rgba(91, 70, 243, 0.25) !important;
+    border: 1px solid rgba(59, 130, 246, 0.25) !important;
     padding: 5px 16px !important;
     border-radius: 20px !important;
     line-height: 1 !important;
@@ -2844,7 +2844,7 @@ outline: none !important; box-shadow: none !important;
     border-radius: 20px !important;
     padding: 36px 24px 30px !important;
     border: 1.5px solid #E2E8F0 !important;
-    box-shadow: 0 2px 12px rgba(91, 70, 243, 0.06) !important;
+    box-shadow: 0 2px 12px rgba(59, 130, 246, 0.06) !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -2855,9 +2855,9 @@ outline: none !important; box-shadow: none !important;
 }
 
 .css-15la3i8:hover {
-    border-color: #A89CF7 !important;
+    border-color: #93c5fd !important;
     transform: translateY(-6px) !important;
-    box-shadow: 0 16px 36px rgba(91, 70, 243, 0.16) !important;
+    box-shadow: 0 16px 36px rgba(59, 130, 246, 0.16) !important;
 }
 
 /* Icon size */

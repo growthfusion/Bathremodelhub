@@ -1,14 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Local Bathroom Pros Near You | BathRemodelHub</title>
-
-    <!-- SEO: unique meta description -->
     <meta name="description" content="Compare free quotes from top-rated local bathroom remodeling professionals near you. Find trusted shower, tile, vanity, and tub contractors matched to your ZIP code." />
 
-    <link rel="icon" href="/bath/images/bathremodelhub-favicon.svg" type="image/svg+xml" sizes="any">
+    <link rel="icon" href="/bath/images/blue_version.png" type="image/png">
 
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -18,11 +16,12 @@
     })(window,document,'script','dataLayer','GTM-M8VC8STX');</script>
     <!-- End Google Tag Manager -->
 
-    <!-- Performance: preconnect to font origins before any blocking CSS -->
+    <!-- LCP image preloads — hero background only (cards load lazily) -->
+    <link rel="preload" as="image" href="/bath/images/brh-desk.png" media="(min-width: 769px)">
+    <link rel="preload" as="image" href="/bath/images/brh-mobile.png" media="(max-width: 768px)">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- Performance: load Google Fonts asynchronously — eliminates ~1,600 ms render-block -->
     <link rel="preload" as="style"
           href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
           onload="this.onload=null;this.rel='stylesheet'">
@@ -34,7 +33,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     </noscript>
 
-    <!-- Tailwind: config defined before CDN loads; synchronous load prevents CLS -->
     <script>
         window.tailwind = {
             config: {
@@ -42,7 +40,7 @@
                     extend: {
                         colors: {
                             "brand-navy":   "#1a3a5c",
-                            "brand-violet": "#5B46F3",
+                            "brand-violet": "#3b82f6",
                             "brand-orange": "#ff6b35",
                             "brand-light":  "#f0f7ff",
                         },
@@ -57,82 +55,257 @@
     </script>
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 
-    <!-- Critical inline CSS — ensures component layout renders correctly before Tailwind loads -->
     <style>
-        /* font fallbacks so layout is stable before async fonts arrive */
-        body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+        body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #f4f6fa; }
         .font-headline { font-family: Manrope, ui-sans-serif, system-ui, sans-serif; }
-
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .star-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
-        .biz-card {
-            background: #fff;
-            border-radius: 18px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid rgba(0,0,0,0.06);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-            transition: transform 0.22s ease;
-            will-change: transform;
-            text-decoration: none;
-            color: inherit;
-            cursor: pointer;
-        }
-        .biz-card:hover { transform: translateY(-4px); }
-        .js-card-trigger { cursor: pointer; text-decoration: none; }
-        .js-card-trigger:hover { text-decoration: none; }
-        h3.js-card-trigger:hover { color: #5B46F3 !important; }
-        .biz-img-wrap {
-            height: 182px;
-            aspect-ratio: 400 / 182;
-            overflow: hidden;
-            position: relative;
-            background: #EEF0FF;
-        }
-        .biz-card__cta {
+        /* ── Hero Banner ─────────────────────────────────────────────────── */
+        .brh-hero {
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, #7C6FF7 0%, #5B46F3 100%);
+            background-image: url('/bath/images/brh-desk.png');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            min-height: 300px;
         }
-        .biz-card__cta::after {
+        .brh-hero::before {
             content: '';
-            position: absolute; inset: 0;
-            background: linear-gradient(135deg, #5B46F3 0%, #4432D4 100%);
-            opacity: 0;
-            transition: opacity 0.18s ease;
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(207,232,247,0.92) 0%, rgba(207,232,247,0.65) 50%, rgba(207,232,247,0.08) 100%);
+            z-index: 1;
+            pointer-events: none;
         }
-        .biz-card:hover .biz-card__cta::after { opacity: 1; }
-        .biz-card__cta > * { position: relative; z-index: 1; }
-        .vc-btn {
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-family: 'Manrope', sans-serif;
+        .brh-hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 56px 48px;
+        }
+        .brh-hero-text { max-width: 600px; }
+        .brh-congrats {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #059669;
             font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .brh-congrats-icon {
+            width: 22px; height: 22px;
+            background: #059669;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .brh-hero-title {
+            font-family: Manrope, sans-serif;
+            font-size: clamp(1.7rem, 3vw, 2.6rem);
+            font-weight: 800;
+            color: #0f2744;
+            line-height: 1.18;
+            margin-bottom: 14px;
+            letter-spacing: -0.02em;
+        }
+        .brh-hero-title .highlight { color: #3b82f6; }
+        .brh-hero-sub {
+            color: #4b5563;
+            font-size: 1.05rem;
+            margin-bottom: 22px;
+            line-height: 1.6;
+        }
+        .brh-zip-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.95);
+            border: 1.5px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 8px 18px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #1a3a5c;
+            box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+        }
+        @media (max-width: 768px) {
+            .brh-hero {
+                background-image: url('/bath/images/brh-mobile.png');
+                background-color: #dbeafe;
+                min-height: 220px;
+            }
+            .brh-hero::before {
+                background: linear-gradient(180deg, rgba(219,234,254,0.92) 0%, rgba(219,234,254,0.60) 100%);
+            }
+            .brh-hero-inner { padding: 36px 24px; }
+            .brh-hero-title { font-size: 1.5rem; }
         }
 
-        /* Loading pulse dots */
+        /* ── Cards Grid ──────────────────────────────────────────────────── */
+        .brh-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        @media (max-width: 1100px) { .brh-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+        @media (max-width: 768px)  { .brh-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+        @media (max-width: 480px)  { .brh-grid { grid-template-columns: 1fr; } }
+
+        /* ── Individual Card ─────────────────────────────────────────────── */
+        .brh-card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(15,39,68,0.09), 0 1px 4px rgba(15,39,68,0.05);
+            border: 1px solid rgba(203,213,225,0.7);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            cursor: default;
+        }
+        .brh-card-body { padding: 26px 22px 18px; flex: 1; display: flex; flex-direction: column; }
+
+        /* Avatar */
+        .brh-avatar-wrap {
+            display: flex; justify-content: center;
+            margin-bottom: 18px;
+        }
+        .brh-avatar {
+            width: 96px; height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #e0f2fe;
+            box-shadow: 0 4px 16px rgba(59,130,246,0.18);
+        }
+        .brh-avatar-placeholder {
+            width: 96px; height: 96px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            display: flex; align-items: center; justify-content: center;
+            border: 3px solid #e0f2fe;
+            box-shadow: 0 4px 16px rgba(59,130,246,0.18);
+        }
+
+        /* Name + badge row */
+        .brh-name-row { display: flex; align-items: flex-start; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+        .brh-name {
+            font-family: Manrope, sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #0f2744;
+            line-height: 1.3;
+            cursor: pointer;
+        }
+        .brh-name:hover { text-decoration: underline; color: #3b82f6; }
+        .brh-top-pro {
+            display: inline-flex; align-items: center; gap: 3px;
+            background: #FEF3C7; color: #B45309;
+            border: 1px solid #FDE68A;
+            border-radius: 20px;
+            padding: 3px 9px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* Intro text with read more */
+        .brh-intro {
+            font-size: 0.83rem;
+            color: #4B5563;
+            line-height: 1.65;
+            margin-bottom: 12px;
+        }
+        .brh-text-clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .brh-text-clamp.expanded {
+            display: block;
+            -webkit-line-clamp: unset;
+        }
+        .brh-read-more {
+            color: #3b82f6;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+            margin-top: 3px;
+        }
+        .brh-read-more:hover { text-decoration: underline; }
+
+        /* Stats */
+        .brh-stats { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+        .brh-stat {
+            display: flex; align-items: center; gap: 7px;
+            font-size: 0.82rem; color: #6B7280;
+        }
+        .brh-stat .material-symbols-outlined { font-size: 15px; color: #93c5fd; }
+
+        /* Stars */
+        .brh-rating-row {
+            display: flex; align-items: center; gap: 7px;
+            margin-bottom: 12px;
+        }
+        .brh-stars { display: flex; align-items: center; gap: 1px; }
+        .brh-rating-num { font-weight: 700; font-size: 0.88rem; color: #111827; }
+        .brh-review-count { font-size: 0.78rem; color: #9CA3AF; }
+
+        /* Quote / testimonial */
+        .brh-quote {
+            font-size: 0.81rem;
+            color: #4b5563;
+            line-height: 1.65;
+            font-style: italic;
+            margin-bottom: 4px;
+            flex: 1;
+            opacity: 0.85;
+        }
+
+        /* CTA button */
+        .brh-cta {
+            display: block;
+            width: 100%;
+            background: #3b82f6;
+            color: #fff;
+            font-family: Manrope, sans-serif;
+            font-weight: 700;
+            font-size: 0.93rem;
+            padding: 16px 16px;
+            border: none;
+            border-top: 1px solid rgba(59,130,246,0.15);
+            cursor: pointer;
+            text-align: center;
+            letter-spacing: 0.02em;
+            box-sizing: border-box;
+            margin: 0;
+        }
+        .brh-cta:hover { background: #2563eb; }
+
+        /* Loading dots — keep functional, no decorative animation */
         .loading-dot {
             width: 10px; height: 10px;
             border-radius: 50%;
-            background: #5B46F3;
-            animation: ldot 1.2s ease-in-out infinite;
-        }
-        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
-        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes ldot {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-            40%            { transform: scale(1);   opacity: 1;   }
+            background: #3b82f6;
+            opacity: 0.7;
         }
 
-        /* Ensure footer links meet WCAG AA contrast on purple gradient */
         .footer-link { color: rgba(255,255,255,0.92) !important; }
         .footer-link:hover { color: #ffffff !important; }
     </style>
 
-    <!-- Performance: DOMPurify deferred — only needed after API response -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js" defer></script>
 </head>
 <body class="font-body text-gray-800 bg-gray-50 min-h-screen">
@@ -146,41 +319,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50" style="box-shadow:0 1px 4px rgba(0,0,0,0.06)">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <a href="/" class="flex items-center gap-2 no-underline">
-                <div style="width:34px;height:34px;border-radius:9px;background:#5B46F3;display:flex;align-items:center;justify-content:center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H3v10h6v-10zM21 11h-6v10h6V11zM12 3l-9 8h18l-9-8z"/><rect x="10" y="15" width="4" height="6" rx="0.5" fill="#fff" stroke="none"/></svg>
-                </div>
-                <span class="font-headline font-extrabold text-xl" style="color:#1E293B;">Bath<span style="color:#5B46F3;">RemodelHub</span></span>
+                <img src="/bath/images/blue_version.png" alt="BathRemodelHub" style="width:34px;height:34px;border-radius:8px;object-fit:cover;">
+                <span class="font-headline font-extrabold text-xl" style="color:#1E293B;">Bath<span style="color:#3b82f6;">RemodelHub</span></span>
             </a>
-            <button onclick="history.back()" class="flex items-center gap-1.5 text-sm font-medium transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-100" style="color:#6B7280">
-                <span class="material-symbols-outlined" style="font-size:16px">arrow_back</span> Back
-            </button>
         </div>
     </header>
 
-    <!-- Results Banner -->
-    <div id="results-banner" class="bg-white border-b border-gray-100">
-        <div class="h-1 w-full" style="background: linear-gradient(90deg, #7C6FF7 0%, #5B46F3 60%, #4432D4 100%);"></div>
-        <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-                <div class="flex items-center gap-1.5 mb-2">
-                    <span class="material-symbols-outlined" style="font-size:13px;color:#5B46F3">search</span>
-                    <!-- Accessibility: improved contrast from #9CA3AF (2.5:1) to #6B7280 (4.6:1) -->
-                    <p class="text-xs font-bold uppercase tracking-widest" style="color:#6B7280">Search Results</p>
+    <!-- Hero Banner -->
+    <div id="results-banner" class="brh-hero">
+        <div class="brh-hero-inner">
+            <div class="brh-hero-text">
+                <div class="brh-congrats">
+                    <div class="brh-congrats-icon">&#10003;</div>
+                    Congratulations!
                 </div>
-                <h1 id="banner-heading" class="font-headline font-extrabold text-2xl md:text-3xl leading-tight" style="color:#1a3a5c">Local Bathroom Pros Near You</h1>
-                <p id="banner-sub" class="text-sm mt-1 font-medium" style="color:#6B7280"></p>
-            </div>
-            <div class="shrink-0">
-                <div class="flex items-center gap-2 px-4 py-2.5 rounded-xl" style="background:#F8F9FF;border:1.5px solid #E8E5FD">
-                    <span class="material-symbols-outlined" style="font-size:16px;color:#5B46F3">location_on</span>
-                    <span id="banner-zip" class="font-bold text-sm" style="color:#1a3a5c">—</span>
+                <h1 class="brh-hero-title">
+                    We Found Trusted
+                    <span id="brh-query" class="highlight">Bathroom Remodeling</span>
+                    Pros Near You
+                </h1>
+                <p class="brh-hero-sub">Compare local pros and get your best quote in minutes.</p>
+                <div id="brh-zip-badge" class="brh-zip-badge" style="display:none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#3b82f6" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <span id="brh-zip-text"></span>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Main -->
-    <main id="results-main" class="max-w-5xl mx-auto px-4 py-10" style="min-height:60vh">
+    <main id="results-main" class="max-w-7xl mx-auto px-4 pt-6 pb-8" style="min-height:60vh">
 
         <!-- Loading -->
         <div id="results-loading" class="flex flex-col items-center justify-center py-24">
@@ -189,7 +357,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="loading-dot"></div>
                 <div class="loading-dot"></div>
             </div>
-            <p class="text-gray-700 text-base font-bold mb-1">Finding local bathroom pros near you…</p>
+            <p class="text-gray-700 text-base font-bold mb-1">Finding local bathroom pros near you&hellip;</p>
             <p class="text-gray-400 text-sm">This usually takes just a second</p>
         </div>
 
@@ -198,12 +366,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <!-- Error -->
         <div id="results-error" class="hidden flex flex-col items-center justify-center py-24 text-center">
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style="background:rgba(91,70,243,0.08)">
-                <span class="material-symbols-outlined text-4xl" style="color:#5B46F3">search_off</span>
+            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style="background:rgba(59,130,246,0.08)">
+                <span class="material-symbols-outlined text-4xl" style="color:#3b82f6">search_off</span>
             </div>
             <p id="results-error-msg" class="text-gray-700 font-bold text-lg mb-2">Something went wrong</p>
             <p class="text-gray-400 text-sm mb-6">Please go back and try again.</p>
-            <button onclick="history.back()" class="font-bold px-6 py-3 rounded-xl transition-colors text-sm text-white" style="background:#5B46F3;">Go Back</button>
+            <button onclick="history.back()" class="font-bold px-6 py-3 rounded-xl transition-colors text-sm text-white" style="background:#3b82f6;">Go Back</button>
         </div>
 
         <!-- Empty -->
@@ -219,7 +387,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </main>
 
     <!-- Footer -->
-    <footer class="text-white py-8 px-4 mt-8" style="background: linear-gradient(135deg, #5B46F3 0%, #4432D4 100%);">
+    <footer class="text-white py-8 px-4 mt-8" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
         <div class="max-w-5xl mx-auto text-center">
             <div class="flex flex-wrap justify-center gap-6 text-sm mb-4">
                 <a href="/privacy-policy.html" class="footer-link hover:text-white transition-colors">Privacy Policy</a>
@@ -236,14 +404,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var searchQuery = params.get('searchQuery') || '';
         var zipCode     = params.get('zipCode')     || '';
 
-        /* Read tracking params with multi-name fallback so any offer-URL variant is supported.
-           Latest Redtrack offer URL maps:
-             utm_subid     → clickid    (sub1 in postback)
-             utm_campaign  → rt_cid
-             utm_user_hash → fbclid     (sub11 in postback)
-             utm_content   → rt_campaign
-             zipcode       → sub3 in postback
-             source_id     → gf1 (static source identifier)                               */
         var sub1       = params.get('utm_subid')     || params.get('sub1')                  || '';
         var fbclid     = params.get('utm_user_hash') || params.get('utm_facebook_click_id') || params.get('fbclid') || params.get('sub11') || '';
         var rtCampaign = params.get('utm_content')   || '';
@@ -252,8 +412,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var zipParam   = zipCode                     || params.get('zipcode')               || params.get('sub3')   || '';
         var utmSrc     = params.get('utm_source')    || 'cma-growthfusion';
         var sourceId   = params.get('source_id')     || '';
-        var designVariant = (params.get('design') || 'A').toUpperCase();
-        var useDesignB = designVariant === 'B';
 
         window.brhTracking = { sub1: sub1, fbclid: fbclid, rt_campaign: rtCampaign, rt_cid: rtCid, gclid: gclid, zipCode: zipParam, utm_source: utmSrc, source_id: sourceId };
 
@@ -262,9 +420,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var elError   = document.getElementById('results-error');
         var elErrMsg  = document.getElementById('results-error-msg');
         var elEmpty   = document.getElementById('results-empty');
-        var elSub     = document.getElementById('banner-sub');
-        var elZip     = document.getElementById('banner-zip');
-        var elHeading = document.getElementById('banner-heading');
 
         function show(el) { el.classList.remove('hidden'); }
         function hide(el) { el.classList.add('hidden'); }
@@ -277,21 +432,108 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         function setContent(el, html) {
             var clean = DOMPurify.sanitize(html, {
-                ALLOWED_TAGS: ['div','p','h2','h3','h4','span','a','strong','br','img'],
-                ALLOWED_ATTR: ['class','href','src','alt','style','target','rel','data-biz-name','data-href','width','height','loading','fetchpriority','decoding','role','tabindex']
+                ALLOWED_TAGS: ['div','p','h1','h2','h3','span','a','strong','br','img','picture','source','button'],
+                ALLOWED_ATTR: ['class','href','src','srcset','media','alt','style','type','data-biz-name','data-href','width','height','loading','fetchpriority','decoding','role','tabindex']
             });
             var doc = new DOMParser().parseFromString(clean, 'text/html');
             while (el.firstChild) { el.removeChild(el.firstChild); }
             Array.from(doc.body.childNodes).forEach(function (n) { el.appendChild(n); });
         }
 
-        if (searchQuery) {
-            elHeading.textContent = searchQuery;
-            document.title = searchQuery + ' | BathRemodelHub';
+        function stars(rating) {
+            var r    = parseFloat(rating);
+            var full = Math.floor(r);
+            var half = r - full >= 0.5;
+            var s    = '';
+            for (var i = 0; i < 5; i++) {
+                if (i < full) {
+                    s += '<span class="material-symbols-outlined star-filled" style="font-size:14px;color:#FBBF24">star</span>';
+                } else if (i === full && half) {
+                    s += '<span class="material-symbols-outlined" style="font-size:14px;color:#FBBF24">star_half</span>';
+                } else {
+                    s += '<span class="material-symbols-outlined" style="font-size:14px;color:#E5E7EB">star</span>';
+                }
+            }
+            return s;
         }
-        if (zipCode) {
-            elZip.textContent = zipCode;
-            elSub.textContent = 'Showing results near ' + zipCode;
+
+        function renderBanner(sq, zip) {
+            var queryEl  = document.getElementById('brh-query');
+            var zipBadge = document.getElementById('brh-zip-badge');
+            var zipText  = document.getElementById('brh-zip-text');
+            if (queryEl && sq)   queryEl.textContent = sq;
+            if (zipText && zip)  zipText.textContent  = zip;
+            if (zipBadge && zip) zipBadge.style.display = 'inline-flex';
+        }
+
+        function bizCard(biz, cardIndex) {
+            var name      = esc(biz.businessName || 'Local Pro');
+            var address   = esc(biz.businessLocation || '');
+            var rating    = biz.rating ? parseFloat(biz.rating) : null;
+            var reviewCnt = biz.numberOfReviews || null;
+            var imgURL    = esc(biz.businessImageURL || '');
+            var isTopPro  = !!biz.isTopPro;
+            var years     = biz.yearsInBusiness || null;
+            var hires     = biz.numberOfHires   || null;
+            var rawIntro  = biz.businessIntroduction || '';
+            var introEsc  = esc(rawIntro);
+            var hasMore   = rawIntro.length > 110;
+            var introShort = hasMore ? esc(rawIntro.slice(0, 110)) : introEsc;
+            var ctaURL    = esc((biz.widgets && biz.widgets.requestFlowURL) || biz.servicePageURL || '#');
+            var isFirst   = (cardIndex === 0);
+
+            var avatarEl = imgURL
+                ? '<img class="brh-avatar" src="' + imgURL + '" alt="' + name + '"'
+                  + (isFirst ? ' fetchpriority="high"' : ' loading="lazy"') + ' decoding="async" />'
+                : '<div class="brh-avatar-placeholder">'
+                  + '<span class="material-symbols-outlined" style="font-size:42px;color:#fff">bathtub</span>'
+                  + '</div>';
+
+            var topProEl = isTopPro
+                ? '<span class="brh-top-pro">'
+                  + '<span class="material-symbols-outlined star-filled" style="font-size:10px;color:#D97706">star</span>'
+                  + 'Top Pro</span>'
+                : '';
+
+            var introEl = rawIntro
+                ? '<div class="brh-intro">'
+                  + '<span class="brh-text-clamp" id="intro-' + cardIndex + '">' + introShort + '</span>'
+                  + (hasMore ? '<span class="brh-read-more" data-target="intro-' + cardIndex + '"> Read More +</span>' : '')
+                  + '</div>'
+                : '';
+
+            var statsEl = '<div class="brh-stats">';
+            if (address) statsEl += '<div class="brh-stat"><span class="material-symbols-outlined">location_on</span>' + address + '</div>';
+            if (years)   statsEl += '<div class="brh-stat"><span class="material-symbols-outlined">schedule</span>' + esc(String(years)) + ' years in business</div>';
+            if (hires)   statsEl += '<div class="brh-stat"><span class="material-symbols-outlined">person</span>Hired ' + esc(String(hires)) + ' times</div>';
+            statsEl += '</div>';
+
+            var ratingEl = rating
+                ? '<div class="brh-rating-row">'
+                  + '<div class="brh-stars">' + stars(rating) + '</div>'
+                  + '<span class="brh-rating-num">' + rating.toFixed(2) + '</span>'
+                  + (reviewCnt ? '<span class="brh-review-count">&ndash; ' + esc(String(reviewCnt)) + ' reviews</span>' : '')
+                  + '</div>'
+                : '';
+
+            var quoteEl = rawIntro
+                ? '<div class="brh-quote">'
+                  + '<span class="brh-text-clamp" id="quote-' + cardIndex + '">&ldquo;' + introShort + '&rdquo;</span>'
+                  + (hasMore ? '<span class="brh-read-more" data-target="quote-' + cardIndex + '"> Read More +</span>' : '')
+                  + '</div>'
+                : '';
+
+            return '<div class="brh-card js-card" data-href="' + ctaURL + '" data-biz-name="' + esc(biz.businessName || 'Local Pro') + '">'
+                + '<div class="brh-card-body">'
+                + '<div class="brh-avatar-wrap">' + avatarEl + '</div>'
+                + '<div class="brh-name-row"><span class="brh-name vc-btn" tabindex="0" role="button">' + name + '</span>' + topProEl + '</div>'
+                + introEl
+                + statsEl
+                + ratingEl
+                + quoteEl
+                + '</div>'
+                + '<button class="brh-cta js-card-cta vc-btn">Compare Quotes</button>'
+                + '</div>';
         }
 
         if (!searchQuery || !zipCode) {
@@ -301,15 +543,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             return;
         }
 
-        /* Build the full utmData object Thumbtack expects.
-           Mapping (per Thumbtack /v4/businesses/search schema):
-             utm_source          ← cma-growthfusion (required, ^cma-... pattern)
-             utm_campaign        ← Redtrack rt_cid
-             rt_campaign         ← utm_content value
-             utm_subid           ← Redtrack clickid (sub1)
-             utm_user_hash       ← Facebook click id (sub11)
-             utm_google_click_id ← gclid (Google Ads)
-             source_id           ← static source identifier                        */
         var utmData = { utm_source: utmSrc, utm_vertical: 'BRH' };
         if (rtCid)      utmData.utm_campaign        = rtCid;
         if (rtCampaign) utmData.rt_campaign         = rtCampaign;
@@ -338,47 +571,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                            : Array.isArray(data.results)    ? data.results : [];
 
             businesses = businesses.slice().sort(function (a, b) {
-                var rA = parseFloat(a.rating) || 0;
-                var rB = parseFloat(b.rating) || 0;
-                return rB - rA;
+                return (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0);
             });
 
             hide(elLoading);
+
             if (!businesses.length) { show(elEmpty); return; }
 
-            var countLabel = businesses.length + ' professional' + (businesses.length !== 1 ? 's' : '')
-                + ' found for ' + searchQuery + ' near ' + zipCode;
-            elSub.textContent = countLabel;
+            renderBanner(searchQuery, zipCode);
 
-            if (useDesignB) {
-                var headerHTML = headerDesignB(countLabel, searchQuery, zipCode);
-                document.getElementById('results-banner').style.display = 'none';
-
-                var bizCardFunction = bizCardDesignB;
-                var gridHTML = '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">'
-                    + esc(countLabel) + '</p>'
-                    + '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">'
-                    + businesses.map(function(biz, i){ return bizCardFunction(biz, i); }).join('')
-                    + '</div>';
-
-                var resultsMain = document.getElementById('results-main');
-                var tempDiv = document.createElement('div');
-                var clean = DOMPurify.sanitize(headerHTML + gridHTML, {
-                    ALLOWED_TAGS: ['div','p','h1','h3','span','img','button','a','strong','br'],
-                    ALLOWED_ATTR: ['class','href','src','alt','style','data-href','data-biz-name','width','height','loading','fetchpriority','decoding','role','tabindex']
-                });
-                tempDiv.innerHTML = clean;
-                while (resultsMain.firstChild) resultsMain.removeChild(resultsMain.firstChild);
-                Array.from(tempDiv.childNodes).forEach(function(n) { resultsMain.appendChild(n); });
-            } else {
-                setContent(elGrid,
-                    '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">'
-                    + esc(countLabel) + '</p>'
-                    + '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">'
-                    + businesses.map(function(biz, i){ return bizCard(biz, i); }).join('')
-                    + '</div>'
-                );
-            }
+            setContent(elGrid,
+                '<div class="brh-grid">'
+                + businesses.map(function (biz, i) { return bizCard(biz, i); }).join('')
+                + '</div>'
+            );
             show(elGrid);
         })
         .catch(function (e) {
@@ -387,183 +593,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             elErrMsg.textContent = e.message || 'Could not load results.';
         });
 
-        function stars(rating) {
-            var r = parseFloat(rating);
-            var full = Math.floor(r);
-            var half = r - full >= 0.5;
-            var s = '';
-            for (var i = 0; i < 5; i++) {
-                if (i < full) {
-                    s += '<span class="material-symbols-outlined star-filled" style="font-size:14px;color:#FBBF24">star</span>';
-                } else if (i === full && half) {
-                    s += '<span class="material-symbols-outlined" style="font-size:14px;color:#FBBF24">star_half</span>';
-                } else {
-                    s += '<span class="material-symbols-outlined" style="font-size:14px;color:#E5E7EB">star</span>';
-                }
-            }
-            return s;
-        }
-
-        function headerDesignB(countLabel, searchQuery, zipCode) {
-            return '<div class="text-center py-12 px-4" style="background: linear-gradient(135deg, #E0F4FE 0%, #F0F7FF 100%); border-bottom: 1px solid #D1E9F6;">'
-                + '<div class="max-w-3xl mx-auto">'
-                + '<div class="flex items-center justify-center gap-2 mb-4">'
-                + '<div style="width:32px;height:32px;border-radius:50%;background:#10B981;display:flex;align-items:center;justify-content:center;">'
-                + '<span class="material-symbols-outlined" style="color:#fff;font-size:18px">done</span>'
-                + '</div>'
-                + '<p class="text-sm font-bold uppercase tracking-widest" style="color:#059669">Congratulations!</p>'
-                + '</div>'
-                + '<h1 class="font-headline font-extrabold text-3xl md:text-4xl leading-tight mb-3" style="color:#1a3a5c">'
-                + 'We Found Trusted <span style="color:#5B46F3">' + esc(searchQuery) + '</span> Pros Near You'
-                + '</h1>'
-                + '<p class="text-gray-600 text-base md:text-lg mb-6">Compare local pros and get your best quote in minutes.</p>'
-                + '<div class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl" style="background:#fff;border:1.5px solid #E8E5FD">'
-                + '<span class="material-symbols-outlined" style="font-size:16px;color:#5B46F3">location_on</span>'
-                + '<span class="font-bold text-sm" style="color:#1a3a5c">' + esc(zipCode) + '</span>'
-                + '</div>'
-                + '</div>'
-                + '</div>';
-        }
-
-        function bizCardDesignB(biz, cardIndex) {
-            var name      = esc(biz.businessName || 'Local Pro');
-            var address   = esc(biz.businessLocation || '');
-            var rating    = biz.rating ? parseFloat(biz.rating) : null;
-            var reviewCnt = biz.numberOfReviews || null;
-            var imgURL    = esc(biz.businessImageURL || '');
-            var isTopPro  = !!biz.isTopPro;
-            var signal    = biz.opinionatedSignal ? esc(biz.opinionatedSignal) : '';
-            var years     = biz.yearsInBusiness   || null;
-            var hires     = biz.numberOfHires     || null;
-            var rawIntro  = biz.businessIntroduction || '';
-            var testimonial = rawIntro ? esc(rawIntro.slice(0, 120)) + (rawIntro.length > 120 ? '…' : '') : '';
-            var ctaURL    = esc((biz.widgets && biz.widgets.requestFlowURL) || biz.servicePageURL || '#');
-
-            var isFirst = (cardIndex === 0);
-
-            var avatarEl = imgURL
-                ? '<img src="' + imgURL + '" alt="' + name + '" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.1);"'
-                  + (isFirst ? ' fetchpriority="high" decoding="async"' : ' loading="lazy" decoding="async"') + ' />'
-                : '<div style="width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#7C6FF7 0%,#5B46F3 100%);display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.1);">'
-                + '<span class="material-symbols-outlined text-white" style="font-size:52px">bathtub</span></div>';
-
-            var starRow = rating
-                ? '<div class="flex items-center gap-1.5 mt-3">'
-                + '<div class="flex items-center">' + stars(rating) + '</div>'
-                + '<span class="font-bold text-gray-900 text-sm">' + rating.toFixed(1) + '</span>'
-                + (reviewCnt ? '<span class="text-gray-400 text-xs">· ' + esc(String(reviewCnt)) + ' reviews</span>' : '')
-                + '</div>' : '';
-
-            var badgesEl = '';
-            if (isTopPro || signal) {
-                badgesEl = '<div class="flex flex-wrap gap-1.5 mt-2">';
-                if (isTopPro) badgesEl += '<span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:#FEF3C7;color:#B45309;border:1px solid #FDE68A"><span class="material-symbols-outlined star-filled" style="font-size:11px;color:#D97706">star</span>Top Pro</span>';
-                if (signal)   badgesEl += '<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:rgba(91,70,243,0.08);color:#5B46F3;border:1px solid rgba(91,70,243,0.2)">' + signal + '</span>';
-                badgesEl += '</div>';
-            }
-
-            var addrEl = address
-                ? '<div class="flex items-center gap-1 text-gray-400 text-xs mt-2">'
-                + '<span class="material-symbols-outlined" style="font-size:13px">location_on</span>'
-                + address + '</div>' : '';
-
-            var metaParts = [];
-            if (years) metaParts.push('<span class="flex items-center gap-1"><span class="material-symbols-outlined" style="font-size:13px;color:#9CA3AF">schedule</span>' + esc(String(years)) + ' years</span>');
-            if (hires) metaParts.push('<span class="flex items-center gap-1" style="color:#059669"><span class="material-symbols-outlined" style="font-size:13px;color:#10B981">check_circle</span>' + esc(String(hires)) + ' hired</span>');
-            var metaEl = metaParts.length
-                ? '<div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 font-medium mt-3">' + metaParts.join('<span style="color:#E5E7EB">·</span>') + '</div>' : '';
-
-            var testimonialEl = testimonial
-                ? '<p class="text-gray-600 text-xs italic leading-relaxed mt-4 pt-4" style="border-top:1px solid #F3F4F6;line-height:1.6;color:#6B7280">"' + testimonial + '"</p>' : '';
-
-            return '<div class="biz-card flex flex-col items-center" data-href="' + ctaURL + '" data-biz-name="' + esc(biz.businessName || 'Local Pro') + '" style="padding:24px;">'
-                + '<div class="mb-4">' + avatarEl + '</div>'
-                + '<h3 class="font-headline font-bold text-base leading-snug js-card-trigger vc-btn text-center" style="color:#1a3a5c;font-size:1.05rem;">' + name + '</h3>'
-                + starRow + badgesEl + addrEl + metaEl + testimonialEl
-                + '<div class="flex-1" style="min-height:16px"></div>'
-                + '<div class="biz-card__cta mt-6 flex items-center justify-center w-full text-white font-bold py-3 rounded-xl text-sm js-card-trigger vc-btn" role="button" tabindex="0">'
-                + '<span style="position:relative;z-index:1;display:flex;align-items:center;gap:8px;color:#fff;pointer-events:none;">'
-                + '<span class="material-symbols-outlined" style="font-size:16px">send</span>Compare Free Quote</span></div>'
-                + '</div>';
-        }
-
-        function bizCard(biz, cardIndex) {
-            var name      = esc(biz.businessName || 'Local Pro');
-            var address   = esc(biz.businessLocation || '');
-            var rating    = biz.rating ? parseFloat(biz.rating) : null;
-            var reviewCnt = biz.numberOfReviews || null;
-            var imgURL    = esc(biz.businessImageURL || '');
-            var isTopPro  = !!biz.isTopPro;
-            var signal    = biz.opinionatedSignal ? esc(biz.opinionatedSignal) : '';
-            var years     = biz.yearsInBusiness   || null;
-            var hires     = biz.numberOfHires     || null;
-            var rawIntro  = biz.businessIntroduction || '';
-            var intro     = rawIntro ? esc(rawIntro.slice(0, 140)) + (rawIntro.length > 140 ? '…' : '') : '';
-            var ctaURL    = esc((biz.widgets && biz.widgets.requestFlowURL) || biz.servicePageURL || '#');
-
-            var isFirst = (cardIndex === 0);
-            var imgEl = imgURL
-                ? '<img src="' + imgURL + '" alt="' + name + '" width="400" height="182" class="w-full h-full object-cover"'
-                  + (isFirst ? ' fetchpriority="high" decoding="async"' : ' loading="lazy" decoding="async"') + ' />'
-                : '<div class="w-full h-full flex items-center justify-center" style="background:linear-gradient(135deg,#7C6FF7 0%,#5B46F3 100%)">'
-                + '<span class="material-symbols-outlined text-white" style="font-size:52px">bathtub</span></div>';
-
-            var topProImg = isTopPro
-                ? '<div class="absolute top-3 left-3 flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full shadow-md" style="background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff">'
-                + '<span class="material-symbols-outlined star-filled" style="font-size:11px">star</span>Top Pro</div>' : '';
-
-            var starRow = rating
-                ? '<div class="flex items-center gap-1.5 mt-2">'
-                + '<div class="flex items-center">' + stars(rating) + '</div>'
-                + '<span class="font-bold text-gray-900 text-sm">' + rating.toFixed(1) + '</span>'
-                + (reviewCnt ? '<span class="text-gray-400 text-xs">· ' + esc(String(reviewCnt)) + ' reviews</span>' : '')
-                + '</div>' : '';
-
-            var badgesEl = '';
-            if (isTopPro || signal) {
-                badgesEl = '<div class="flex flex-wrap gap-1.5 mt-2">';
-                if (isTopPro) badgesEl += '<span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:#FEF3C7;color:#B45309;border:1px solid #FDE68A"><span class="material-symbols-outlined star-filled" style="font-size:11px;color:#D97706">star</span>Top Pro</span>';
-                if (signal)   badgesEl += '<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:rgba(91,70,243,0.08);color:#5B46F3;border:1px solid rgba(91,70,243,0.2)">' + signal + '</span>';
-                badgesEl += '</div>';
-            }
-
-            var addrEl = address
-                ? '<div class="flex items-center gap-1 text-gray-400 text-xs mt-1.5">'
-                + '<span class="material-symbols-outlined" style="font-size:13px">location_on</span>'
-                + address + '</div>' : '';
-
-            var metaParts = [];
-            if (years) metaParts.push('<span class="flex items-center gap-1"><span class="material-symbols-outlined" style="font-size:13px;color:#9CA3AF">schedule</span>' + esc(String(years)) + ' yrs</span>');
-            if (hires) metaParts.push('<span class="flex items-center gap-1" style="color:#059669"><span class="material-symbols-outlined" style="font-size:13px;color:#10B981">check_circle</span>' + esc(String(hires)) + ' hired</span>');
-            var metaEl = metaParts.length
-                ? '<div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 font-medium mt-2">' + metaParts.join('<span style="color:#E5E7EB">·</span>') + '</div>' : '';
-
-            var introEl = intro
-                ? '<p class="text-gray-500 text-xs leading-relaxed mt-3 pt-3" style="border-top:1px solid #F3F4F6;line-height:1.65">' + intro + '</p>' : '';
-
-            return '<div class="biz-card" data-href="' + ctaURL + '" data-biz-name="' + esc(biz.businessName || 'Local Pro') + '">'
-                + '<div class="biz-img-wrap">'
-                + imgEl + topProImg
-                + '</div>'
-                + '<div class="p-5 flex flex-col flex-1">'
-                + '<h3 class="font-headline font-bold text-base leading-snug js-card-trigger vc-btn" style="color:#1a3a5c;font-size:1rem;">' + name + '</h3>'
-                + starRow + badgesEl + addrEl + metaEl + introEl
-                + '<div class="flex-1" style="min-height:14px"></div>'
-                + '<div class="biz-card__cta mt-4 flex items-center justify-center w-full text-white font-bold py-3 rounded-xl text-sm js-card-trigger vc-btn" role="button" tabindex="0">'
-                + '<span style="position:relative;z-index:1;display:flex;align-items:center;gap:8px;color:#fff;pointer-events:none;">'
-                + '<span class="material-symbols-outlined" style="font-size:16px">send</span>Compare Free Quote</span></div>'
-                + '</div>'
-                + '</div>';
-        }
     })();
     </script>
 
-    <!-- Thumbtack Request Flow Widget — Popup -->
+    <!-- Read More toggle -->
+    <script>
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.brh-read-more');
+        if (!btn) return;
+        e.stopPropagation();
+        var targetId = btn.getAttribute('data-target');
+        var textEl   = targetId ? document.getElementById(targetId) : null;
+        if (!textEl) return;
+        var expanded = textEl.classList.toggle('expanded');
+        btn.textContent = expanded ? ' Read Less' : ' Read More +';
+    });
+    </script>
+
+    <!-- Thumbtack Popup -->
     <div id="brh-popup-backdrop" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;padding:16px;">
         <div id="brh-popup-card" style="background:#fff;border-radius:12px;width:860px;max-width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.25);animation:brhPopIn 0.2s ease;">
             <iframe id="brh-popup-iframe"
-                width="860"
-                height="760"
+                width="860" height="760"
                 title="Get a free quote from this pro"
                 style="width:860px;height:760px;max-width:100%;display:block;border:none;"
                 sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
@@ -590,17 +641,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         window.addEventListener('message', function (e) {
             var _allowed = new Set(['https://www.thumbtack.com','https://thumbtack.com','https://pro.thumbtack.com','https://staging.thumbtack.com']);
             if (!e.origin || !_allowed.has(e.origin)) return;
-            var raw  = typeof e.data === 'string'
-                         ? e.data.toLowerCase()
-                         : JSON.stringify(e.data || '').toLowerCase();
+            var raw  = typeof e.data === 'string' ? e.data.toLowerCase() : JSON.stringify(e.data || '').toLowerCase();
             var msg  = (typeof e.data === 'object' && e.data !== null) ? e.data : {};
             var type = String(msg.type || msg.event || msg.action || msg.name || e.data || '').toLowerCase();
-
-            if (type.indexOf('close') !== -1 || raw.indexOf('close') !== -1) {
-                closePopup(); return;
-            }
-            if (type.indexOf('submit') !== -1 || type.indexOf('complete') !== -1 ||
-                raw.indexOf('submit') !== -1  || raw.indexOf('complete') !== -1) {
+            if (type.indexOf('close') !== -1 || raw.indexOf('close') !== -1) { closePopup(); return; }
+            if (type.indexOf('submit') !== -1 || type.indexOf('complete') !== -1 || raw.indexOf('submit') !== -1 || raw.indexOf('complete') !== -1) {
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({ event: 'QuoteSubmitted', rfwData: msg.data || {} });
                 return;
@@ -618,10 +663,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         function openPopup(url, bizName) {
-            if (!url || url === '#') {
-                console.warn('[BathRemodelHub] openPopup — no requestFlowURL returned by API.');
-                return;
-            }
+            if (!url || url === '#') { console.warn('[BathRemodelHub] openPopup — no requestFlowURL returned by API.'); return; }
             try {
                 var parsed = new URL(url);
                 if (parsed.protocol !== 'https:') { console.warn('[BathRemodelHub] openPopup — blocked non-https URL:', parsed.protocol); return; }
@@ -632,23 +674,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             backdrop.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             iframeEl.src = url;
-
-            var t             = window.brhTracking || {};
-            var rtPostbackUrl = buildRtPostbackUrl();
-            window.dataLayer  = window.dataLayer || [];
+            var t = window.brhTracking || {};
+            window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
-                event:         'contact',
-                businessName:  bizName,
-                rt_campaign:   t.rt_campaign || '',
-                zipcode:       t.zipCode     || '',
-                rt_cid:        t.rt_cid      || '',
-                fbclid:        t.fbclid      || '',
-                gclid:         t.gclid       || '',
-                sub1:          t.sub1        || '',
-                source_id:     t.source_id   || '',
-                rtPostbackUrl: rtPostbackUrl
+                event: 'contact', businessName: bizName,
+                rt_campaign: t.rt_campaign || '', zipcode: t.zipCode || '',
+                rt_cid: t.rt_cid || '', fbclid: t.fbclid || '',
+                gclid: t.gclid || '', sub1: t.sub1 || '',
+                source_id: t.source_id || '',
+                rtPostbackUrl: buildRtPostbackUrl()
             });
-            try { new Image().src = rtPostbackUrl; } catch (e) {}
+            try { new Image().src = buildRtPostbackUrl(); } catch (e) {}
         }
 
         function closePopup() {
@@ -661,51 +697,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePopup(); });
 
         document.addEventListener('click', function (e) {
-            var trigger = e.target.closest('.js-card-trigger');
+            var trigger = e.target.closest('.brh-name') || e.target.closest('.brh-cta');
             if (!trigger) return;
+            var card = trigger.closest('.js-card');
+            if (!card) return;
             e.preventDefault();
-            var card    = trigger.closest('.biz-card');
-            var url     = card ? card.getAttribute('data-href')  : '';
-            var bizName = card ? (card.dataset.bizName || '')     : '';
-            openPopup(url, bizName);
+            openPopup(card.getAttribute('data-href'), card.dataset.bizName || '');
         });
-
         document.addEventListener('keydown', function (e) {
             if (e.key !== 'Enter' && e.key !== ' ') return;
-            var trigger = e.target.closest('.js-card-trigger');
+            var trigger = e.target.closest('.brh-name') || e.target.closest('.brh-cta');
             if (!trigger) return;
+            var card = trigger.closest('.js-card');
+            if (!card) return;
             e.preventDefault();
-            var card    = trigger.closest('.biz-card');
-            var url     = card ? card.getAttribute('data-href')  : '';
-            var bizName = card ? (card.dataset.bizName || '')     : '';
-            openPopup(url, bizName);
+            openPopup(card.getAttribute('data-href'), card.dataset.bizName || '');
         });
     })();
     </script>
 
-    <!-- Scroll to top -->
-    <button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top" style="display:none;position:fixed;bottom:28px;right:28px;z-index:9999;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#7C6FF7,#5B46F3);box-shadow:0 4px 20px rgba(91,70,243,0.45);align-items:center;justify-content:center;transition:opacity 0.25s,transform 0.25s;" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
-    </button>
-    <script>
-    (function () {
-        var btn = document.getElementById('scrollTopBtn');
-        window.addEventListener('scroll', function () {
-            var scrolled = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-            btn.style.display = scrolled > 0.5 ? 'flex' : 'none';
-        }, { passive: true });
-    })();
-    </script>
 
-    <!-- API env indicator (Stage / Production) — DevTools only -->
+    <!-- API env indicator — DevTools only -->
     <script>
     (function () {
         fetch('/api/info').then(function (r) { return r.json(); }).then(function (d) {
-            var color = d.envName === 'Production' ? '#1B8A3E'
-                      : d.envName === 'Stage'      ? '#E68A00' : '#666';
+            var color = d.envName === 'Production' ? '#1B8A3E' : d.envName === 'Stage' ? '#E68A00' : '#666';
             console.log('%c[BathRemodelHub] Using ' + (d.envName || 'Unknown') + ' credentials',
-                'font-weight:bold;color:' + color + ';font-size:13px',
-                '\n→ ' + (d.apiBaseUrl || 'no API_BASE_URL set'));
+                'font-weight:bold;color:' + color + ';font-size:13px', '\n→ ' + (d.apiBaseUrl || 'no API_BASE_URL set'));
         }).catch(function () {});
     })();
     </script>
