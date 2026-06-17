@@ -73,9 +73,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <div class="va-zip-field">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                 <input id="landingZipInput" name="zip" type="text" inputmode="numeric" maxlength="5" autocomplete="postal-code" pattern="\d*" placeholder="Enter Your ZIP Code" />
-                                <button id="vaZipSubmit" type="submit" aria-label="Get quotes">
+                                <a id="vaZipSubmit" href="#" role="button" aria-label="Get quotes" class="vc-btn">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </form>
@@ -250,56 +250,56 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- ④ FAQ ACCORDION -->
     <section class="ip2-faq">
         <div class="ip2-faq__inner">
-            <h2>Everything You Need to Know</h2>
+            <h2>All You Need, All in One Place</h2>
             <div class="ip2-acc">
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>How to Compare Bathroom Remodeling Quotes</span>
+                        <span>Customer-Friendly & Trust-Building</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
-                        <p>When reviewing quotes, look beyond the price. Make sure each estimate clearly lists costs for labor, materials, fixtures, permits, and cleanup. Check for included warranties and what exactly is covered. The goal isn't to pick the cheapest option but to find the best value in quality and reliability. Reviews and references also help you choose the right team.</p>
+                        <p>Comparing bathroom remodel quotes goes beyond the numbers. Make sure each estimate details costs for labor, materials, and permits, plus cleanup and warranties. Choosing the lowest bid can be risky — instead, look for proven quality, reliability, and strong customer reviews. The right team will give you confidence and peace of mind.</p>
                     </div>
                 </div>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Bathroom Remodeling Basics</span>
+                        <span>Practical & Clear  </span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
-                        <p>A bathroom remodel takes careful planning. First decide the scope &mdash; a small update or a full renovation. Then pick materials, fixtures, and layout based on your taste, space, and budget. Don't forget water-saving options, good lighting, and smart storage. A clear design plan and timeline helps keep everything on track.</p>
+                        <p>A bathroom remodel starts with defining your scope — whether it’s a small refresh or a full renovation. Choose materials, fixtures, and layouts that fit your style, space, and budget. Don’t overlook water‑saving features, smart storage, and good lighting. A solid plan and timeline keep the project running smoothly.</p>
                     </div>
                 </div>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Why Renovate Your Bathroom?</span>
+                        <span>Value‑Focused</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
-                        <p>Remodeling your bathroom offers better looks, improved function, and increased home value. Many homeowners see a 60&ndash;70% return on investment when selling. Upgraded fixtures and energy-efficient features like LED lighting or low-flow toilets also save money long-term by cutting utility bills.</p>
+                        <p>A bathroom remodel boosts both style and function while increasing home value. Many homeowners recoup 60–70% of costs when selling. Energy‑efficient upgrades like LED lights and low‑flow toilets cut utility bills, saving money long‑term.</p>
                     </div>
                 </div>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>DIY vs. Hiring a Pro</span>
+                        <span>Balanced & Informative</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
-                        <p>Simple tasks like painting or swapping hardware can be DIY. But plumbing, electrical work, waterproofing, or tile jobs are best left to the pros. Hiring a professional ensures work meets code, comes with a warranty, and avoids costly mistakes. Professional installation gives you confidence the job is done right the first time.</p>
+                        <p>DIY works for small updates like painting or swapping hardware. But plumbing, electrical, waterproofing, and tile should be left to professionals. Pros ensure code compliance, warranties, and quality work — saving you from costly mistakes.</p>
                     </div>
                 </div>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Work with the Right Bathroom Experts</span>
+                        <span>Professional & Trust‑Building</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
-                        <p>The best contractors guide you through everything: picking materials, managing permits, and making sure all work is up to code. They know how to maximize your space while keeping design goals in mind &mdash; making the process easier and the results higher quality. Whether you need a full renovation or a single upgrade, working with experienced pros gives you peace of mind.</p>
+                        <p>Experienced contractors handle everything: permits, materials, and code compliance. They maximize space while keeping your design goals in mind. Whether it’s a full remodel or a small upgrade, working with pros ensures quality and peace of mind.</p>
                     </div>
                 </div>
 
@@ -355,17 +355,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     document.addEventListener('DOMContentLoaded', function () {
         var heroForm = document.getElementById('ip-hero-form');
-        if (heroForm) {
-            heroForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                var zip = (document.getElementById('landingZipInput').value || '').trim();
-                if (!/^\d{5}$/.test(zip)) { document.getElementById('landingZipInput').focus(); return; }
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({ event: 'Search', Search: QUERY, zipCode: zip });
-                goToResults(zip);
-            });
+        var submitBtn = document.getElementById('vaZipSubmit');
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            var zip = (document.getElementById('landingZipInput').value || '').trim();
+            if (!/^\d{5}$/.test(zip)) { document.getElementById('landingZipInput').focus(); return; }
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ event: 'Search', Search: QUERY, zipCode: zip });
+            goToResults(zip);
         }
 
+        if (heroForm) heroForm.addEventListener('submit', handleSubmit);
+        if (submitBtn) submitBtn.addEventListener('click', handleSubmit);
     });
 })();
 </script>
