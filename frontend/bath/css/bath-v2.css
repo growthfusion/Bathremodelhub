@@ -29,7 +29,7 @@
     display: flex;
     align-items: center;
     background: #f8fafc;
-    border: 1.5px solid #e2e8f0;
+    border: 2.5px solid #cbd5e1;
     border-radius: 12px;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -50,7 +50,7 @@
     flex: 1;
     border: none;
     background: transparent;
-    padding: 13px 56px 13px 42px;
+    padding: 13px 120px 13px 42px;
     font-size: 16px;
     font-family: 'Inter', sans-serif;
     color: #0f172a;
@@ -63,7 +63,8 @@
     right: 6px;
     top: 50%;
     transform: translateY(-50%);
-    width: 42px;
+    width: auto;
+    padding: 0 16px;
     height: 42px;
     border-radius: 9px;
     background: #f97316;
@@ -72,12 +73,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    color: #ffffff;
+    white-space: nowrap;
     transition: background 0.2s;
     flex-shrink: 0;
 }
 .sticky-zip-btn:hover  { background: #ea6a0c; }
 .sticky-zip-btn:active { background: #c2530a; }
-.sticky-zip-btn svg    { width: 18px; height: 18px; color: #fff; stroke: #fff; }
 /* ── END STICKY ZIP BAR ─────────────────────────────────────────── */
 
 /* CSS variable tokens */
@@ -256,13 +261,14 @@ section.va-hero-section::after {
     pointer-events: none;
 }
 
-/* Orange arrow button inside input */
+/* Get Quote button inside input */
 #vaZipSubmit {
     position: absolute;
     right: 7px;
     top: 50%;
     transform: translateY(-50%);
-    width: 52px;
+    width: auto;
+    padding: 0 20px;
     height: 52px;
     border-radius: 12px;
     background: #f97316;
@@ -272,12 +278,16 @@ section.va-hero-section::after {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
     box-shadow: 0 4px 16px rgba(249,115,22,0.35);
     transition: background 0.2s ease, transform 0.2s ease;
     flex-shrink: 0;
     z-index: 3;
+    text-decoration: none;
 }
-#vaZipSubmit svg { width: 22px; height: 22px; color: #ffffff; stroke: #ffffff; }
 #vaZipSubmit:hover { background: #ea6a0c; transform: translateY(-50%); }
 #vaZipSubmit:active { background: #c2530a; }
 
@@ -287,7 +297,7 @@ section.va-hero-section::after {
     background: #ffffff;
     border: 1px solid transparent;
     border-radius: 0.625rem;
-    padding: 20px 72px 20px 48px;
+    padding: 20px 130px 20px 48px;
     font-size: 18px;
     font-weight: 500;
     font-family: 'Inter', sans-serif;
@@ -340,10 +350,10 @@ section.va-hero-section::after {
     }
     section.va-hero-section::before {
         background: linear-gradient(to bottom,
-            rgba(218,234,248,0.98) 0%,
-            rgba(218,234,248,0.92) 35%,
-            rgba(218,234,248,0.60) 62%,
-            rgba(218,234,248,0)    82%);
+            rgba(37,99,235,0.30) 0%,
+            rgba(37,99,235,0.22) 35%,
+            rgba(37,99,235,0.12) 62%,
+            rgba(37,99,235,0)    82%);
     }
     #landingHeroContent.hero-variant-a > div.grid { max-width: 100%; }
     #landingHeroContent.hero-variant-a { padding: 24px 20px 56px; }
@@ -354,24 +364,20 @@ section.va-hero-section::after {
 
     /* Hero: slightly less than full viewport so next card peeks in */
     section.va-hero-section {
-        background-image: url('../images/bath-mobile-hero.png');
-        background-position: center bottom;
-        background-size: 100% auto;
-        background-color: #daeaf8;
-        min-height: calc(100vh - 80px);
-        min-height: calc(100dvh - 80px);
+        background-image: none;
+        background-color: #f4f1ec;
+        min-height: 0;
         display: flex;
         flex-direction: column;
     }
-    /* Semi-transparent overlay — reduces image opacity, keeps text crisp */
+    /* No overlay needed — solid warm bg */
     section.va-hero-section::before {
-        display: block;
-        background: rgba(218, 234, 248, 0.82);
+        display: none;
     }
 
-    /* Bigger logo */
+    /* Bigger logo — dark text on light bg */
     .va-hn         { height: 76px; }
-    .va-hn-logo    { font-size: 20px; font-weight: 800; gap: 10px; }
+    .va-hn-logo    { font-size: 24px; font-weight: 800; gap: 10px; color: #0f172a; }
     .va-hn-logo img { height: 48px; }
 
     .va-hn-wrap { flex-shrink: 0; }
@@ -381,7 +387,7 @@ section.va-hero-section::after {
         flex: 1;
         display: flex;
         align-items: flex-start;
-        padding: 48px 24px 36px;
+        padding: 36px 24px 56px;
         text-align: center;
     }
     #landingHeroContent.hero-variant-a > div.grid {
@@ -389,16 +395,17 @@ section.va-hero-section::after {
         width: 100%;
     }
 
-    /* Heading: generous line-height + breathing room below */
+    /* Heading: dark on warm bg */
     #landingHeroTitle {
         font-size: clamp(28px, 8vw, 38px);
         line-height: 1.28;
         letter-spacing: -0.025em;
         text-align: center;
         margin-bottom: 22px;
+        color: #0f172a;
     }
 
-    /* Subtitle: comfortable line-height + space below */
+    /* Subtitle: dark on warm bg */
     #landingHeroSubtitle {
         font-size: 16px;
         line-height: 1.75;
@@ -407,6 +414,7 @@ section.va-hero-section::after {
         margin-left: auto;
         margin-right: auto;
         margin-bottom: 40px;
+        color: #0f172a;
     }
 
     /* ZIP form — full width, aligned to content */
@@ -415,6 +423,42 @@ section.va-hero-section::after {
         width: 100%;
         margin-left: 0;
         margin-right: 0;
+    }
+
+    /* Hide pin icon on mobile — frees space for full placeholder text */
+    .hero-variant-a .va-zip-field svg:first-child {
+        display: none;
+    }
+    .sticky-zip-field svg:first-child {
+        display: none;
+    }
+
+    /* ZIP input — full placeholder text fits without icon */
+    #landingZipInput {
+        font-size: 14px;
+        padding: 18px 100px 18px 16px;
+    }
+
+    /* Sticky input — same treatment */
+    .sticky-zip-field input {
+        padding: 13px 100px 13px 16px;
+        font-size: 14px;
+    }
+
+    /* Get Quote button — compact on mobile */
+    #vaZipSubmit {
+        padding: 0 12px;
+        font-size: 12px;
+        font-weight: 700;
+        height: 44px;
+        border-radius: 10px;
+    }
+
+    /* Sticky Get Quote button — compact */
+    .sticky-zip-btn {
+        padding: 0 12px;
+        font-size: 12px;
+        height: 38px;
     }
 
     /* Hide mobile-only elements */
