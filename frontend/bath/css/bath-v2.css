@@ -3,6 +3,83 @@
    Mirrors fences-v2.css — bath-hero.png desktop, bath-mobile-hero.png mobile
    =================================================================== */
 
+/* ── STICKY ZIP BAR ─────────────────────────────────────────────── */
+.sticky-zip-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #ffffff;
+    box-shadow: 0 2px 20px rgba(15,23,42,0.13);
+    padding: 10px 20px;
+    transform: translateY(-110%);
+    transition: transform 0.32s cubic-bezier(0.22,1,0.36,1);
+    will-change: transform;
+}
+.sticky-zip-bar.is-visible {
+    transform: translateY(0);
+}
+.sticky-zip-bar__inner {
+    max-width: 560px;
+    margin: 0 auto;
+}
+.sticky-zip-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.sticky-zip-field:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+.sticky-zip-field > svg:first-child {
+    position: absolute;
+    left: 14px;
+    width: 18px;
+    height: 18px;
+    color: #9ca3af;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+.sticky-zip-field input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 13px 56px 13px 42px;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    color: #0f172a;
+    outline: none;
+    min-width: 0;
+}
+.sticky-zip-field input::placeholder { color: #94a3b8; font-weight: 400; }
+.sticky-zip-btn {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 9px;
+    background: #f97316;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+.sticky-zip-btn:hover  { background: #ea6a0c; }
+.sticky-zip-btn:active { background: #c2530a; }
+.sticky-zip-btn svg    { width: 18px; height: 18px; color: #fff; stroke: #fff; }
+/* ── END STICKY ZIP BAR ─────────────────────────────────────────── */
+
 /* CSS variable tokens */
 .va-hero-section, #vaActivityStrip, .hero-variant-a {
     --va-bg:           #f8fafc;
@@ -274,14 +351,81 @@ section.va-hero-section::after {
 
 /* ── MOBILE ── */
 @media (max-width: 640px) {
+
+    /* Hero: slightly less than full viewport so next card peeks in */
     section.va-hero-section {
         background-image: url('../images/bath-mobile-hero.png');
         background-position: center bottom;
         background-size: 100% auto;
+        background-color: #daeaf8;
+        min-height: calc(100vh - 80px);
+        min-height: calc(100dvh - 80px);
+        display: flex;
+        flex-direction: column;
     }
-    #landingHeroTitle { font-size: clamp(28px, 7vw, 38px); }
-    #landingHeroSubtitle { font-size: 15px; }
-    .hero-variant-a .va-cta-wrap { max-width: 100%; }
+    /* Semi-transparent overlay — reduces image opacity, keeps text crisp */
+    section.va-hero-section::before {
+        display: block;
+        background: rgba(218, 234, 248, 0.82);
+    }
+
+    /* Bigger logo */
+    .va-hn         { height: 76px; }
+    .va-hn-logo    { font-size: 20px; font-weight: 800; gap: 10px; }
+    .va-hn-logo img { height: 48px; }
+
+    .va-hn-wrap { flex-shrink: 0; }
+
+    /* Content: top-aligned, flows naturally downward */
+    #landingHeroContent.hero-variant-a {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        padding: 48px 24px 36px;
+        text-align: center;
+    }
+    #landingHeroContent.hero-variant-a > div.grid {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    /* Heading: generous line-height + breathing room below */
+    #landingHeroTitle {
+        font-size: clamp(28px, 8vw, 38px);
+        line-height: 1.28;
+        letter-spacing: -0.025em;
+        text-align: center;
+        margin-bottom: 22px;
+    }
+
+    /* Subtitle: comfortable line-height + space below */
+    #landingHeroSubtitle {
+        font-size: 16px;
+        line-height: 1.75;
+        text-align: center;
+        max-width: 290px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 40px;
+    }
+
+    /* ZIP form — full width, aligned to content */
+    .hero-variant-a .va-cta-wrap {
+        max-width: 100%;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    /* Hide mobile-only elements */
+    .va-hn-phone     { display: none; }
+    .va-btn-text     { display: none; }
+    .va-trust-mobile { display: none; }
+
+    /* Next section — minimal top padding so card peeks right away */
+    .ip2-intro             { padding-top: 10px; }
+    .ip2-intro__split      { padding: 0 20px; }
+    .ip2-intro__img-wrap   { border-radius: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
