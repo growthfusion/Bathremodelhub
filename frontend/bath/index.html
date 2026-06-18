@@ -46,6 +46,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <main id="main-content">
 
+    <!-- STICKY ZIP BAR — slides in from top after hero scrolls out -->
+    <div id="sticky-zip-bar" class="sticky-zip-bar" aria-hidden="true">
+        <div class="sticky-zip-bar__inner">
+            <form id="sticky-zip-form" data-search-query="bathroom remodeling">
+                <div class="sticky-zip-field">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <input id="sticky-zip-input" type="text" inputmode="numeric" maxlength="5" pattern="\d*" placeholder="Enter Your ZIP Code" autocomplete="postal-code" />
+                    <button type="submit" class="sticky-zip-btn zip-btn" aria-label="Get quotes">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- HERO — Variant A: light clean with full-bleed illustration -->
     <section class="va-hero-section" id="cta-search">
 
@@ -372,6 +387,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 })();
 </script>
 
+<!-- Sticky ZIP bar behaviour -->
+<script>
+(function () {
+    var bar        = document.getElementById('sticky-zip-bar');
+    var hero       = document.getElementById('cta-search');
+    var stickyForm = document.getElementById('sticky-zip-form');
+    var stickyInput= document.getElementById('sticky-zip-input');
+    var QUERY      = 'bathroom remodeling';
+
+    if (!bar || !hero) return;
+
+    function onScroll() {
+        var heroBottom = hero.offsetTop + hero.offsetHeight;
+        if ((window.scrollY || window.pageYOffset) > heroBottom) {
+            bar.classList.add('is-visible');
+            bar.removeAttribute('aria-hidden');
+        } else {
+            bar.classList.remove('is-visible');
+            bar.setAttribute('aria-hidden', 'true');
+        }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    if (stickyForm) {
+        stickyForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var zip = (stickyInput.value || '').trim();
+            if (!/^\d{5}$/.test(zip)) { stickyInput.focus(); return; }
+            var trail = (typeof window.hcTrackingParams === 'function') ? window.hcTrackingParams() : '';
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ event: 'Search', Search: QUERY, zipCode: zip });
+            window.location.href = '/bath/results.html?zipCode=' + encodeURIComponent(zip)
+                + '&searchQuery=' + encodeURIComponent(QUERY) + trail;
+        });
+    }
+})();
+</script>
 
 </body>
 </html>
