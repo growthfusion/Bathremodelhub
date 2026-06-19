@@ -684,6 +684,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 source_id: t.source_id || '',
                 rtPostbackUrl: buildRtPostbackUrl()
             });
+            window.dataLayer.push({ event: 'Lead', businessName: bizName, zipcode: t.zipCode || '', sub1: t.sub1 || '', fbclid: t.fbclid || '', gclid: t.gclid || '' });
             try { new Image().src = buildRtPostbackUrl(); } catch (e) {}
         }
 
