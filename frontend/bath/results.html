@@ -656,12 +656,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             }
         });
 
-        var RT_POSTBACK_BASE = 'https://uo8b2.ttrk.io/postback';
-        function buildRtPostbackUrl() {
-            var t = window.brhTracking || {};
-            return RT_POSTBACK_BASE + '?clickid=' + encodeURIComponent(t.sub1 || '') + '&type=lead';
-        }
-
         function openPopup(url, bizName) {
             if (!url || url === '#') { console.warn('[BathRemodelHub] openPopup — no requestFlowURL returned by API.'); return; }
             try {
@@ -676,16 +670,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             iframeEl.src = url;
             var t = window.brhTracking || {};
             window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-                event: 'Contact', businessName: bizName,
-                rt_campaign: t.rt_campaign || '', zipcode: t.zipCode || '',
-                rt_cid: t.rt_cid || '', fbclid: t.fbclid || '',
-                gclid: t.gclid || '', sub1: t.sub1 || '',
-                source_id: t.source_id || '',
-                rtPostbackUrl: buildRtPostbackUrl()
-            });
-            window.dataLayer.push({ event: 'Lead', businessName: bizName, zipcode: t.zipCode || '', sub1: t.sub1 || '', fbclid: t.fbclid || '', gclid: t.gclid || '' });
-            try { new Image().src = buildRtPostbackUrl(); } catch (e) {}
+            window.dataLayer.push({ event: 'contact', businessName: bizName, zipcode: t.zipCode||'', sub1: t.sub1||'', fbclid: t.fbclid||'' });
+            window.dataLayer.push({ event: 'request_quote', businessName: bizName, zipcode: t.zipCode||'' });
+            try { new Image().src = 'https://uo8b2.ttrk.io/postback?clickid=' + encodeURIComponent(t.sub1||'') + '&type=lead'; } catch(x){}
         }
 
         function closePopup() {
