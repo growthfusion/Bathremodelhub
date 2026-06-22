@@ -64,13 +64,12 @@ router.post('/businesses', async function (req, res) {
         const ALLOWED_UTM_KEYS = [
             'utm_source',
             'utm_campaign',
-            'utm_content',
             'utm_subid',
             'utm_user_hash',
             'utm_facebook_click_id',
             'utm_google_click_id',
             'utm_vertical',
-            'rt_campaign',
+            'rt_ad',
             'source_id'
         ];
 
