@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return v ? s + '&' + k + '=' + encodeURIComponent(v) : s;
         }, '');
     }
+    window.hcTrackingParams = trackingParams;
 
     function setContent(el, html) {
         var clean = window.DOMPurify
