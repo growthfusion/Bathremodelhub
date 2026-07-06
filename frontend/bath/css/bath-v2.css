@@ -109,7 +109,7 @@
 section.va-hero-section {
     position: relative;
     background-color: #daeaf8;
-    background-image: url('../images/bath-hero.png');
+    background-image: url('../images/bath-hero.webp');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -343,7 +343,7 @@ section.va-hero-section::after {
 /* ── TABLET ── */
 @media (max-width: 1023px) {
     section.va-hero-section {
-        background-image: url('../images/bath-mobile-hero.png');
+        background-image: url('../images/bath-mobile-hero.webp');
         background-position: center bottom;
         background-size: 100% auto;
         min-height: 580px;

@@ -1,4 +1,44 @@
 'use strict';
+
+// Auto-detect ZIP from GPS or IP and pre-fill any empty ZIP inputs on the page.
+// Caches result in sessionStorage so the API is only called once per session.
+window.detectAndFillZip = async function (fieldIds) {
+    var ids    = fieldIds || ['landingZipInput', 'sticky-zip-input'];
+    var fields = ids.map(function (id) { return document.getElementById(id); }).filter(Boolean);
+    var empty  = fields.filter(function (el) { return !el.value; });
+    if (!empty.length) return;
+
+    var zip = sessionStorage.getItem('brh_zip');
+    if (!zip) {
+        zip = await new Promise(function (resolve) {
+            function fetchByIp() {
+                fetch('/api/location')
+                    .then(function (r) { return r.json(); })
+                    .then(function (d) { resolve((d.zip && d.zip.trim()) ? d.zip.trim() : null); })
+                    .catch(function () { resolve(null); });
+            }
+            if (!navigator.geolocation) { fetchByIp(); return; }
+            navigator.geolocation.getCurrentPosition(
+                function (pos) {
+                    fetch('/api/location?lat=' + pos.coords.latitude + '&lng=' + pos.coords.longitude)
+                        .then(function (r) { return r.json(); })
+                        .then(function (d) {
+                            if (d.zip && d.zip.trim()) { resolve(d.zip.trim()); }
+                            else { fetchByIp(); }
+                        })
+                        .catch(function () { fetchByIp(); });
+                },
+                function () { fetchByIp(); },
+                { timeout: 10000, maximumAge: 300000 }
+            );
+        });
+        if (zip) sessionStorage.setItem('brh_zip', zip);
+    }
+
+    if (!zip) return;
+    empty.forEach(function (el) { if (!el.value) el.value = zip; });
+};
+
 document.addEventListener('DOMContentLoaded', function () {
 
     // ── Load Material Symbols if not already on this page ────────────────────
@@ -217,4 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(function () { zipInput.focus(); }, 500);
         });
     });
+
+    // Auto-fill empty ZIP fields from geolocation / IP
+    window.detectAndFillZip();
 });

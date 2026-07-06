@@ -143,4 +143,58 @@ router.get('/info', function (req, res) {
     });
 });
 
+// GET /api/location  — returns ZIP from GPS coords (Google Geocoding) or IP (ipapi.co)
+router.get('/location', async function (req, res) {
+    var lat = req.query.lat ? parseFloat(req.query.lat) : null;
+    var lng = req.query.lng ? parseFloat(req.query.lng) : null;
+
+    // GPS path: coordinates provided → Google Geocoding API
+    if (lat !== null && lng !== null && !isNaN(lat) && !isNaN(lng)) {
+        try {
+            var geocodeUrl = 'https://maps.googleapis.com/maps/api/geocode/json' +
+                '?latlng=' + lat + ',' + lng +
+                '&result_type=postal_code' +
+                '&key=' + encodeURIComponent(process.env.GOOGLE_GEOCODING_KEY || '');
+            var geocodeRes = await fetch(geocodeUrl, {
+                headers: { 'User-Agent': 'bathremodelhub/1.0' },
+                signal: AbortSignal.timeout(4000)
+            });
+            if (!geocodeRes.ok) return res.json({ zip: null });
+            var geocodeData = await geocodeRes.json();
+            if (geocodeData.status === 'OK' && geocodeData.results && geocodeData.results.length) {
+                var components = geocodeData.results[0].address_components || [];
+                for (var i = 0; i < components.length; i++) {
+                    if (components[i].types.indexOf('postal_code') !== -1) {
+                        return res.json({ zip: components[i].long_name });
+                    }
+                }
+            }
+            return res.json({ zip: null });
+        } catch (err) {
+            console.error('[location/google]', err.message);
+            return res.json({ zip: null });
+        }
+    }
+
+    // IP fallback: no coordinates → ipapi.co
+    var ip = String(req.ip || '');
+    var isPrivate = !ip || /^(127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|::1|^$)/.test(ip);
+    var ipapiUrl  = isPrivate
+        ? 'https://ipapi.co/json/'
+        : 'https://ipapi.co/' + encodeURIComponent(ip) + '/json/';
+    try {
+        var ipapiRes = await fetch(ipapiUrl, {
+            headers: { 'User-Agent': 'bathremodelhub/1.0' },
+            signal: AbortSignal.timeout(4000)
+        });
+        if (!ipapiRes.ok) return res.json({ zip: null });
+        var ipapiData = await ipapiRes.json();
+        var zip = (ipapiData.postal && ipapiData.postal.trim()) ? ipapiData.postal.trim() : null;
+        return res.json({ zip: zip });
+    } catch (err) {
+        console.error('[location/ipapi]', err.message);
+        return res.json({ zip: null });
+    }
+});
+
 module.exports = router;
