@@ -8,15 +8,17 @@
     <title>BathRemodelHub – Find the Best Bathroom Pros Near You</title>
     <link rel="icon" href="/bath/images/blue_version.png" type="image/png">
 
-    <!-- LCP image preloads — hero background (desktop & mobile) + first visible image -->
-    <link rel="preload" as="image" href="/bath/images/bath-hero.png" media="(min-width: 1024px)">
-    <link rel="preload" as="image" href="/bath/images/bath-mobile-hero.png" media="(max-width: 1023px)">
+    <!-- LCP image preloads — WebP hero backgrounds + first visible image -->
+    <link rel="preload" as="image" href="/bath/images/bath-hero.webp" imagesrcset="/bath/images/bath-hero.webp" media="(min-width: 1024px)">
+    <link rel="preload" as="image" href="/bath/images/bath-mobile-hero.webp" imagesrcset="/bath/images/bath-mobile-hero.webp" media="(max-width: 1023px)">
     <link rel="preload" as="image" href="/bath/images/bathtub_01.webp" type="image/webp">
 
     <!-- Preconnect for Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Non-blocking font load -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="/bath/css/fonts.css">
@@ -113,8 +115,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <!-- LEFT — rounded image -->
             <div class="ip2-intro__img-wrap">
                 <picture>
-                    <source srcset="/bath/images/bathtub_01.png" type="image/webp">
-                    <img src="/bath/images/bathtub_01.png" alt="Beautiful bathroom remodel" loading="lazy" decoding="async">
+                    <source srcset="/bath/images/bathtub_01.webp" type="image/webp">
+                    <img src="/bath/images/bathtub_01.png" alt="Beautiful bathroom remodel" loading="lazy" decoding="async" width="800" height="600">
                 </picture>
             </div>
 
@@ -162,7 +164,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="ip2-bento">
             <div class="ip2-bento__card ip2-bento__card--wide">
                 <div class="ip2-bento__img">
-                    <img src="/bath/images/img-replacement.png" alt="Shower and bathtub replacement" loading="lazy" decoding="async">
+                    <picture>
+                        <source srcset="/bath/images/img-replacement.webp" type="image/webp">
+                        <img src="/bath/images/img-replacement.png" alt="Shower and bathtub replacement" loading="lazy" decoding="async" width="800" height="600">
+                    </picture>
                 </div>
                 <div class="ip2-bento__body">
                     <h3>Shower &amp; Bathtub Replacement</h3>
@@ -171,7 +176,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="ip2-bento__card">
                 <div class="ip2-bento__img">
-                    <img src="/bath/images/img-vanity.png" alt="Vanity and sink installation" loading="lazy" decoding="async">
+                    <picture>
+                        <source srcset="/bath/images/img-vanity.webp" type="image/webp">
+                        <img src="/bath/images/img-vanity.png" alt="Vanity and sink installation" loading="lazy" decoding="async" width="800" height="600">
+                    </picture>
                 </div>
                 <div class="ip2-bento__body">
                     <h3>Vanity &amp; Sink Installation</h3>
@@ -180,7 +188,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="ip2-bento__card">
                 <div class="ip2-bento__img">
-                    <img src="/bath/images/img-shower.png" alt="Walk-in shower conversions" loading="lazy" decoding="async">
+                    <picture>
+                        <source srcset="/bath/images/img-shower.webp" type="image/webp">
+                        <img src="/bath/images/img-shower.png" alt="Walk-in shower conversions" loading="lazy" decoding="async" width="800" height="600">
+                    </picture>
                 </div>
                 <div class="ip2-bento__body">
                     <h3>Walk-In Shower Conversions</h3>
@@ -189,7 +200,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="ip2-bento__card ip2-bento__card--wide">
                 <div class="ip2-bento__img">
-                    <img src="/bath/images/img-toilet.png" alt="Toilet replacement and installation" loading="lazy" decoding="async">
+                    <picture>
+                        <source srcset="/bath/images/img-toilet.webp" type="image/webp">
+                        <img src="/bath/images/img-toilet.png" alt="Toilet replacement and installation" loading="lazy" decoding="async" width="800" height="600">
+                    </picture>
                 </div>
                 <div class="ip2-bento__body">
                     <h3>Toilet Replacement &amp; Installation</h3>
@@ -198,7 +212,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="ip2-bento__card ip2-bento__card--wide">
                 <div class="ip2-bento__img">
-                    <img src="/bath/images/img-tile.png" alt="Bathroom flooring and tile" loading="lazy" decoding="async">
+                    <picture>
+                        <source srcset="/bath/images/img-tile.webp" type="image/webp">
+                        <img src="/bath/images/img-tile.png" alt="Bathroom flooring and tile" loading="lazy" decoding="async" width="800" height="600">
+                    </picture>
                 </div>
                 <div class="ip2-bento__body">
                     <h3>Flooring &amp; Tile Installation</h3>
@@ -207,7 +224,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="ip2-bento__card">
                 <div class="ip2-bento__img">
-                    <img src="/bath/images/img-fixture.png" alt="Lighting and fixture upgrades" loading="lazy" decoding="async">
+                    <picture>
+                        <source srcset="/bath/images/img-fixture.webp" type="image/webp">
+                        <img src="/bath/images/img-fixture.png" alt="Lighting and fixture upgrades" loading="lazy" decoding="async" width="800" height="600">
+                    </picture>
                 </div>
                 <div class="ip2-bento__body">
                     <h3>Lighting &amp; Fixture Upgrades</h3>
@@ -256,7 +276,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
             <!-- RIGHT — pro image -->
             <div class="ip2-why__illus" aria-hidden="true">
-                <img src="/bath/images/pro.png" alt="">
+                <picture>
+                    <source srcset="/bath/images/pro.webp" type="image/webp">
+                    <img src="/bath/images/pro.png" alt="" loading="lazy" decoding="async" width="480" height="560">
+                </picture>
             </div>
 
         </div>
@@ -376,9 +399,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             e.preventDefault();
             var zip = (document.getElementById('landingZipInput').value || '').trim();
             if (!/^\d{5}$/.test(zip)) { document.getElementById('landingZipInput').focus(); return; }
+
+            // 1. Push to GTM DataLayer
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({ event: 'Search', Search: QUERY, zipCode: zip });
-            goToResults(zip);
+
+            // 2. Fire Snap SEARCH directly (most reliable on redirect pages)
+            if (typeof snaptr === 'function') {
+                snaptr('track', 'SEARCH', { search_string: zip });
+            }
+
+            // 3. Delay redirect 400ms so pixels have time to fire
+            setTimeout(function () {
+                goToResults(zip);
+            }, 400);
         }
 
         if (heroForm) heroForm.addEventListener('submit', handleSubmit);
@@ -390,11 +424,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- Sticky ZIP bar behaviour -->
 <script>
 (function () {
-    var bar        = document.getElementById('sticky-zip-bar');
-    var hero       = document.getElementById('cta-search');
-    var stickyForm = document.getElementById('sticky-zip-form');
-    var stickyInput= document.getElementById('sticky-zip-input');
-    var QUERY      = 'bathroom remodeling';
+    var bar         = document.getElementById('sticky-zip-bar');
+    var hero        = document.getElementById('cta-search');
+    var stickyForm  = document.getElementById('sticky-zip-form');
+    var stickyInput = document.getElementById('sticky-zip-input');
+    var QUERY       = 'bathroom remodeling';
 
     if (!bar || !hero) return;
 
@@ -417,10 +451,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var zip = (stickyInput.value || '').trim();
             if (!/^\d{5}$/.test(zip)) { stickyInput.focus(); return; }
             var trail = (typeof window.hcTrackingParams === 'function') ? window.hcTrackingParams() : '';
+
+            // 1. Push to GTM DataLayer
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({ event: 'Search', Search: QUERY, zipCode: zip });
-            window.location.href = '/bath/results.html?zipCode=' + encodeURIComponent(zip)
-                + '&searchQuery=' + encodeURIComponent(QUERY) + trail;
+
+            // 2. Fire Snap SEARCH directly
+            if (typeof snaptr === 'function') {
+                snaptr('track', 'SEARCH', { search_string: zip });
+            }
+
+            // 3. Delay redirect 400ms
+            setTimeout(function () {
+                window.location.href = '/bath/results.html?zipCode=' + encodeURIComponent(zip)
+                    + '&searchQuery=' + encodeURIComponent(QUERY) + trail;
+            }, 400);
         });
     }
 })();
