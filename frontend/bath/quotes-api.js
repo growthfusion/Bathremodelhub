@@ -36,7 +36,15 @@ window.detectAndFillZip = async function (fieldIds) {
     }
 
     if (!zip) return;
-    empty.forEach(function (el) { if (!el.value) el.value = zip; });
+    empty.forEach(function (el) {
+        if (!el.value) {
+            el.value = zip;
+            // Setting .value programmatically doesn't fire 'input', but pages
+            // (e.g. /bath/a/) track ZIP state via an 'input' listener for submit
+            // validation — dispatch it so auto-filled ZIPs aren't treated as empty.
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    });
 };
 
 document.addEventListener('DOMContentLoaded', function () {

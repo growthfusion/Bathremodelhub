@@ -404,11 +404,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({ event: 'Search', Search: QUERY, zipCode: zip });
 
-            // 2. Fire Snap SEARCH directly (most reliable on redirect pages)
-            if (typeof snaptr === 'function') {
-                snaptr('track', 'SEARCH', { search_string: zip });
-            }
-
             // 3. Delay redirect 400ms so pixels have time to fire
             setTimeout(function () {
                 goToResults(zip);
@@ -455,11 +450,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             // 1. Push to GTM DataLayer
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({ event: 'Search', Search: QUERY, zipCode: zip });
-
-            // 2. Fire Snap SEARCH directly
-            if (typeof snaptr === 'function') {
-                snaptr('track', 'SEARCH', { search_string: zip });
-            }
 
             // 3. Delay redirect 400ms
             setTimeout(function () {
