@@ -45,7 +45,7 @@ jobs:
             --region $REGION \
             --allow-unauthenticated \
             --port 8080 \
-            --set-env-vars "NODE_ENV=staging,API_BASE_URL=${{ secrets.API_BASE_URL }},TOKEN_URL=${{ secrets.TOKEN_URL }},CLIENT_ID=${{ secrets.CLIENT_ID }},CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" \
+            --set-env-vars "NODE_ENV=staging,API_BASE_URL=${{ secrets.API_BASE_URL }},TOKEN_URL=${{ secrets.TOKEN_URL }},CLIENT_ID=${{ secrets.CLIENT_ID }},CLIENT_SECRET=${{ secrets.CLIENT_SECRET }},CH_HOST=${{ secrets.CH_HOST }},CH_PORT=${{ secrets.CH_PORT }},CH_DATABASE=${{ secrets.CH_DATABASE }},CH_USER=${{ secrets.CH_USER }},CH_PASSWORD=${{ secrets.CH_PASSWORD }}" \
             --project $PROJECT_ID
 
       - name: Map custom domain
