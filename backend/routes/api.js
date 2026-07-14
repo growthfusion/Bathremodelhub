@@ -2,8 +2,29 @@
 
 const express = require('express');
 const { getToken, API_BASE } = require('../lib/auth');
+const { chInsert }           = require('../lib/clickhouse');
 
 const router = express.Router();
+
+// ── Search tracking → ClickHouse (utm_subid + ZIP captured at Thumbtack search time) ──
+// Fire-and-forget: callers don't await this, so a slow/failed insert never
+// delays the /businesses response. Failures are caught and logged only.
+function logSearchTracking(entry) {
+    return chInsert(
+        'hc_search_tracking',
+        ['zip_code', 'utm_subid', 'search_query', 'utm_source', 'utm_campaign', 'utm_content'],
+        [
+            String(entry.zipCode      || '').slice(0, 10),
+            String(entry.utmSubid     || '').slice(0, 200),
+            String(entry.searchQuery  || '').slice(0, 200),
+            String(entry.utmSource    || '').slice(0, 60),
+            String(entry.utmCampaign  || '').slice(0, 60),
+            String(entry.utmContent   || '').slice(0, 60),
+        ]
+    )
+        .then(function () { console.log('[search-tracking] logged →', entry.zipCode, entry.utmSubid || '(no subid)'); })
+        .catch(function (err) { console.error('[search-tracking]', err.message); });
+}
 
 // ── Keyword cache (5-minute TTL) ──────────────────────────────────────────────
 const kwCache = new Map();
@@ -94,6 +115,16 @@ router.post('/businesses', async function (req, res) {
             utmData:     cleanUtm
         };
         console.log('[businesses] → upstream:', JSON.stringify(payload));
+
+        // Fire-and-forget: log the ZIP + utm_subid sent to Thumbtack for this search.
+        logSearchTracking({
+            zipCode:     cleanZip,
+            searchQuery: payload.searchQuery,
+            utmSubid:    cleanUtm.utm_subid,
+            utmSource:   cleanUtm.utm_source,
+            utmCampaign: cleanUtm.utm_campaign,
+            utmContent:  cleanUtm.utm_content,
+        });
 
         const upstream = await fetch(`${API_BASE}/api/v4/businesses/search`, {
             method:  'POST',
