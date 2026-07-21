@@ -1,0 +1,316 @@
+@import "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap";
+
+#presell-1a {
+    --background: #fff;
+    --foreground: #1a1a1a;
+    --primary: #1b68e9;
+    --primary-foreground: #fff;
+    --card: #f8f9fa;
+    font-family: Inter, system-ui, sans-serif
+}
+
+.sprite-dc {
+    background: url(./sprites/us-states.png) -4px -4px;
+    width: 240px;
+    height: 120px
+}
+
+.sprite-ut {
+    background: url(./sprites/us-states.png) -500px -132px;
+    width: 200px;
+    height: 120px
+}
+
+.sprite-tx {
+    background: url(./sprites/us-states.png) -197px -644px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-tn {
+    background: url(./sprites/us-states.png) -500px -260px;
+    width: 200px;
+    height: 120px
+}
+
+.sprite-or {
+    background: url(./sprites/us-states.png) -385px -644px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-ny {
+    background: url(./sprites/us-states.png) -252px -4px;
+    width: 240px;
+    height: 120px
+}
+
+.sprite-nm {
+    background: url(./sprites/us-states.png) -573px -644px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-nd {
+    background: url(./sprites/us-states.png) -1106px -772px;
+    width: 152px;
+    height: 120px
+}
+
+.sprite-mo {
+    background: url(./sprites/us-states.png) -240px -260px;
+    width: 206px;
+    height: 120px
+}
+
+.sprite-mn {
+    background: url(./sprites/us-states.png) -4px -388px;
+    width: 200px;
+    height: 120px
+}
+
+.sprite-mi {
+    background: url(./sprites/us-states.png) -4px -772px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-ky {
+    background: url(./sprites/us-states.png) -252px -132px;
+    width: 228px;
+    height: 120px
+}
+
+.sprite-in {
+    background: url(./sprites/us-states.png) -192px -772px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-fl {
+    background: url(./sprites/us-states.png) -380px -772px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-ct {
+    background: url(./sprites/us-states.png) -1106px -900px;
+    width: 152px;
+    height: 120px
+}
+
+.sprite-az {
+    background: url(./sprites/us-states.png) -568px -772px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-wy {
+    background: url(./sprites/us-states.png) -1106px -388px;
+    width: 171px;
+    height: 120px
+}
+
+.sprite-wv {
+    background: url(./sprites/us-states.png) -4px -260px;
+    width: 228px;
+    height: 120px
+}
+
+.sprite-wi {
+    background: url(./sprites/us-states.png) -918px -4px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-wa {
+    background: url(./sprites/us-states.png) -500px -4px;
+    width: 202px;
+    height: 120px
+}
+
+.sprite-vt {
+    background: url(./sprites/us-states.png) -212px -388px;
+    width: 200px;
+    height: 120px
+}
+
+.sprite-va {
+    background: url(./sprites/us-states.png) -918px -132px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-sd {
+    background: url(./sprites/us-states.png) -710px -388px;
+    width: 192px;
+    height: 120px
+}
+
+.sprite-sc {
+    background: url(./sprites/us-states.png) -918px -260px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-ri {
+    background: url(./sprites/us-states.png) -761px -644px;
+    width: 137px;
+    height: 120px
+}
+
+.sprite-pa {
+    background: url(./sprites/us-states.png) -1106px -644px;
+    width: 164px;
+    height: 120px
+}
+
+.sprite-ok {
+    background: url(./sprites/us-states.png) -918px -388px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-oh {
+    background: url(./sprites/us-states.png) -710px -260px;
+    width: 195px;
+    height: 120px
+}
+
+.sprite-nv {
+    background: url(./sprites/us-states.png) -918px -516px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-nj {
+    background: url(./sprites/us-states.png) -710px -132px;
+    width: 199px;
+    height: 120px
+}
+
+.sprite-nh {
+    background: url(./sprites/us-states.png) -918px -644px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-ne {
+    background: url(./sprites/us-states.png) -420px -388px;
+    width: 200px;
+    height: 120px
+}
+
+.sprite-nc {
+    background: url(./sprites/us-states.png) -918px -772px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-mt {
+    background: url(./sprites/us-states.png) -4px -900px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-ms {
+    background: url(./sprites/us-states.png) -4px -516px;
+    width: 200px;
+    height: 120px
+}
+
+.sprite-me {
+    background: url(./sprites/us-states.png) -756px -772px;
+    width: 152px;
+    height: 120px
+}
+
+.sprite-md {
+    background: url(./sprites/us-states.png) -192px -900px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-ma {
+    background: url(./sprites/us-states.png) -212px -516px;
+    width: 200px;
+    height: 120px
+}
+
+.sprite-la {
+    background: url(./sprites/us-states.png) -4px -644px;
+    width: 185px;
+    height: 120px
+}
+
+.sprite-ks {
+    background: url(./sprites/us-states.png) -420px -516px;
+    width: 200px;
+    height: 120px
+}
+
+.sprite-il {
+    background: url(./sprites/us-states.png) -710px -4px;
+    width: 200px;
+    height: 120px
+}
+
+.sprite-id {
+    background: url(./sprites/us-states.png) -944px -900px;
+    width: 152px;
+    height: 120px
+}
+
+.sprite-ia {
+    background: url(./sprites/us-states.png) -380px -900px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-hi {
+    background: url(./sprites/us-states.png) -4px -132px;
+    width: 240px;
+    height: 120px
+}
+
+.sprite-ga {
+    background: url(./sprites/us-states.png) -710px -516px;
+    width: 192px;
+    height: 120px
+}
+
+.sprite-de {
+    background: url(./sprites/us-states.png) -568px -900px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-co {
+    background: url(./sprites/us-states.png) -756px -900px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-ca {
+    background: url(./sprites/us-states.png) -1106px -4px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-ar {
+    background: url(./sprites/us-states.png) -1106px -132px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-al {
+    background: url(./sprites/us-states.png) -1106px -260px;
+    width: 180px;
+    height: 120px
+}
+
+.sprite-ak {
+    background: url(./sprites/us-states.png) -1106px -516px;
+    width: 170px;
+    height: 120px
+}
