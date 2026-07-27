@@ -174,7 +174,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <section class="hero">
     <h1>Bathroom Remodeling Options For U.S. Homeowners 55+</h1>
     <p class="sub">Book your free estimate in a few seconds.</p>
-    <button type="button" class="cta vc-btn" data-scroll="states" href="https://tk.bathremodelhub.us/click" style="margin-top:24px">Get free estimate →</button>
+    <a class="cta vc-btn" href="https://tk.bathremodelhub.us/click" style="margin-top:24px">Get free estimate →</a>
     <p class="fine">Takes under 60 seconds · No obligation</p>
     <ul class="badges">
       <li><span class="tick">✓</span>Licensed Contractors</li>
@@ -206,7 +206,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="notice"><strong>July 17, 2026:</strong> While the cost of a new walk-in tub is not typically covered by Medicare, we have found a service where seniors are getting this service at massive discounts. Follow the steps below to find out more.</div>
 
-    <button type="button" class="cta vc-btn" data-scroll="states" href="https://tk.bathremodelhub.us/click" style="margin-top:16px">See if my zip qualifies →</button>
+    <a class="cta vc-btn" href="https://tk.bathremodelhub.us/click" style="margin-top:16px">See if my zip qualifies →</a>
   </section>
 
   <section class="steps">
@@ -251,7 +251,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <div class="sticky">
-  <button type="button" class="cta vc-btn" data-scroll="states" href="https://tk.bathremodelhub.us/click">Get free estimate →</button>
+  <a class="cta vc-btn" href="https://tk.bathremodelhub.us/click">Get free estimate →</a>
 </div>
 
 <script>
@@ -262,8 +262,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   var selected = null;
 
   STATES.forEach(function (s) {
-    var b = document.createElement("button");
-    b.type = "button";
+    var b = document.createElement("a");
     b.className = "state vc-btn";
     b.setAttribute("href", "https://tk.bathremodelhub.us/click");
     b.setAttribute("aria-pressed", "false");
@@ -274,12 +273,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       b.setAttribute("aria-pressed", "true");
     });
     grid.appendChild(b);
-  });
-
-  Array.prototype.forEach.call(document.querySelectorAll("[data-scroll]"), function (el) {
-    el.addEventListener("click", function () {
-      document.getElementById(el.getAttribute("data-scroll")).scrollIntoView({ behavior: "smooth", block: "start" });
-    });
   });
 })();
 </script>
