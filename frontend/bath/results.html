@@ -404,7 +404,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var searchQuery = params.get('searchQuery') || '';
         var zipCode     = params.get('zipCode')     || '';
 
-        var sub1       = params.get('utm_subid')     || params.get('sub1')                  || '';
+        var sub1       = (function () {
+            var fromUrl = params.get('utm_subid') || params.get('sub1') || '';
+            if (fromUrl) return fromUrl;
+            var m = document.cookie.match(/(?:^|;\s*)rtkclickid-store=([^;]+)/);
+            return m ? decodeURIComponent(m[1]) : '';
+        })();
         var fbclid     = params.get('utm_user_hash') || params.get('utm_facebook_click_id') || params.get('fbclid') || params.get('sub11') || '';
         var rtAd       = params.get('utm_content')   || params.get('utm_rt_ad') || params.get('rt_ad') || '';
         var rtCid      = params.get('utm_campaign')  || params.get('rt_cid')                || params.get('sub4')   || '';
@@ -414,6 +419,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var sourceId   = params.get('source_id')     || '';
 
         window.brhTracking = { sub1: sub1, fbclid: fbclid, rt_ad: rtAd, rt_cid: rtCid, gclid: gclid, zipCode: zipParam, utm_source: utmSrc, source_id: sourceId };
+
+        // Fire startfunnel pixel on results page load (after navigation, so no race condition)
+        if (sub1) {
+            try { new Image().src = 'https://uo8b2.ttrk.io/postback?clickid=' + encodeURIComponent(sub1) + '&type=startfunnel'; } catch (x) {}
+        }
 
         var elLoading = document.getElementById('results-loading');
         var elGrid    = document.getElementById('results-grid');
