@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, follow">
     <meta name="description" content="Get free quotes from trusted local bathroom remodeling pros near you. Shower upgrades, vanity installs, tub-to-shower conversions and more. Compare estimates from pre-screened experts.">
     <title>BathRemodelHub – Find the Best Bathroom Pros Near You</title>
     <link rel="icon" href="/bath/images/blue_version.png" type="image/png">
@@ -38,34 +39,6 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-M8VC8STX');</script>
     <!-- End Google Tag Manager -->
-    <style>
-    /* ── HERO LEAD FIELDS (email + phone above ZIP) — desktop + mobile ── */
-    .va-lead-fields { display: flex; flex-direction: column; gap: 8px; }
-    .va-lead-fields input {
-        width: 100%; box-sizing: border-box; height: 52px; padding: 0 16px;
-        font-size: 16px; font-weight: 500; font-family: 'Inter', sans-serif;
-        color: #0f172a; background: #ffffff;
-        border: 1px solid #e2e8f0; border-radius: 0.625rem; outline: none;
-        transition: box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-    .va-lead-fields input::placeholder { color: #94a3b8; font-weight: 400; }
-    .va-lead-fields input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
-    .va-lead-fields input.is-invalid { border-color: #dc2626; }
-    .va-lead-error { margin: 0; padding: 0 4px; font-size: 13px; font-weight: 600; color: #dc2626; text-align: left; font-family: 'Inter', sans-serif; }
-    /* ZIP box gets the same visible border as email/phone (overrides transparent border in bath-v2.css) */
-    #ip-hero-form #landingZipInput { border: 1px solid #cbd5e1; }
-    #ip-hero-form #landingZipInput:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
-    .va-lead-fields input { border-color: #cbd5e1; }
-    /* Desktop: email + phone side by side */
-    @media (min-width: 641px) {
-        .va-lead-fields { flex-direction: row; }
-        .va-lead-fields input { flex: 1; min-width: 0; }
-    }
-    /* Mobile: stacked, slightly more compact */
-    @media (max-width: 640px) {
-        .va-lead-fields input { height: 50px; }
-    }
-    </style>
 </head>
 
 <body class="__className_2dbf9b">
@@ -115,11 +88,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                     <form id="ip-hero-form" data-search-query="bathroom remodeling" action="" method="get">
                         <div class="va-cta-wrap">
-                            <div class="va-lead-fields">
-                                <input id="hero-email" name="email" type="email" autocomplete="email" placeholder="Email Address" aria-label="Email address" required />
-                                <input id="hero-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="14" placeholder="Phone Number" aria-label="Phone number" required />
-                            </div>
-                            <p id="hero-lead-error" class="va-lead-error" role="alert" hidden></p>
                             <div class="va-zip-field">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                 <input id="landingZipInput" name="zip" type="text" inputmode="numeric" maxlength="5" autocomplete="postal-code" pattern="\d*" placeholder="Enter ZIP For Free Quote" />
@@ -428,60 +396,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var heroForm = document.getElementById('ip-hero-form');
         var submitBtn = document.getElementById('vaZipSubmit');
 
-        var email = document.getElementById('hero-email');
-        var phone = document.getElementById('hero-phone');
-        var err   = document.getElementById('hero-lead-error');
-
-        // Format phone as (555) 123-4567 while typing
-        phone.addEventListener('input', function () {
-            var d = phone.value.replace(/\D/g, '').slice(0, 10);
-            var out = d;
-            if (d.length > 6)      out = '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6);
-            else if (d.length > 3) out = '(' + d.slice(0, 3) + ') ' + d.slice(3);
-            else if (d.length > 0) out = '(' + d;
-            phone.value = out;
-        });
-
-        function fail(el, msg) {
-            el.classList.add('is-invalid');
-            err.textContent = msg;
-            err.hidden = false;
-            el.focus();
-        }
-
-        var submitting = false;
         function handleSubmit(e) {
             e.preventDefault();
-            if (submitting) return;
-
-            email.classList.remove('is-invalid');
-            phone.classList.remove('is-invalid');
-            document.getElementById('landingZipInput').classList.remove('is-invalid');
-            err.hidden = true;
-
-            var emailVal = email.value.trim();
-            var phoneVal = phone.value.replace(/\D/g, '');
             var zip = (document.getElementById('landingZipInput').value || '').trim();
-
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailVal)) { fail(email, 'Please enter a valid email address.'); return; }
-            if (!/^[2-9]\d{9}$/.test(phoneVal))                  { fail(phone, 'Please enter a valid 10-digit phone number.'); return; }
             if (!/^\d{5}$/.test(zip)) { document.getElementById('landingZipInput').focus(); return; }
-            submitting = true;
-
-            // Kept in sessionStorage for results.html (never put in the URL)
-            try {
-                sessionStorage.setItem('brh_email', emailVal);
-                sessionStorage.setItem('brh_phone', phoneVal);
-            } catch (x) {}
-
-            // Save straight to the backend now — doesn't depend on the results page loading
-            if (typeof window.hcCaptureLead === 'function') {
-                window.hcCaptureLead({ zipCode: zip, email: emailVal, phone: phoneVal, searchQuery: QUERY });
-            }
 
             // 1. Push to GTM DataLayer
             window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({ event: 'lead_contact_capture', email: emailVal, phone: phoneVal });
             window.dataLayer.push({ event: 'Search', Search: QUERY, zipCode: zip });
 
             // 3. Delay redirect 400ms so pixels have time to fire
@@ -492,11 +413,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         if (heroForm) heroForm.addEventListener('submit', handleSubmit);
         if (submitBtn) submitBtn.addEventListener('click', handleSubmit);
-
-        // Three text inputs + no real submit button = Enter would do nothing, so wire it up
-        [email, phone, document.getElementById('landingZipInput')].forEach(function (el) {
-            el.addEventListener('keydown', function (e) { if (e.key === 'Enter') handleSubmit(e); });
-        });
     });
 })();
 </script>
@@ -530,19 +446,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             e.preventDefault();
             var zip = (stickyInput.value || '').trim();
             if (!/^\d{5}$/.test(zip)) { stickyInput.focus(); return; }
-
-            // This variant needs email + phone: if they haven't been captured yet,
-            // hand the ZIP to the hero form and bring the visitor back up to it.
-            var haveLead = false;
-            try { haveLead = !!(sessionStorage.getItem('brh_email') && sessionStorage.getItem('brh_phone')); } catch (x) {}
-            if (!haveLead) {
-                var heroZip = document.getElementById('landingZipInput');
-                if (heroZip) heroZip.value = zip;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                var heroEmail = document.getElementById('hero-email');
-                if (heroEmail) setTimeout(function () { heroEmail.focus({ preventScroll: true }); }, 350);
-                return;
-            }
             var trail = (typeof window.hcTrackingParams === 'function') ? window.hcTrackingParams() : '';
 
             // 1. Push to GTM DataLayer

@@ -6,13 +6,16 @@ const { chInsert }           = require('../lib/clickhouse');
 
 const router = express.Router();
 
-// ── Search tracking → ClickHouse (utm_subid + ZIP captured at Thumbtack search time) ──
-// Fire-and-forget: callers don't await this, so a slow/failed insert never
-// delays the /businesses response. Failures are caught and logged only.
+// ── Search tracking → ClickHouse (utm_subid + ZIP + email/phone captured at Thumbtack search time) ──
+// Waits for p but never longer than ms — tracking must not stall the user's response.
+function settleWithin(p, ms) {
+    return Promise.race([p, new Promise(function (resolve) { setTimeout(resolve, ms); })]);
+}
+
 function logSearchTracking(entry) {
     return chInsert(
         'hc_search_tracking',
-        ['zip_code', 'utm_subid', 'search_query', 'utm_source', 'utm_campaign', 'utm_content'],
+        ['zip_code', 'utm_subid', 'search_query', 'utm_source', 'utm_campaign', 'utm_content', 'email', 'phone', 'contractor_found'],
         [
             String(entry.zipCode      || '').slice(0, 10),
             String(entry.utmSubid     || '').slice(0, 200),
@@ -20,10 +23,14 @@ function logSearchTracking(entry) {
             String(entry.utmSource    || '').slice(0, 60),
             String(entry.utmCampaign  || '').slice(0, 60),
             String(entry.utmContent   || '').slice(0, 60),
+            String(entry.email        || '').slice(0, 254),
+            String(entry.phone        || '').slice(0, 15),
+            // 'Yes' = upstream returned >=1 contractor, 'No' = empty list, '' = unknown (upstream error)
+            String(entry.contractorFound || '').slice(0, 3),
         ]
     )
         .then(function () { console.log('[search-tracking] logged →', entry.zipCode, entry.utmSubid || '(no subid)'); })
-        .catch(function (err) { console.error('[search-tracking]', err.message); });
+        .catch(function (err) { console.error('[search-tracking] FAILED after retries:', err.message); });
 }
 
 // ── Keyword cache (5-minute TTL) ──────────────────────────────────────────────
@@ -65,9 +72,17 @@ router.get('/keywords', async function (req, res) {
 
 // POST /api/businesses  { searchQuery, zipCode, utmData }
 router.post('/businesses', async function (req, res) {
-    const { searchQuery, zipCode, utmData } = req.body;
+    const { searchQuery, zipCode, utmData, email, phone } = req.body;
     const cleanZip = String(zipCode || '').trim();
 
+    // Optional contact details — only stored when well-formed, otherwise dropped.
+    // Logged to ClickHouse only; never forwarded to the upstream Thumbtack API.
+    const emailTrim  = String(email || '').trim().toLowerCase();
+    const cleanEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailTrim) ? emailTrim.slice(0, 254) : '';
+    const phoneDigits = String(phone || '').replace(/\D/g, '');
+    const cleanPhone = /^[2-9]\d{9}$/.test(phoneDigits) ? phoneDigits : '';
+
+    // Do not log email/phone to the console (PII).
     console.log('[businesses] received →', { searchQuery, zipCode: cleanZip });
 
     if (!searchQuery || !cleanZip) {
@@ -76,6 +91,9 @@ router.post('/businesses', async function (req, res) {
     if (!/^\d{5}$/.test(cleanZip)) {
         return res.status(400).json({ error: 'zipCode must be a 5-digit US ZIP code' });
     }
+
+    // Assigned once the request is validated; declared here so the catch block can call it.
+    let track = function () { return Promise.resolve(); };
 
     try {
         const token = await getToken();
@@ -116,15 +134,25 @@ router.post('/businesses', async function (req, res) {
         };
         console.log('[businesses] → upstream:', JSON.stringify(payload));
 
-        // Fire-and-forget: log the ZIP + utm_subid sent to Thumbtack for this search.
-        logSearchTracking({
-            zipCode:     cleanZip,
-            searchQuery: payload.searchQuery,
-            utmSubid:    cleanUtm.utm_subid,
-            utmSource:   cleanUtm.utm_source,
-            utmCampaign: cleanUtm.utm_campaign,
-            utmContent:  cleanUtm.utm_content,
-        });
+        // Logged once per search, after the upstream call, so we know whether
+        // any contractors came back. Awaited (bounded) before responding so the
+        // insert can't be cut off when the instance is throttled.
+        let tracked = false;
+        track = function (contractorFound) {
+            if (tracked) return Promise.resolve();
+            tracked = true;
+            return logSearchTracking({
+                zipCode:     cleanZip,
+                searchQuery: payload.searchQuery,
+                utmSubid:    cleanUtm.utm_subid,
+                utmSource:   cleanUtm.utm_source,
+                utmCampaign: cleanUtm.utm_campaign,
+                utmContent:  cleanUtm.utm_content,
+                email:       cleanEmail,
+                phone:       cleanPhone,
+                contractorFound: contractorFound,
+            });
+        };
 
         const upstream = await fetch(`${API_BASE}/api/v4/businesses/search`, {
             method:  'POST',
@@ -139,6 +167,7 @@ router.post('/businesses', async function (req, res) {
         console.log('[businesses] ← upstream:', upstream.status, rawBody.slice(0, 300));
 
         if (!upstream.ok) {
+            await settleWithin(track(''), 3000);   // upstream error — contractor availability unknown
             let errMsg = `Upstream error ${upstream.status}`;
             try {
                 const parsed = JSON.parse(rawBody);
@@ -147,10 +176,60 @@ router.post('/businesses', async function (req, res) {
             return res.status(upstream.status).json({ error: errMsg });
         }
 
-        res.json(JSON.parse(rawBody));
+        const result = JSON.parse(rawBody);
+        // "data" is the contractor list: non-empty array → Yes, empty/missing → No
+        await settleWithin(track(Array.isArray(result.data) && result.data.length > 0 ? 'Yes' : 'No'), 3000);
+        res.json(result);
     } catch (err) {
+        await settleWithin(track(''), 3000);   // no-op if already logged; keeps failed searches in the table
         console.error('[businesses]', err.message);
         res.status(502).json({ error: err.message });
+    }
+});
+
+// ── Lead capture → ClickHouse hc_lead_capture ───────────────────────────────
+// Written the moment the visitor submits the landing-page form, independent of
+// the results page — so email/phone are never lost if sessionStorage is empty,
+// the results tab is closed, or the later /businesses call fails.
+const leadHits = new Map();   // ip -> { n, reset }  (simple per-IP limiter)
+function leadRateLimited(ip) {
+    const now = Date.now();
+    let h = leadHits.get(ip);
+    if (!h || now > h.reset) { h = { n: 0, reset: now + 60000 }; leadHits.set(ip, h); }
+    h.n += 1;
+    if (leadHits.size > 5000) { leadHits.forEach(function (v, k) { if (now > v.reset) leadHits.delete(k); }); }
+    return h.n > 20;   // max 20 submissions / minute / IP
+}
+
+// POST /api/lead  { zipCode, email, phone, searchQuery, utmData, page }
+router.post('/lead', async function (req, res) {
+    if (leadRateLimited(req.ip)) return res.status(429).json({ error: 'Too many requests' });
+
+    const b = req.body || {};
+    const zip   = String(b.zipCode || '').trim();
+    const email = String(b.email || '').trim().toLowerCase();
+    const phone = String(b.phone || '').replace(/\D/g, '');
+
+    if (!/^\d{5}$/.test(zip)) return res.status(400).json({ error: 'zipCode must be 5 digits' });
+    const okEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    const okPhone = /^[2-9]\d{9}$/.test(phone);
+    if (!okEmail && !okPhone) return res.status(400).json({ error: 'email or phone required' });
+
+    const u = (b.utmData && typeof b.utmData === 'object') ? b.utmData : {};
+    const str = function (v, n) { return typeof v === 'string' ? v.trim().slice(0, n) : ''; };
+
+    try {
+        await chInsert(
+            'hc_lead_capture',
+            ['zip_code', 'email', 'phone', 'search_query', 'utm_subid', 'utm_source', 'utm_campaign', 'utm_content', 'page'],
+            [zip, okEmail ? email.slice(0, 254) : '', okPhone ? phone : '',
+             str(b.searchQuery, 200), str(u.utm_subid, 200), str(u.utm_source, 60),
+             str(u.utm_campaign, 60), str(u.utm_content, 60), str(b.page, 200)]
+        );
+        res.json({ ok: true });
+    } catch (err) {
+        console.error('[lead-capture] FAILED after retries:', err.message);
+        res.status(503).json({ error: 'Could not save' });
     }
 });
 

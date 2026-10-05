@@ -99,6 +99,32 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     window.hcTrackingParams = trackingParams;
 
+    // Lead capture — saves email/phone/ZIP to the backend the moment a form is submitted.
+    // keepalive lets the request finish even though the page is about to navigate away.
+    // Never throws and never blocks the user's flow.
+    window.hcCaptureLead = function (lead) {
+        try {
+            var p = new URLSearchParams(window.location.search);
+            var cookie = (document.cookie.match(/(?:^|;\s*)rtkclickid-store=([^;]+)/) || [])[1] || '';
+            var utm = {
+                utm_subid:    p.get('utm_subid') || p.get('sub1') || cookie,
+                utm_campaign: p.get('utm_campaign') || p.get('rt_cid') || p.get('sub4') || '',
+                utm_content:  p.get('utm_content') || p.get('utm_rt_ad') || p.get('rt_ad') || '',
+                utm_source:   p.get('utm_source') || ''
+            };
+            fetch('/api/lead', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                keepalive: true,
+                body: JSON.stringify({
+                    zipCode: lead.zipCode, email: lead.email, phone: lead.phone,
+                    searchQuery: lead.searchQuery || '', utmData: utm,
+                    page: window.location.pathname
+                })
+            }).catch(function () {});
+        } catch (e) {}
+    };
+
     function setContent(el, html) {
         var clean = window.DOMPurify
             ? window.DOMPurify.sanitize(html, {
