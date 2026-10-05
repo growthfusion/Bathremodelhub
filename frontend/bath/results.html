@@ -562,10 +562,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (gclid)      utmData.utm_google_click_id = gclid;
         if (sourceId)   utmData.source_id           = sourceId;
 
+        // Email/phone captured on the landing page (kept in sessionStorage, never in the URL)
+        var leadEmail = '', leadPhone = '';
+        try {
+            leadEmail = sessionStorage.getItem('brh_email') || '';
+            leadPhone = sessionStorage.getItem('brh_phone') || '';
+        } catch (e) {}
+
         fetch('/api/businesses', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ searchQuery: searchQuery, zipCode: zipCode, utmData: utmData })
+            body:    JSON.stringify({ searchQuery: searchQuery, zipCode: zipCode, utmData: utmData, email: leadEmail, phone: leadPhone })
         })
         .then(function (res) {
             if (!res.ok) {
