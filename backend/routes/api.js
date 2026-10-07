@@ -130,7 +130,9 @@ router.post('/businesses', async function (req, res) {
         const payload = {
             searchQuery: String(searchQuery).slice(0, 200),
             zipCode:     cleanZip,
-            utmData:     cleanUtm
+            utmData:     cleanUtm,
+            // Thumbtack: skip pros who are already "overserved" (have enough leads)
+            settings:    { excludeOverserved: true }
         };
         console.log('[businesses] → upstream:', JSON.stringify(payload));
 
