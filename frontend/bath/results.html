@@ -152,15 +152,6 @@
             .brh-step        { font-size: 13px; margin-bottom: 10px; }
         }
 
-        /* Highlight flags on standout cards */
-        .brh-flags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-        .brh-flag {
-            display: inline-flex; align-items: center; gap: 4px;
-            background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0;
-            border-radius: 999px; padding: 2px 10px; font-size: 13px; font-weight: 700;
-        }
-        .brh-flag .material-symbols-outlined { font-size: 14px; }
-        .brh-flag--blue { background: #EFF6FF; color: #1D4ED8; border-color: #BFDBFE; }
 
         /* ── Cards Grid ──────────────────────────────────────────────────── */
         .brh-grid {
@@ -501,8 +492,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             if (zipBadge && zip) zipBadge.style.display = 'inline';
         }
 
-        var best = {};   // standout pro per category, set once results load
-
         function bizCard(biz, cardIndex) {
             var name      = esc(biz.businessName || 'Local Pro');
             var address   = esc(biz.businessLocation || '');
@@ -520,11 +509,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var introShort = introEsc;
             var ctaURL    = esc((biz.widgets && biz.widgets.requestFlowURL) || biz.servicePageURL || '#');
             var isFirst   = (cardIndex === 0);
-            var flags     = '';
-            if (biz === best.rating)  flags += '<span class="brh-flag"><span class="material-symbols-outlined">emoji_events</span>Highest rated</span>';
-            if (biz === best.reviews) flags += '<span class="brh-flag brh-flag--blue"><span class="material-symbols-outlined">reviews</span>Most reviews</span>';
-            if (biz === best.years)   flags += '<span class="brh-flag brh-flag--blue"><span class="material-symbols-outlined">workspace_premium</span>Most experienced</span>';
-            var flagsEl   = flags ? '<div class="brh-flags">' + flags + '</div>' : '';
 
             var avatarEl = imgURL
                 ? '<img class="brh-avatar" src="' + imgURL + '" alt="' + name + '"'
@@ -564,7 +548,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             //  testimonial quote — same text twice. Removed.)
             return '<div class="brh-card js-card" data-href="' + ctaURL + '" data-biz-name="' + esc(biz.businessName || 'Local Pro') + '">'
                 + '<div class="brh-card-body">'
-                + flagsEl
                 + '<div class="brh-card-head">'
                 +   '<div class="brh-avatar-wrap">' + avatarEl + '</div>'
                 +   '<div class="brh-name-row"><span class="brh-name vc-btn" tabindex="0" role="button">' + name + '</span>' + topProEl + ratingEl + '</div>'
@@ -688,14 +671,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         || keys.reviews(b) - keys.reviews(a);
                 };
             }
-            function leader(key, minReviews) {
-                var pool = businesses.filter(function (b) { return keys.reviews(b) >= (minReviews || 0); });
-                if (!pool.length) return null;
-                var top = pool.sort(compare(key))[0];
-                return keys[key](top) > 0 ? top : null;
-            }
-            // A 5.0 from 4 reviews shouldn't wear the "Highest rated" trophy: require 10+ reviews
-            best = { rating: leader('rating', 10), reviews: leader('reviews'), years: leader('years') };
 
             // Cards render once, in "best match" order (rating weighted by
             // how many reviews back it up).
