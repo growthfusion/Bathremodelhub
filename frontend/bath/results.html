@@ -17,50 +17,79 @@
     <!-- End Google Tag Manager -->
 
 
+    <!-- Resource hints. The Thumbtack widget (requestFlowURL) loads from partner.thumbtack.com,
+         so open that connection (DNS + TCP + TLS) now, while the pros search is still running. -->
     <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://partner.thumbtack.com">
+    <link rel="preconnect" href="https://www.thumbtack.com">
+    <link rel="preconnect" href="https://production-next-images-cdn.thumbtack.com">
+    <link rel="dns-prefetch" href="https://staging-partner.thumbtack.com">
     <link rel="dns-prefetch" href="https://us.i.posthog.com">
     <link rel="dns-prefetch" href="https://us-assets.i.posthog.com">
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="https://uo8b2.ttrk.io">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-          onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" as="style"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    </noscript>
 
-    <!-- Shared design tokens — same file the landing pages load.
-         Must sit outside <noscript>, or it never loads in a real browser. -->
+    <!-- Self-hosted fonts: no Google round-trips. Inter is one variable file covering every weight. -->
+    <link rel="preload" href="/bath/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/bath/fonts/material-symbols.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- Shared design tokens — same file the landing pages load. -->
     <link rel="stylesheet" href="/bath/css/tokens.css">
+    <!-- Static build of the Tailwind classes this page uses. Replaces the Tailwind CDN script
+         (a render-blocking JS compiler that re-ran on every DOM change). -->
+    <link rel="stylesheet" href="/bath/css/results-tw.css">
+
+    <style>
+        @font-face {
+            font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap;
+            src: url('/bath/fonts/inter-latin.woff2') format('woff2');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }
+        @font-face {
+            font-family: 'Material Symbols Outlined'; font-style: normal; font-weight: 100 700; font-display: block;
+            src: url('/bath/fonts/material-symbols.woff2') format('woff2');
+        }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined'; font-weight: normal; font-style: normal;
+            font-size: 24px; line-height: 1; letter-spacing: normal; text-transform: none;
+            display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr;
+            -webkit-font-feature-settings: 'liga'; font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
 
     <script>
-        window.tailwind = {
-            config: {
-                theme: {
-                    extend: {
-                        colors: {
-                            "brand-navy":   "#1a3a5c",
-                            "brand-violet": "#3b82f6",
-                            "brand-orange": "#ff6b35",
-                            "brand-light":  "#f0f7ff",
-                        },
-                        fontFamily: {
-                            headline: ["Inter", "sans-serif"],
-                            body:     ["Inter",   "sans-serif"],
-                        }
-                    }
-                }
-            }
-        };
+    // Start the pros search NOW. It needs none of the page's CSS/JS, so it runs in parallel with
+    // them instead of waiting for DOMContentLoaded. The main script below consumes window.__brhSearch.
+    (function () {
+        try {
+            var p = new URLSearchParams(location.search);
+            var searchQuery = p.get('searchQuery') || '';
+            var zip = p.get('zipCode') || p.get('zipcode') || p.get('sub3') || '';
+            if (!searchQuery || !zip) return;
+            var sub1 = p.get('utm_subid') || p.get('sub1') || '';
+            if (!sub1) { var m = document.cookie.match(/(?:^|;\s*)rtkclickid-store=([^;]+)/); sub1 = m ? decodeURIComponent(m[1]) : ''; }
+            var utm = { utm_source: p.get('utm_source') || 'cma-growthfusion', utm_vertical: 'BRH' };
+            var cid = p.get('utm_campaign') || p.get('rt_cid') || p.get('sub4') || '';
+            var ad  = p.get('utm_content') || p.get('utm_rt_ad') || p.get('rt_ad') || '';
+            var fb  = p.get('utm_user_hash') || p.get('utm_facebook_click_id') || p.get('fbclid') || p.get('sub11') || '';
+            var gc  = p.get('gclid') || p.get('utm_google_click_id') || '';
+            var sid = p.get('source_id') || '';
+            if (cid) utm.utm_campaign = cid;
+            if (ad)  utm.rt_ad = ad;
+            if (sub1) utm.utm_subid = sub1;
+            if (fb)  utm.utm_user_hash = fb;
+            if (gc)  utm.utm_google_click_id = gc;
+            if (sid) utm.source_id = sid;
+            var email = '', phone = '';
+            try { email = sessionStorage.getItem('brh_email') || ''; phone = sessionStorage.getItem('brh_phone') || ''; } catch (e) {}
+            window.__brhSearch = fetch('/api/businesses', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ searchQuery: searchQuery, zipCode: zip, utmData: utm, email: email, phone: phone })
+            });
+        } catch (e) {}
+    })();
     </script>
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 
     <style>
         body { font-family: var(--font-body); background: var(--surface); }
@@ -327,7 +356,7 @@
         .footer-link:hover { color: #ffffff !important; }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js" defer></script>
+    <script src="/bath/js/purify-3.4.16.min.js" defer></script>
     <script src="/js/posthog-init.js" defer></script>
 </head>
 <body class="font-body text-gray-800 bg-gray-50 min-h-screen">
@@ -610,11 +639,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             leadPhone = sessionStorage.getItem('brh_phone') || '';
         } catch (e) {}
 
-        fetch('/api/businesses', {
+        // Reuse the search the <head> script already started; fetch here only if it could not.
+        var searchReq = window.__brhSearch || fetch('/api/businesses', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({ searchQuery: searchQuery, zipCode: zipCode, utmData: utmData, email: leadEmail, phone: leadPhone })
-        })
+        });
+        window.__brhSearch = null;
+
+        searchReq
         .then(function (res) {
             if (!res.ok) {
                 return res.json().catch(function () { return {}; }).then(function (j) {
@@ -645,6 +678,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var matchChip = document.getElementById('brh-match-chip');
             if (matchChip) matchChip.style.visibility = 'visible';
 
+            // Auto-open the Thumbtack widget for the first contractor. Done BEFORE the cards
+            // render so the iframe starts downloading immediately instead of after the DOM work.
+            var first = businesses[0];
+            var firstURL = (first && first.widgets && first.widgets.requestFlowURL) || '';
+            if (firstURL && window.brhOpenPopup) {
+                window.brhOpenPopup(firstURL, first.businessName || '');
+            }
+
             // Cards render in the exact order the Thumbtack API returned them.
             setContent(elGrid,
                 '<div class="brh-grid">'
@@ -653,13 +694,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             );
             show(elGrid);
             revealReadMore();
-
-            // Auto-open the Thumbtack widget for the first contractor.
-            var first = businesses[0];
-            var firstURL = (first && first.widgets && first.widgets.requestFlowURL) || '';
-            if (firstURL && window.brhOpenPopup) {
-                window.brhOpenPopup(firstURL, first.businessName || '');
-            }
         })
         .catch(function (e) {
             hide(elLoading);
@@ -691,7 +725,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- Thumbtack Popup -->
     <div id="brh-popup-backdrop" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;padding:16px;">
-        <div id="brh-popup-card" style="background:#fff;border-radius:12px;width:860px;max-width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.25);animation:brhPopIn 0.2s ease;">
+        <div id="brh-popup-card" style="background:#fff;border-radius:12px;width:860px;max-width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.25);animation:brhPopIn 0.2s ease;position:relative;">
+            <div id="brh-popup-loader" style="position:absolute;inset:0;z-index:5;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;pointer-events:none;font-family:Inter,sans-serif;color:#475569;font-size:15px;">
+                <div style="width:36px;height:36px;border:3px solid #E2E8F0;border-top-color:#2563EB;border-radius:50%;animation:brhSpin 0.8s linear infinite;"></div>
+                <span>Loading your quote form&hellip;</span>
+            </div>
             <iframe id="brh-popup-iframe"
                 width="860" height="760"
                 title="Get a free quote from this pro"
@@ -711,6 +749,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             #brh-popup-card     { width:100% !important; height:100vh !important; height:100dvh !important; max-width:100% !important; border-radius:0 !important; box-shadow:none !important; animation:brhSlideUp 0.25s ease; }
             #brh-popup-iframe   { width:100% !important; height:100% !important; max-width:100% !important; }
         }
+        @keyframes brhSpin { to { transform:rotate(360deg); } }
         @keyframes brhSlideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
     </style>
 
@@ -719,12 +758,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var backdrop = document.getElementById('brh-popup-backdrop');
         var iframeEl = document.getElementById('brh-popup-iframe');
 
+        // The widget (requestFlowURL) is served from a Thumbtack subdomain such as
+        // partner.thumbtack.com (staging-partner.thumbtack.com on staging), so accept
+        // thumbtack.com and any *.thumbtack.com. An exact-origin list dropped the
+        // widget's "close" message, which is why the X did nothing.
+        function isThumbtackOrigin(origin) {
+            try {
+                var h = new URL(origin).hostname;
+                return h === 'thumbtack.com' || h.slice(-14) === '.thumbtack.com';
+            } catch (_) { return false; }
+        }
+
         window.addEventListener('message', function (e) {
-            var _allowed = new Set(['https://www.thumbtack.com','https://thumbtack.com','https://pro.thumbtack.com','https://staging.thumbtack.com']);
-            if (!e.origin || !_allowed.has(e.origin)) return;
+            if (!isThumbtackOrigin(e.origin)) return;
             var raw  = typeof e.data === 'string' ? e.data.toLowerCase() : JSON.stringify(e.data || '').toLowerCase();
             var msg  = (typeof e.data === 'object' && e.data !== null) ? e.data : {};
             var type = String(msg.type || msg.event || msg.action || msg.name || e.data || '').toLowerCase();
+            console.debug('[brh-popup] message from', e.origin, e.data);   // helps if Thumbtack changes its message format
             if (type.indexOf('close') !== -1 || raw.indexOf('close') !== -1) { closePopup(); return; }
             if (type.indexOf('submit') !== -1 || type.indexOf('complete') !== -1 || raw.indexOf('submit') !== -1 || raw.indexOf('complete') !== -1) {
                 window.dataLayer = window.dataLayer || [];
@@ -748,6 +798,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             } catch (e) { console.warn('[BathRemodelHub] openPopup — invalid URL'); return; }
             backdrop.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            showLoader();
             iframeEl.src = url;
             var t = window.brhTracking || {};
             window.dataLayer = window.dataLayer || [];
@@ -756,7 +807,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             try { new Image().src = 'https://uo8b2.ttrk.io/postback?clickid=' + encodeURIComponent(t.sub1||'') + '&type=lead'; } catch(x){}
         }
 
+        var loader = document.getElementById('brh-popup-loader');
+        var loaderTimer = null;
+        function showLoader() {
+            loader.style.display = 'flex';
+            clearTimeout(loaderTimer);
+            loaderTimer = setTimeout(hideLoader, 10000);   // never leave the spinner up if the load event is missed
+        }
+        function hideLoader() { clearTimeout(loaderTimer); loader.style.display = 'none'; }
+        iframeEl.addEventListener('load', function () { if (iframeEl.getAttribute('src')) hideLoader(); });
+
         function closePopup() {
+            hideLoader();
             backdrop.style.display = 'none';
             document.body.style.overflow = '';
             iframeEl.src = '';
