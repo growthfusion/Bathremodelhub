@@ -20,6 +20,9 @@ const PORT     = process.env.PORT || 3000;
 const FRONTEND = path.join(__dirname, '..', 'frontend');
 
 // ── Core middleware ───────────────────────────────────────────────────────────
+// Gzip every compressible response (HTML/CSS/JS/JSON). Images are already
+// compressed formats and are skipped by the default filter.
+app.use(require('compression')());
 app.use(express.json());
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 app.use(blockSensitiveFiles);
@@ -54,7 +57,15 @@ app.get('/js/posthog-init.js', function (req, res) {
 app.use(express.static(FRONTEND, {
     setHeaders(res, filePath) {
         if (filePath.endsWith('.html')) {
+            // Pages must revalidate — copy changes ship without a deploy bump
             res.setHeader('Cache-Control', 'no-cache');
+        } else if (/\.(webp|png|jpe?g|gif|svg|ico|woff2?)$/i.test(filePath)) {
+            // Images/fonts are content-stable; new art ships under a new name
+            res.setHeader('Cache-Control', 'public, max-age=2592000, stale-while-revalidate=86400');
+        } else if (/\.(css|js)$/i.test(filePath)) {
+            // Unversioned filenames, so keep the window short: an hour stale
+            // at most, refreshed in the background on the next visit
+            res.setHeader('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
         }
     }
 }));
