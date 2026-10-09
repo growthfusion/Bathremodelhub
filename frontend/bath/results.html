@@ -65,82 +65,45 @@
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .star-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
-        /* ── Hero Banner ─────────────────────────────────────────────────── */
-        /* Flat band, no illustration — a thin brand rule carries the accent
-           and the copy sits on a solid surface, so contrast never depends
-           on whatever a photo happens to show underneath. */
-        .brh-hero {
-            position: relative;
-            overflow: hidden;
-            /* Calm, airy band: a faint blue-white wash reads as clean and
-               trustworthy; loud saturated fills read as an ad banner. */
-            background: linear-gradient(180deg, #EFF6FF 0%, #FFFFFF 92%);
-            border-bottom: 1px solid var(--divider);
-            min-height: 0;
-        }
+        /* ── Confirmation banner — GOV.UK confirmation-page pattern ──────
+           A solid green panel states the outcome ("your matches are ready"),
+           kept brief with no interactive elements, then plain text below the
+           panel sets the next step. */
+        .brh-hero { background: var(--surface); }
         .brh-hero-inner {
-            position: relative;
-            z-index: 2;
-            max-width: 1152px;
+            max-width: 820px;
             margin: 0 auto;
-            padding: 36px 24px;
+            padding: 28px 24px 8px;
         }
-        .brh-hero-text { max-width: 52ch; }
-        /* Status line — sentence case, not a shouty uppercase banner */
-        /* Meta row sits under the heading: status first, then the ZIP it
-           searched — the context a user checks after the headline, not before. */
-        /* Good-news strip — one green sentence. Green border-left reads as a
-           confirmation note someone left for you, not a status chip. */
-        .brh-success {
-            display: inline-flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-top: 18px;
-            padding: 12px 18px 12px 14px;
-            background: #F0FDF4;
-            border: 1px solid #BBF7D0;
-            border-left: 4px solid #16A34A;
-            border-radius: 10px;
-            font-family: var(--font-body);
-            font-size: 16px;
-            line-height: 1.45;
-            color: #14532D;
-        }
-        .brh-success strong { font-weight: 700; color: #14532D; }
-        /* Same specificity guard as the logo — Tailwind preflight loads later */
-        .brh-success .brh-congrats-icon {
-            width: 18px;
-            height: 18px;
-            min-width: 18px;
-            max-width: none;
-            background: #16A34A;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            flex: 0 0 18px;
-            margin-top: 2px;
+        .brh-panel {
+            background: #00703C;
             color: #FFFFFF;
-            font-size: 11px;
-            font-weight: 700;
-            line-height: 1;
-            box-sizing: border-box;
+            text-align: center;
+            padding: 32px 28px;
+            border-radius: 12px;
         }
-        .brh-hero-title {
+        .brh-panel__title {
             font-family: var(--font-body);
-            font-size: 36px;
+            font-size: 34px;
             font-weight: 700;
-            color: var(--text-heading);
+            color: #FFFFFF;
             line-height: 1.15;
-            margin-bottom: 12px;
             letter-spacing: -0.02em;
             text-wrap: balance;
+            margin: 0;
         }
-        /* The service name is the answer to the user's search — weight, not a
-           second colour, keeps one accent on the page. */
-        /* Soft highlighter stroke under the search term — draws the eye to
-           "what you asked for" without adding a second loud colour. */
-        .brh-hero-title .highlight { color: var(--primary); }
+        .brh-panel__title .highlight { color: #FFFFFF; }
+        .brh-panel__body {
+            font-family: var(--font-body);
+            font-size: 19px;
+            line-height: 1.4;
+            margin-top: 10px;
+            color: rgba(255,255,255,0.96);
+            /* reserved before results load, so the panel doesn't jump */
+            visibility: hidden;
+            min-height: 1.4em;
+        }
+        .brh-panel__body strong { font-weight: 700; color: #FFFFFF; }
 
         /* Header — matches .va-hn on the landing pages so the logo is the
            same size and the bar the same height across the site. */
@@ -171,22 +134,23 @@
             header .brh-nav .brh-nav__logo img { height: var(--logo-height-mob); }
             .brh-foot__logo img { height: 26px; }
         }
+        /* Next step, plain text under the panel (confirmation-page pattern) */
         .brh-hero-sub {
             font-family: var(--font-body);
             color: var(--text-body);
-            font-size: var(--fs-body);
-            max-width: var(--measure-1);
-            margin-bottom: 0;
+            font-size: 17px;
             line-height: var(--lh-4);
+            text-align: center;
+            max-width: 56ch;
+            margin: 16px auto 0;
         }
         @media (max-width: 768px) {
-            .brh-hero-inner { padding: 24px 20px; }
-            .brh-hero-text  { max-width: 100%; }
-            .brh-hero-title { font-size: var(--fs-h2-mob); margin-bottom: 8px; }
-            .brh-hero-sub   { font-size: var(--fs-body-mob); margin-bottom: 0; }
-            .brh-success    { margin-top: 14px; font-size: 15px; padding: 11px 14px 11px 12px; }
+            .brh-hero-inner  { padding: 16px 16px 4px; }
+            .brh-panel       { padding: 24px 18px; border-radius: 10px; }
+            .brh-panel__title { font-size: 26px; }
+            .brh-panel__body  { font-size: 16px; }
+            .brh-hero-sub     { font-size: 15px; margin-top: 12px; }
         }
-
 
         /* -- Sort & filter bar ------------------------------------------------ */
         .brh-filters { display: flex; flex-direction: column; gap: 0; margin-bottom: 10px; }
@@ -405,21 +369,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </header>
 
     <!-- Hero Banner -->
+    <!-- Confirmation banner (GOV.UK confirmation-page pattern) -->
     <div id="results-banner" class="brh-hero">
         <div class="brh-hero-inner">
-            <div class="brh-hero-text">
-                <h1 class="brh-hero-title">
+            <div class="brh-panel">
+                <h1 class="brh-panel__title">
                     Your <span id="brh-query" class="highlight">bathroom remodeling</span> matches are ready
                 </h1>
-                <p class="brh-hero-sub">Compare 2 or 3 quotes for the best price.</p>
-
-                <!-- One sentence of good news, not a row of chips. Hidden until
-                     the pros actually load, so it never shows half-empty. -->
-                <p id="brh-match-chip" class="brh-success" style="display:none;">
-                    <span class="brh-congrats-icon" aria-hidden="true">&#10003;</span>
-                    <span><strong id="brh-match-text">Matches found</strong><span id="brh-zip-badge" style="display:none;"> near <strong id="brh-zip-text"></strong></span> &mdash; comparing quotes is <strong>100% free</strong>.</span>
-                </p>
+                <div class="brh-panel__body" id="brh-match-chip">
+                    <strong id="brh-match-text">Matches found</strong><span id="brh-zip-badge" style="display:none;"> near <strong id="brh-zip-text"></strong></span>
+                </div>
             </div>
+            <p class="brh-hero-sub">Next: compare 2 or 3 quotes &mdash; every quote is free, with no obligation to hire.</p>
         </div>
     </div>
 
@@ -665,8 +626,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         // The hero's success chip must not sit above a failure message
         function hideMatchChip() {
-            var chip = document.getElementById('brh-match-chip');
-            if (chip) chip.style.display = 'none';
+            // A green "your matches are ready" panel above an error message
+            // would be a lie — remove the whole banner, not just the count.
+            var banner = document.getElementById('results-banner');
+            if (banner) banner.style.display = 'none';
         }
 
         if (!searchQuery || !zipCode) {
@@ -725,7 +688,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     : businesses.length + ' local pros are ready to quote';
             }
             var matchChip = document.getElementById('brh-match-chip');
-            if (matchChip) matchChip.style.display = 'inline-flex';
+            if (matchChip) matchChip.style.visibility = 'visible';
 
             var num = function (v) { return parseFloat(v) || 0; };
             // "Best match" weighs rating against how many reviews back it up, so
