@@ -157,7 +157,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- STICKY ZIP BAR — slides in from top after hero scrolls out -->
     <div id="sticky-zip-bar" class="sticky-zip-bar" aria-hidden="true">
         <div class="sticky-zip-bar__inner">
-            <form id="sticky-zip-form" data-search-query="bathroom remodeling">
+            <form id="sticky-zip-form" data-search-query="bathroom remodeling" novalidate>
                 <label class="va-field-label--sr" for="sticky-zip-input">ZIP code</label>
                 <div class="sticky-zip-field">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -192,7 +192,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <!-- LEFT text + form -->
                 <div class="va-hero-left">
                     <h1 id="landingHeroTitle">Get bathroom remodel quotes near you</h1>
-                    <form id="ip-hero-form" class="va-zip-card" data-search-query="bathroom remodeling" action="" method="get">
+                    <form id="ip-hero-form" class="va-zip-card" data-search-query="bathroom remodeling" action="" method="get" novalidate>
                         <div class="va-cta-wrap">
                             <p id="hero-lead-error" class="va-lead-error" role="alert" hidden></p>
                             <label class="va-field-label--sr" for="landingZipInput">ZIP code</label>
@@ -495,7 +495,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js" defer></script>
+<script src="/bath/js/purify-3.4.16.min.js" defer></script>
 
 <!-- Accordion -->
 <script>
@@ -550,7 +550,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             + trail;
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    // Runs immediately (this script sits at the end of <body>, so the form already exists).
+    // It used to wait for DOMContentLoaded, which only fires after every deferred script has
+    // downloaded; a click before that had no handler, so the browser did a native GET submit
+    // and just reloaded the page.
+    (function () {
         var heroForm = document.getElementById('ip-hero-form');
 
         var err = document.getElementById('hero-lead-error');
@@ -579,9 +583,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             if (!/^\d{5}$/.test(zip)) { fail(zipEl, 'Enter a ZIP code in the correct format, like 90210'); return; }
             submitting = true;
 
-            // Save straight to the backend now — doesn't depend on the results page loading
+            // Save straight to the backend now — doesn't depend on the results page loading.
+            // quotes-api.js is deferred, so if it isn't ready yet retry once before the redirect.
+            var lead = { zipCode: zip, searchQuery: QUERY };
             if (typeof window.hcCaptureLead === 'function') {
-                window.hcCaptureLead({ zipCode: zip, searchQuery: QUERY });
+                window.hcCaptureLead(lead);
+            } else {
+                setTimeout(function () {
+                    if (typeof window.hcCaptureLead === 'function') window.hcCaptureLead(lead);
+                }, 250);
             }
 
             // 1. Push to GTM DataLayer
@@ -595,7 +605,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         if (heroForm) heroForm.addEventListener('submit', handleSubmit);
-    });
+
+        // Coming back with the Back button restores this page from the bfcache with
+        // `submitting` still true, which made every further click do nothing.
+        window.addEventListener('pageshow', function (ev) { if (ev.persisted) submitting = false; });
+    })();
 })();
 </script>
 
