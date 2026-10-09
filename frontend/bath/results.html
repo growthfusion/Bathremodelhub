@@ -72,19 +72,12 @@
         .brh-hero {
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, #1E40AF 0%, #2563EB 60%, #3B82F6 100%);
+            /* Calm, airy band: a faint blue-white wash reads as clean and
+               trustworthy; loud saturated fills read as an ad banner. */
+            background: linear-gradient(180deg, #EFF6FF 0%, #FFFFFF 92%);
+            border-bottom: 1px solid var(--divider);
             min-height: 0;
         }
-        /* Soft decorative rings — purely visual, behind the copy */
-        .brh-hero::before, .brh-hero::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            border: 36px solid rgba(255,255,255,0.07);
-            pointer-events: none;
-        }
-        .brh-hero::before { width: 320px; height: 320px; right: -80px; top: -140px; }
-        .brh-hero::after  { width: 200px; height: 200px; right: 140px; bottom: -120px; }
         .brh-hero-inner {
             position: relative;
             z-index: 2;
@@ -107,19 +100,25 @@
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            padding: 6px 12px;
-            background: rgba(255,255,255,0.16);
-            border: 1px solid rgba(255,255,255,0.28);
+            padding: 7px 13px;
+            background: #FFFFFF;
+            border: 1px solid var(--divider);
             border-radius: 999px;
+            box-shadow: 0 1px 2px rgba(15,23,42,0.05);
             font-family: var(--font-body);
             font-weight: 600;
             font-size: 14px;
             line-height: var(--lh-4);
-            color: #FFFFFF;
+            color: var(--text-body);
         }
-        /* The match count is the headline fact: solid white pill */
-        .brh-meta__item--ok { background: #FFFFFF; border-color: #FFFFFF; color: #047857; }
-        .brh-meta__item svg { flex: 0 0 15px; color: #FFFFFF; }
+        /* Green = "good news" — reserved for the one success fact so it owns
+           the row; everything else stays neutral. */
+        .brh-meta__item--ok {
+            background: #ECFDF5;
+            border-color: #A7F3D0;
+            color: #047857;
+        }
+        .brh-meta__item svg { flex: 0 0 15px; color: var(--text-placeholder); }
         /* Same specificity guard as the logo — Tailwind preflight loads later */
         .brh-meta .brh-congrats-icon {
             width: 18px;
@@ -142,7 +141,7 @@
             font-family: var(--font-body);
             font-size: 36px;
             font-weight: 700;
-            color: #FFFFFF;
+            color: var(--text-heading);
             line-height: 1.15;
             margin-bottom: 12px;
             letter-spacing: -0.02em;
@@ -150,7 +149,13 @@
         }
         /* The service name is the answer to the user's search — weight, not a
            second colour, keeps one accent on the page. */
-        .brh-hero-title .highlight { color: #FFFFFF; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.55); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+        /* Soft highlighter stroke under the search term — draws the eye to
+           "what you asked for" without adding a second loud colour. */
+        .brh-hero-title .highlight {
+            color: var(--primary);
+            background-image: linear-gradient(transparent 68%, rgba(37,99,235,0.14) 68%);
+            border-radius: 2px;
+        }
 
         /* Header — matches .va-hn on the landing pages so the logo is the
            same size and the bar the same height across the site. */
@@ -183,7 +188,7 @@
         }
         .brh-hero-sub {
             font-family: var(--font-body);
-            color: rgba(255,255,255,0.94);
+            color: var(--text-body);
             font-size: var(--fs-body);
             max-width: var(--measure-1);
             margin-bottom: 0;
