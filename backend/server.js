@@ -8,6 +8,14 @@ const { blockSensitiveFiles } = require('./middleware/security');
 const apiRouter               = require('./routes/api');
 
 const app      = express();
+
+// Behind a reverse proxy / load balancer (stage, production) req.ip is the
+// PROXY's address unless Express is told how many hops to trust. Without this,
+// every visitor looks like the same IP: location lookup resolves the wrong
+// place and the per-IP lead rate limit becomes one shared site-wide bucket.
+// Default 1 hop; set TRUST_PROXY=2 behind CDN + load balancer, 0 for no proxy.
+const proxyHops = process.env.TRUST_PROXY === undefined ? 1 : Number(process.env.TRUST_PROXY);
+app.set('trust proxy', Number.isNaN(proxyHops) ? 1 : proxyHops);
 const PORT     = process.env.PORT || 3000;
 const FRONTEND = path.join(__dirname, '..', 'frontend');
 

@@ -295,8 +295,16 @@ router.get('/location', async function (req, res) {
     }
 
     // IP fallback: no coordinates → ipapi.co
-    var ip = String(req.ip || '');
-    var isPrivate = !ip || /^(127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|::1|^$)/.test(ip);
+    // Node reports IPv4 clients as "::ffff:1.2.3.4" on dual-stack sockets, which
+    // the private-range test below would otherwise treat as a public address.
+    var ip = String(req.ip || '').replace(/^::ffff:/i, '');
+    var isPrivate = !ip || /^(127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|::1$|f[cd])/i.test(ip);
+    // A private address here means "no real client IP". Calling ipapi.co with no
+    // IP geolocates the SERVER, so every visitor would get the server's city.
+    // That is a handy dev shortcut (your laptop is the visitor) but wrong in prod.
+    if (isPrivate && process.env.NODE_ENV === 'production') {
+        return res.json({ zip: null, city: null, state: null });
+    }
     var ipapiUrl  = isPrivate
         ? 'https://ipapi.co/json/'
         : 'https://ipapi.co/' + encodeURIComponent(ip) + '/json/';

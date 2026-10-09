@@ -74,7 +74,6 @@
             overflow: hidden;
             background: var(--surface);
             border-bottom: 1px solid var(--divider);
-            box-shadow: inset 0 3px 0 var(--primary);
             min-height: 0;
         }
         .brh-hero-inner {
@@ -258,8 +257,8 @@
 
         /* Intro text with read more */
         .brh-intro {
-            font-size: 15px;
-            color: var(--text-body);
+            font-size: 16px;
+            color: var(--text-heading);
             line-height: var(--lh-4);
             margin-bottom: 10px;
         }
@@ -274,22 +273,28 @@
             -webkit-line-clamp: unset;
         }
         .brh-read-more {
+            background: none;
+            border: 0;
+            padding: 6px 0;
+            font-family: var(--font-body);
             color: var(--primary);
             font-weight: 600;
-            font-size: 14px;
+            font-size: 15px;
+            line-height: 1;
             cursor: pointer;
             user-select: none;
             display: inline-block;
-            margin-top: 2px;
             text-decoration: underline;
             text-underline-offset: 3px;
         }
+        /* display:inline-block above would otherwise override [hidden] */
+        .brh-read-more[hidden] { display: none; }
 
         /* Stats: one wrapping row instead of a tall stack */
         .brh-stats { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 4px; }
         .brh-stat {
             display: flex; align-items: center; gap: 5px;
-            font-size: 14px; color: var(--text-secondary);
+            font-size: 14px; color: var(--text-body);
             line-height: var(--lh-4);
         }
         .brh-stat .material-symbols-outlined { font-size: 15px; color: var(--primary); }
@@ -301,7 +306,7 @@
         }
         .brh-stars { display: flex; align-items: center; gap: 1px; }
         .brh-rating-num { font-weight: 700; font-size: 15px; color: var(--text-heading); }
-        .brh-review-count { font-size: 14px; color: var(--text-secondary); white-space: nowrap; }
+        .brh-review-count { font-size: 14px; color: var(--text-body); white-space: nowrap; }
 
         /* CTA — same pressed-edge primary button as the home page */
         .brh-cta {
@@ -368,14 +373,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <h1 class="brh-hero-title">
                     Your <span id="brh-query" class="highlight">bathroom remodeling</span> matches are ready
                 </h1>
-                <p class="brh-hero-sub">Homeowners who compare 2&ndash;3 quotes get the best price &mdash; start with the top-rated pro below.</p>
+                <p class="brh-hero-sub">Compare 2 or 3 quotes for the best price.</p>
 
                 <div class="brh-meta">
                     <span id="brh-match-chip" class="brh-meta__item brh-meta__item--ok">
                         <span class="brh-congrats-icon" aria-hidden="true">&#10003;</span>
                         <span id="brh-match-text">Matches found</span>
                     </span>
-                    <span class="brh-meta__item">Free &middot; No obligation</span>
+                    <span class="brh-meta__item">Free quotes</span>
                     <span id="brh-zip-badge" class="brh-meta__item" style="display:none;">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                         <span id="brh-zip-text"></span>
@@ -439,7 +444,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </footer>
 
     <script>
-    (function () {
+    document.addEventListener('DOMContentLoaded', function () {
         var params      = new URLSearchParams(window.location.search);
         var searchQuery = params.get('searchQuery') || '';
         var zipCode     = params.get('zipCode')     || '';
@@ -483,7 +488,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         function setContent(el, html) {
             var clean = DOMPurify.sanitize(html, {
                 ALLOWED_TAGS: ['div','p','h1','h2','h3','span','a','strong','br','img','picture','source','button'],
-                ALLOWED_ATTR: ['class','href','src','srcset','media','alt','style','type','data-biz-name','data-href','width','height','loading','fetchpriority','decoding','role','tabindex']
+                ALLOWED_ATTR: ['class','href','src','srcset','media','alt','style','type','data-biz-name','data-href','width','height','loading','fetchpriority','decoding','role','tabindex','hidden']
             });
             var doc = new DOMParser().parseFromString(clean, 'text/html');
             while (el.firstChild) { el.removeChild(el.firstChild); }
@@ -527,8 +532,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var hires     = biz.numberOfHires   || null;
             var rawIntro  = biz.businessIntroduction || '';
             var introEsc  = esc(rawIntro);
-            var hasMore   = rawIntro.length > 110;
-            var introShort = hasMore ? esc(rawIntro.slice(0, 110)) : introEsc;
+            // Full text goes in; CSS line-clamp does the truncating. Slicing the
+            // string here made "Read More" reveal nothing, since the rest was gone.
+            var hasMore   = rawIntro.length > 0;
+            var introShort = introEsc;
             var ctaURL    = esc((biz.widgets && biz.widgets.requestFlowURL) || biz.servicePageURL || '#');
             var isFirst   = (cardIndex === 0);
 
@@ -548,7 +555,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var introEl = rawIntro
                 ? '<div class="brh-intro">'
                   + '<span class="brh-text-clamp" id="intro-' + cardIndex + '">' + introShort + '</span>'
-                  + (hasMore ? '<span class="brh-read-more" data-target="intro-' + cardIndex + '"> Read More +</span>' : '')
+                  + (hasMore ? '<button type="button" class="brh-read-more" data-target="intro-' + cardIndex + '" aria-expanded="false" hidden>Read more</button>' : '')
                   + '</div>'
                 : '';
 
@@ -580,6 +587,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 + '<button class="brh-cta js-card-cta vc-btn">Compare Quotes</button>'
                 + '</div>';
         }
+
+        // Show "Read more" only on cards whose description is actually clamped.
+        // Must run after the grid is visible, since hidden elements measure 0.
+        function revealReadMore() {
+            document.querySelectorAll('.brh-intro').forEach(function (box) {
+                var text = box.querySelector('.brh-text-clamp');
+                var btn  = box.querySelector('.brh-read-more');
+                if (!text || !btn) return;
+                if (text.classList.contains('expanded')) { btn.hidden = false; return; }
+                btn.hidden = !(text.scrollHeight > text.clientHeight + 1);
+            });
+        }
+        var rmTimer;
+        window.addEventListener('resize', function () {
+            clearTimeout(rmTimer); rmTimer = setTimeout(revealReadMore, 150);
+        });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(revealReadMore);
 
         // The hero's success chip must not sit above a failure message
         function hideMatchChip() {
@@ -653,6 +677,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 + '</div>'
             );
             show(elGrid);
+            revealReadMore();
         })
         .catch(function (e) {
             hide(elLoading);
@@ -664,7 +689,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             elErrMsg.textContent = "We couldn't load pros for that area";
         });
 
-    })();
+    });
     </script>
 
     <!-- Read More toggle -->
@@ -673,11 +698,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var btn = e.target.closest('.brh-read-more');
         if (!btn) return;
         e.stopPropagation();
-        var targetId = btn.getAttribute('data-target');
-        var textEl   = targetId ? document.getElementById(targetId) : null;
+        var box    = btn.closest('.brh-intro');
+        var textEl = box ? box.querySelector('.brh-text-clamp') : null;
         if (!textEl) return;
         var expanded = textEl.classList.toggle('expanded');
-        btn.textContent = expanded ? ' Read Less' : ' Read More +';
+        btn.textContent = expanded ? 'Read less' : 'Read more';
+        btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
     });
     </script>
 
