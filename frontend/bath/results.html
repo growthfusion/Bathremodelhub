@@ -184,6 +184,37 @@
             .brh-meta__item { font-size: 14px; }
         }
 
+
+        /* -- Sort & filter bar ------------------------------------------------ */
+        .brh-filters { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+        .brh-filters__row { display: flex; align-items: center; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+        .brh-filters__row::-webkit-scrollbar { display: none; }
+        .brh-filters__label { font-size: 14px; font-weight: 600; color: var(--text-body); white-space: nowrap; flex-shrink: 0; }
+        .brh-chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            min-height: 40px; padding: 0 14px;
+            background: var(--surface); color: var(--text-heading);
+            border: 1px solid var(--divider); border-radius: 999px;
+            font-family: var(--font-body); font-size: 14px; font-weight: 600;
+            white-space: nowrap; cursor: pointer; flex-shrink: 0;
+            transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+        }
+        .brh-chip .material-symbols-outlined { font-size: 18px; }
+        .brh-chip:hover { border-color: var(--primary); }
+        .brh-chip[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+        .brh-chip:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+        .brh-count { font-size: 14px; color: var(--text-body); margin: 0; }
+
+        /* Highlight flags on standout cards */
+        .brh-flags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+        .brh-flag {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0;
+            border-radius: 999px; padding: 2px 10px; font-size: 13px; font-weight: 700;
+        }
+        .brh-flag .material-symbols-outlined { font-size: 14px; }
+        .brh-flag--blue { background: #EFF6FF; color: #1D4ED8; border-color: #BFDBFE; }
+
         /* ── Cards Grid ──────────────────────────────────────────────────── */
         .brh-grid {
             display: grid;
@@ -404,6 +435,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <p class="text-sm" style="color:#475569;">This usually takes just a second</p>
         </div>
 
+        <!-- Sort & filter -->
+        <div id="brh-filters" class="brh-filters hidden" role="group" aria-label="Sort and filter pros">
+            <div class="brh-filters__row">
+                <span class="brh-filters__label">Sort by</span>
+                <button type="button" class="brh-chip" data-sort="match" aria-pressed="true"><span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>Best match</button>
+                <button type="button" class="brh-chip" data-sort="rating" aria-pressed="false"><span class="material-symbols-outlined" aria-hidden="true">star</span>Highest rated</button>
+                <button type="button" class="brh-chip" data-sort="reviews" aria-pressed="false"><span class="material-symbols-outlined" aria-hidden="true">reviews</span>Most reviews</button>
+                <button type="button" class="brh-chip" data-sort="years" aria-pressed="false"><span class="material-symbols-outlined" aria-hidden="true">workspace_premium</span>Most experienced</button>
+                <button type="button" class="brh-chip" data-sort="hires" aria-pressed="false"><span class="material-symbols-outlined" aria-hidden="true">handshake</span>Most hired</button>
+            </div>
+            <div class="brh-filters__row">
+                <span class="brh-filters__label">Filter</span>
+                <button type="button" class="brh-chip" data-filter="toppro" aria-pressed="false"><span class="material-symbols-outlined" aria-hidden="true">verified</span>Top Pros only</button>
+                <button type="button" class="brh-chip" data-filter="rating45" aria-pressed="false"><span class="material-symbols-outlined" aria-hidden="true">star</span>4.5+ stars</button>
+            </div>
+            <p id="brh-count" class="brh-count" aria-live="polite"></p>
+        </div>
+
         <!-- Results Grid -->
         <div id="results-grid" class="hidden"></div>
 
@@ -521,6 +570,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             if (zipBadge && zip) zipBadge.style.display = 'inline-flex';
         }
 
+        var best = {};   // standout pro per category, set once results load
+
         function bizCard(biz, cardIndex) {
             var name      = esc(biz.businessName || 'Local Pro');
             var address   = esc(biz.businessLocation || '');
@@ -538,6 +589,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var introShort = introEsc;
             var ctaURL    = esc((biz.widgets && biz.widgets.requestFlowURL) || biz.servicePageURL || '#');
             var isFirst   = (cardIndex === 0);
+            var flags     = '';
+            if (biz === best.rating)  flags += '<span class="brh-flag"><span class="material-symbols-outlined">emoji_events</span>Highest rated</span>';
+            if (biz === best.reviews) flags += '<span class="brh-flag brh-flag--blue"><span class="material-symbols-outlined">reviews</span>Most reviews</span>';
+            if (biz === best.years)   flags += '<span class="brh-flag brh-flag--blue"><span class="material-symbols-outlined">workspace_premium</span>Most experienced</span>';
+            var flagsEl   = flags ? '<div class="brh-flags">' + flags + '</div>' : '';
 
             var avatarEl = imgURL
                 ? '<img class="brh-avatar" src="' + imgURL + '" alt="' + name + '"'
@@ -577,6 +633,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             //  testimonial quote — same text twice. Removed.)
             return '<div class="brh-card js-card" data-href="' + ctaURL + '" data-biz-name="' + esc(biz.businessName || 'Local Pro') + '">'
                 + '<div class="brh-card-body">'
+                + flagsEl
                 + '<div class="brh-card-head">'
                 +   '<div class="brh-avatar-wrap">' + avatarEl + '</div>'
                 +   '<div class="brh-name-row"><span class="brh-name vc-btn" tabindex="0" role="button">' + name + '</span>' + topProEl + ratingEl + '</div>'
@@ -653,10 +710,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                            : Array.isArray(data.businesses) ? data.businesses
                            : Array.isArray(data.results)    ? data.results : [];
 
-            businesses = businesses.slice().sort(function (a, b) {
-                return (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0);
-            });
-
             hide(elLoading);
 
             if (!businesses.length) { show(elEmpty); return; }
@@ -671,13 +724,81 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     : businesses.length + ' pros matched';
             }
 
-            setContent(elGrid,
-                '<div class="brh-grid">'
-                + businesses.map(function (biz, i) { return bizCard(biz, i); }).join('')
-                + '</div>'
-            );
+            var num = function (v) { return parseFloat(v) || 0; };
+            // "Best match" weighs rating against how many reviews back it up, so
+            // 4.9 from 212 reviews outranks 5.0 from 4. Each pro's rating is
+            // pulled toward the average of this result set by PRIOR_WEIGHT
+            // phantom reviews; with many reviews that pull becomes negligible.
+            var PRIOR_WEIGHT = 10;
+            var rated = businesses.filter(function (b) { return num(b.rating) > 0; });
+            var avgRating = rated.length
+                ? rated.reduce(function (t, b) { return t + num(b.rating); }, 0) / rated.length
+                : 4.5;
+            var keys = {
+                match:   function (b) {
+                    var v = num(b.numberOfReviews);
+                    return (num(b.rating) * v + avgRating * PRIOR_WEIGHT) / (v + PRIOR_WEIGHT);
+                },
+                rating:  function (b) { return num(b.rating); },
+                reviews: function (b) { return num(b.numberOfReviews); },
+                years:   function (b) { return num(b.yearsInBusiness); },
+                hires:   function (b) { return num(b.numberOfHires); }
+            };
+            // Ties fall back to rating, then review count, so order stays stable
+            function compare(key) {
+                return function (a, b) {
+                    return keys[key](b) - keys[key](a)
+                        || keys.rating(b) - keys.rating(a)
+                        || keys.reviews(b) - keys.reviews(a);
+                };
+            }
+            function leader(key, minReviews) {
+                var pool = businesses.filter(function (b) { return keys.reviews(b) >= (minReviews || 0); });
+                if (!pool.length) return null;
+                var top = pool.sort(compare(key))[0];
+                return keys[key](top) > 0 ? top : null;
+            }
+            // A 5.0 from 4 reviews shouldn't wear the "Highest rated" trophy: require 10+ reviews
+            best = { rating: leader('rating', 10), reviews: leader('reviews'), years: leader('years') };
+
+            var state = { sort: 'match', toppro: false, rating45: false };
+            var elFilters = document.getElementById('brh-filters');
+            var elCount   = document.getElementById('brh-count');
+
+            function renderList() {
+                var list = businesses.filter(function (b) {
+                    if (state.toppro   && !b.isTopPro) return false;
+                    if (state.rating45 && num(b.rating) < 4.5) return false;
+                    return true;
+                }).sort(compare(state.sort));
+
+                elCount.textContent = list.length + (list.length === 1 ? ' pro' : ' pros') + ' shown';
+
+                setContent(elGrid, list.length
+                    ? '<div class="brh-grid">' + list.map(function (biz, i) { return bizCard(biz, i); }).join('') + '</div>'
+                    : '<div class="text-center" style="padding:40px 20px;color:#475569;">No pros match these filters. Try removing one.</div>'
+                );
+                revealReadMore();
+            }
+
+            elFilters.addEventListener('click', function (e) {
+                var chip = e.target.closest('.brh-chip');
+                if (!chip) return;
+                if (chip.dataset.sort) {
+                    state.sort = chip.dataset.sort;
+                    elFilters.querySelectorAll('[data-sort]').forEach(function (c) {
+                        c.setAttribute('aria-pressed', c === chip ? 'true' : 'false');
+                    });
+                } else if (chip.dataset.filter) {
+                    state[chip.dataset.filter] = !state[chip.dataset.filter];
+                    chip.setAttribute('aria-pressed', state[chip.dataset.filter] ? 'true' : 'false');
+                }
+                renderList();
+            });
+
+            show(elFilters);
             show(elGrid);
-            revealReadMore();
+            renderList();
         })
         .catch(function (e) {
             hide(elLoading);
