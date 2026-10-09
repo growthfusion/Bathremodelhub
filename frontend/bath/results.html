@@ -186,42 +186,28 @@
 
 
         /* -- Sort & filter bar ------------------------------------------------ */
-        .brh-filters { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+        .brh-filters { display: flex; flex-direction: column; gap: 0; margin-bottom: 10px; }
         .brh-filters__row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .brh-filters__label { font-size: 14px; font-weight: 600; color: var(--text-body); white-space: nowrap; flex-shrink: 0; }
-        .brh-chip {
-            display: inline-flex; align-items: center; gap: 6px;
-            min-height: 40px; padding: 0 14px;
-            background: var(--surface); color: var(--text-heading);
-            border: 1px solid var(--divider); border-radius: 999px;
-            font-family: var(--font-body); font-size: 14px; font-weight: 600;
-            white-space: nowrap; cursor: pointer; flex-shrink: 0;
-            transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-        }
-        /* Native select styled to match the chips — keeps OS keyboard,
+        /* Native select — keeps OS keyboard,
            screen-reader and mobile-picker behaviour for free. */
         .brh-sort-wrap { position: relative; flex-shrink: 0; }
         .brh-sort {
             appearance: none; -webkit-appearance: none;
-            min-height: 44px; padding: 0 38px 0 14px;
+            min-height: 38px; padding: 0 32px 0 12px;
             background: var(--surface); color: var(--text-heading);
             border: 1px solid var(--divider); border-radius: 10px;
-            font-family: var(--font-body); font-size: 15px; font-weight: 600;
+            font-family: var(--font-body); font-size: 14px; font-weight: 600;
             cursor: pointer;
         }
         .brh-sort:hover { border-color: var(--primary); }
         .brh-sort:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
         .brh-sort-arrow {
-            position: absolute; right: 10px; top: 50%;
+            position: absolute; right: 8px; top: 50%;
             transform: translateY(-50%);
-            font-size: 20px !important; color: var(--text-body);
+            font-size: 18px !important; color: var(--text-body);
             pointer-events: none;
         }
-        .brh-chip .material-symbols-outlined { font-size: 18px; }
-        .brh-chip:hover { border-color: var(--primary); }
-        .brh-chip[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; }
-        .brh-chip:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
-        .brh-count { font-size: 14px; color: var(--text-body); margin: 0; }
 
         /* Highlight flags on standout cards */
         .brh-flags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
@@ -440,7 +426,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <!-- Main -->
-    <main id="results-main" class="max-w-7xl mx-auto px-4 pt-6 pb-8">
+    <main id="results-main" class="max-w-7xl mx-auto px-4 pt-3 pb-8">
 
         <!-- Loading -->
         <div id="results-loading" class="flex flex-col items-center justify-center" style="padding:48px 20px;">
@@ -467,10 +453,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </select>
                     <span class="material-symbols-outlined brh-sort-arrow" aria-hidden="true">expand_more</span>
                 </div>
-                <button type="button" class="brh-chip" data-filter="toppro" aria-pressed="false"><span class="material-symbols-outlined" aria-hidden="true">verified</span>Top Pros only</button>
-                <button type="button" class="brh-chip" data-filter="rating45" aria-pressed="false"><span class="material-symbols-outlined" aria-hidden="true">star</span>4.5+ stars</button>
             </div>
-            <p id="brh-count" class="brh-count" aria-live="polite"></p>
         </div>
 
         <!-- Results Grid -->
@@ -781,22 +764,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             // A 5.0 from 4 reviews shouldn't wear the "Highest rated" trophy: require 10+ reviews
             best = { rating: leader('rating', 10), reviews: leader('reviews'), years: leader('years') };
 
-            var state = { sort: 'match', toppro: false, rating45: false };
+            var state = { sort: 'match' };
             var elFilters = document.getElementById('brh-filters');
-            var elCount   = document.getElementById('brh-count');
 
             function renderList() {
-                var list = businesses.filter(function (b) {
-                    if (state.toppro   && !b.isTopPro) return false;
-                    if (state.rating45 && num(b.rating) < 4.5) return false;
-                    return true;
-                }).sort(compare(state.sort));
+                var list = businesses.slice().sort(compare(state.sort));
 
-                elCount.textContent = list.length + (list.length === 1 ? ' pro' : ' pros') + ' shown';
 
                 setContent(elGrid, list.length
                     ? '<div class="brh-grid">' + list.map(function (biz, i) { return bizCard(biz, i); }).join('') + '</div>'
-                    : '<div class="text-center" style="padding:40px 20px;color:#475569;">No pros match these filters. Try removing one.</div>'
+                    : '<div class="text-center" style="padding:40px 20px;color:#475569;">No pros to show.</div>'
                 );
                 revealReadMore();
             }
@@ -804,14 +781,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var elSort = document.getElementById('brh-sort');
             elSort.addEventListener('change', function () {
                 state.sort = elSort.value;
-                renderList();
-            });
-
-            elFilters.addEventListener('click', function (e) {
-                var chip = e.target.closest('.brh-chip');
-                if (!chip || !chip.dataset.filter) return;
-                state[chip.dataset.filter] = !state[chip.dataset.filter];
-                chip.setAttribute('aria-pressed', state[chip.dataset.filter] ? 'true' : 'false');
                 renderList();
             });
 
