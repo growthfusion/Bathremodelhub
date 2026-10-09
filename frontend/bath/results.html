@@ -196,72 +196,76 @@
         @media (max-width: 480px)  { .brh-grid { grid-template-columns: 1fr; } }
 
         /* ── Individual Card ─────────────────────────────────────────────── */
+        /* Card — same system as the home page bento cards:
+           1px divider border, 8px radius, light shadow, compact body. */
         .brh-card {
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 4px 24px rgba(15,39,68,0.09), 0 1px 4px rgba(15,39,68,0.05);
-            border: 1px solid rgba(203,213,225,0.7);
+            background: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--divider);
+            box-shadow: 0 1px 2px rgba(15,23,42,0.06);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             cursor: default;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
         }
-        .brh-card-body { padding: 26px 22px 18px; flex: 1; display: flex; flex-direction: column; }
+        .brh-card:hover {
+            border-color: var(--text-placeholder);
+            box-shadow: 0 4px 12px rgba(15,23,42,0.10);
+        }
+        .brh-card-body { padding: 16px 18px 4px; flex: 1; display: flex; flex-direction: column; }
 
-        /* Avatar */
-        .brh-avatar-wrap {
-            display: flex; justify-content: center;
-            margin-bottom: 18px;
-        }
+        /* Header row: avatar beside the name, not a huge centred circle */
+        .brh-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .brh-avatar-wrap { flex-shrink: 0; }
         .brh-avatar {
-            width: 96px; height: 96px;
+            width: 56px; height: 56px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #e0f2fe;
-            box-shadow: 0 4px 16px rgba(59,130,246,0.18);
+            border: 2px solid var(--divider);
         }
         .brh-avatar-placeholder {
-            width: 96px; height: 96px;
+            width: 56px; height: 56px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            background: var(--primary);
             display: flex; align-items: center; justify-content: center;
-            border: 3px solid #e0f2fe;
-            box-shadow: 0 4px 16px rgba(59,130,246,0.18);
+            border: 2px solid var(--divider);
         }
+        .brh-avatar-placeholder .material-symbols-outlined { font-size: 26px !important; }
 
-        /* Name + badge row */
-        .brh-name-row { display: flex; align-items: flex-start; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+        /* Name + badge + rating stack beside the avatar */
+        .brh-name-row { display: flex; align-items: center; gap: 6px 8px; flex-wrap: wrap; min-width: 0; }
         .brh-name {
             font-family: var(--font-body);
-            font-weight: 700;
-            font-size: 17px;
-            color: #0f2744;
-            line-height: 1.3;
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--text-heading);
+            line-height: var(--lh-3);
             cursor: pointer;
         }
-        .brh-name:hover { text-decoration: underline; color: #3b82f6; }
+        .brh-name:hover { text-decoration: underline; color: var(--primary); }
         .brh-top-pro {
             display: inline-flex; align-items: center; gap: 3px;
             background: #FEF3C7; color: #B45309;
             border: 1px solid #FDE68A;
-            border-radius: 20px;
-            padding: 3px 9px;
+            border-radius: 999px;
+            padding: 2px 8px;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 600;
             white-space: nowrap;
             flex-shrink: 0;
         }
 
         /* Intro text with read more */
         .brh-intro {
-            font-size: 14px;
-            color: #4B5563;
-            line-height: 1.65;
-            margin-bottom: 12px;
+            font-size: 15px;
+            color: var(--text-body);
+            line-height: var(--lh-4);
+            margin-bottom: 10px;
         }
         .brh-text-clamp {
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -270,64 +274,61 @@
             -webkit-line-clamp: unset;
         }
         .brh-read-more {
-            color: #3b82f6;
+            color: var(--primary);
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
             user-select: none;
             display: inline-block;
-            margin-top: 3px;
+            margin-top: 2px;
+            text-decoration: underline;
+            text-underline-offset: 3px;
         }
-        .brh-read-more:hover { text-decoration: underline; }
 
-        /* Stats */
-        .brh-stats { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+        /* Stats: one wrapping row instead of a tall stack */
+        .brh-stats { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-bottom: 4px; }
         .brh-stat {
-            display: flex; align-items: center; gap: 7px;
-            font-size: 14px; color: #6B7280;
+            display: flex; align-items: center; gap: 5px;
+            font-size: 14px; color: var(--text-secondary);
+            line-height: var(--lh-4);
         }
-        .brh-stat .material-symbols-outlined { font-size: 15px; color: #93c5fd; }
+        .brh-stat .material-symbols-outlined { font-size: 15px; color: var(--primary); }
 
-        /* Stars */
+        /* Stars — inline in the header beside the name */
         .brh-rating-row {
-            display: flex; align-items: center; gap: 7px;
-            margin-bottom: 12px;
+            display: flex; align-items: center; gap: 6px;
+            width: 100%;
         }
         .brh-stars { display: flex; align-items: center; gap: 1px; }
-        .brh-rating-num { font-weight: 700; font-size: 15px; color: #111827; }
-        .brh-review-count { font-size: 14px; color: #9CA3AF; }
+        .brh-rating-num { font-weight: 700; font-size: 15px; color: var(--text-heading); }
+        .brh-review-count { font-size: 14px; color: var(--text-secondary); white-space: nowrap; }
 
-        /* Quote / testimonial */
-        .brh-quote {
-            font-size: 14px;
-            color: #4b5563;
-            line-height: 1.65;
-            font-style: italic;
-            margin-bottom: 4px;
-            flex: 1;
-            opacity: 0.85;
-        }
-
-        /* CTA button */
+        /* CTA — same pressed-edge primary button as the home page */
         .brh-cta {
             display: block;
-            width: 100%;
-            /* #3b82f6 gave white text only 3.68:1; #2563EB reaches 5.17:1 */
+            width: auto;
+            margin: 10px 18px 18px;
             background: var(--primary);
-            color: #fff;
+            color: var(--on-primary);
             font-family: var(--font-body);
-            font-weight: 700;
+            font-weight: 600;
             font-size: 16px;
-            padding: 16px 16px;
+            min-height: 48px;
+            padding: 0 16px;
             border: none;
-            border-top: 1px solid rgba(59,130,246,0.15);
+            border-radius: var(--radius);
             cursor: pointer;
             text-align: center;
-            letter-spacing: 0.02em;
             box-sizing: border-box;
-            margin: 0;
+            box-shadow: 0 3px 0 var(--primary-edge);
+            transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
         }
-        .brh-cta:hover { background: #2563eb; }
+        .brh-cta:hover  { background: var(--primary-hover); }
+        .brh-cta:active {
+            background: var(--primary-hover);
+            box-shadow: 0 0 0 var(--primary-edge);
+            transform: translateY(3px);
+        }
 
         /* Loading dots — keep functional, no decorative animation */
         .loading-dot {
@@ -365,15 +366,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="brh-hero-inner">
             <div class="brh-hero-text">
                 <h1 class="brh-hero-title">
-                    Trusted <span id="brh-query" class="highlight">bathroom remodeling</span> pros near you
+                    Your <span id="brh-query" class="highlight">bathroom remodeling</span> matches are ready
                 </h1>
-                <p class="brh-hero-sub">Compare local pros and get your best quote in minutes.</p>
+                <p class="brh-hero-sub">Homeowners who compare 2&ndash;3 quotes get the best price &mdash; start with the top-rated pro below.</p>
 
                 <div class="brh-meta">
                     <span id="brh-match-chip" class="brh-meta__item brh-meta__item--ok">
                         <span class="brh-congrats-icon" aria-hidden="true">&#10003;</span>
-                        Match found
+                        <span id="brh-match-text">Matches found</span>
                     </span>
+                    <span class="brh-meta__item">Free &middot; No obligation</span>
                     <span id="brh-zip-badge" class="brh-meta__item" style="display:none;">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                         <span id="brh-zip-text"></span>
@@ -564,21 +566,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   + '</div>'
                 : '';
 
-            var quoteEl = rawIntro
-                ? '<div class="brh-quote">'
-                  + '<span class="brh-text-clamp" id="quote-' + cardIndex + '">&ldquo;' + introShort + '&rdquo;</span>'
-                  + (hasMore ? '<span class="brh-read-more" data-target="quote-' + cardIndex + '"> Read More +</span>' : '')
-                  + '</div>'
-                : '';
-
+            // (The old card repeated the introduction a second time as a fake
+            //  testimonial quote — same text twice. Removed.)
             return '<div class="brh-card js-card" data-href="' + ctaURL + '" data-biz-name="' + esc(biz.businessName || 'Local Pro') + '">'
                 + '<div class="brh-card-body">'
-                + '<div class="brh-avatar-wrap">' + avatarEl + '</div>'
-                + '<div class="brh-name-row"><span class="brh-name vc-btn" tabindex="0" role="button">' + name + '</span>' + topProEl + '</div>'
+                + '<div class="brh-card-head">'
+                +   '<div class="brh-avatar-wrap">' + avatarEl + '</div>'
+                +   '<div class="brh-name-row"><span class="brh-name vc-btn" tabindex="0" role="button">' + name + '</span>' + topProEl + ratingEl + '</div>'
+                + '</div>'
                 + introEl
                 + statsEl
-                + ratingEl
-                + quoteEl
                 + '</div>'
                 + '<button class="brh-cta js-card-cta vc-btn">Compare Quotes</button>'
                 + '</div>';
@@ -641,6 +638,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             if (!businesses.length) { show(elEmpty); return; }
 
             renderBanner(searchQuery, zipCode);
+
+            // A concrete number is more persuasive than a vague status line
+            var matchText = document.getElementById('brh-match-text');
+            if (matchText) {
+                matchText.textContent = businesses.length === 1
+                    ? '1 pro matched'
+                    : businesses.length + ' pros matched';
+            }
 
             setContent(elGrid,
                 '<div class="brh-grid">'
