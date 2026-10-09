@@ -89,48 +89,37 @@
         /* Status line — sentence case, not a shouty uppercase banner */
         /* Meta row sits under the heading: status first, then the ZIP it
            searched — the context a user checks after the headline, not before. */
-        .brh-meta {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px 16px;
-            margin-top: 18px;
-        }
-        .brh-meta__item {
+        /* Good-news strip — one green sentence. Green border-left reads as a
+           confirmation note someone left for you, not a status chip. */
+        .brh-success {
             display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 7px 13px;
-            background: #FFFFFF;
-            border: 1px solid var(--divider);
-            border-radius: 999px;
-            box-shadow: 0 1px 2px rgba(15,23,42,0.05);
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 18px;
+            padding: 12px 18px 12px 14px;
+            background: #F0FDF4;
+            border: 1px solid #BBF7D0;
+            border-left: 4px solid #16A34A;
+            border-radius: 10px;
             font-family: var(--font-body);
-            font-weight: 600;
-            font-size: 14px;
-            line-height: var(--lh-4);
-            color: var(--text-body);
+            font-size: 16px;
+            line-height: 1.45;
+            color: #14532D;
         }
-        /* Green = "good news" — reserved for the one success fact so it owns
-           the row; everything else stays neutral. */
-        .brh-meta__item--ok {
-            background: #ECFDF5;
-            border-color: #A7F3D0;
-            color: #047857;
-        }
-        .brh-meta__item svg { flex: 0 0 15px; color: var(--text-placeholder); }
+        .brh-success strong { font-weight: 700; color: #14532D; }
         /* Same specificity guard as the logo — Tailwind preflight loads later */
-        .brh-meta .brh-congrats-icon {
+        .brh-success .brh-congrats-icon {
             width: 18px;
             height: 18px;
             min-width: 18px;
             max-width: none;
-            background: var(--success);
+            background: #16A34A;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             flex: 0 0 18px;
+            margin-top: 2px;
             color: #FFFFFF;
             font-size: 11px;
             font-weight: 700;
@@ -151,11 +140,7 @@
            second colour, keeps one accent on the page. */
         /* Soft highlighter stroke under the search term — draws the eye to
            "what you asked for" without adding a second loud colour. */
-        .brh-hero-title .highlight {
-            color: var(--primary);
-            background-image: linear-gradient(transparent 68%, rgba(37,99,235,0.14) 68%);
-            border-radius: 2px;
-        }
+        .brh-hero-title .highlight { color: var(--primary); }
 
         /* Header — matches .va-hn on the landing pages so the logo is the
            same size and the bar the same height across the site. */
@@ -199,8 +184,7 @@
             .brh-hero-text  { max-width: 100%; }
             .brh-hero-title { font-size: var(--fs-h2-mob); margin-bottom: 8px; }
             .brh-hero-sub   { font-size: var(--fs-body-mob); margin-bottom: 0; }
-            .brh-meta       { margin-top: 14px; gap: 8px; }
-            .brh-meta__item { font-size: 13px; padding: 5px 10px; gap: 5px; }
+            .brh-success    { margin-top: 14px; font-size: 15px; padding: 11px 14px 11px 12px; }
         }
 
 
@@ -429,17 +413,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </h1>
                 <p class="brh-hero-sub">Compare 2 or 3 quotes for the best price.</p>
 
-                <div class="brh-meta">
-                    <span id="brh-match-chip" class="brh-meta__item brh-meta__item--ok">
-                        <span class="brh-congrats-icon" aria-hidden="true">&#10003;</span>
-                        <span id="brh-match-text">Matches found</span>
-                    </span>
-                    <span class="brh-meta__item">Free quotes</span>
-                    <span id="brh-zip-badge" class="brh-meta__item" style="display:none;">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                        <span id="brh-zip-text"></span>
-                    </span>
-                </div>
+                <!-- One sentence of good news, not a row of chips. Hidden until
+                     the pros actually load, so it never shows half-empty. -->
+                <p id="brh-match-chip" class="brh-success" style="display:none;">
+                    <span class="brh-congrats-icon" aria-hidden="true">&#10003;</span>
+                    <span><strong id="brh-match-text">Matches found</strong><span id="brh-zip-badge" style="display:none;"> near <strong id="brh-zip-text"></strong></span> &mdash; comparing quotes is <strong>100% free</strong>.</span>
+                </p>
             </div>
         </div>
     </div>
@@ -589,7 +568,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var zipText  = document.getElementById('brh-zip-text');
             if (queryEl && sq)   queryEl.textContent = sq;
             if (zipText && zip)  zipText.textContent  = zip;
-            if (zipBadge && zip) zipBadge.style.display = 'inline-flex';
+            if (zipBadge && zip) zipBadge.style.display = 'inline';
         }
 
         var best = {};   // standout pro per category, set once results load
@@ -742,9 +721,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var matchText = document.getElementById('brh-match-text');
             if (matchText) {
                 matchText.textContent = businesses.length === 1
-                    ? '1 pro matched'
-                    : businesses.length + ' pros matched';
+                    ? '1 local pro is ready to quote'
+                    : businesses.length + ' local pros are ready to quote';
             }
+            var matchChip = document.getElementById('brh-match-chip');
+            if (matchChip) matchChip.style.display = 'inline-flex';
 
             var num = function (v) { return parseFloat(v) || 0; };
             // "Best match" weighs rating against how many reviews back it up, so
