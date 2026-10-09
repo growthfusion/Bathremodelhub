@@ -516,5 +516,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 })();
 </script>
 
+<!-- US ZIP fields: digits only, max 5 (covers typing, paste and autofill) -->
+<script>
+(function () {
+    var inputs = document.querySelectorAll('#landingZipInput, #sticky-zip-input, [data-zip]');
+    Array.prototype.forEach.call(inputs, function (el) {
+        el.setAttribute('maxlength', '5');
+        el.setAttribute('pattern', '[0-9]{5}');
+        el.setAttribute('inputmode', 'numeric');
+        el.addEventListener('input', function () {
+            var clean = el.value.replace(/\D/g, '').slice(0, 5);
+            if (el.value !== clean) el.value = clean;
+        });
+    });
+})();
+</script>
 </body>
 </html>
