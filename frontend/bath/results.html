@@ -645,45 +645,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var matchChip = document.getElementById('brh-match-chip');
             if (matchChip) matchChip.style.visibility = 'visible';
 
-            var num = function (v) { return parseFloat(v) || 0; };
-            // "Best match" weighs rating against how many reviews back it up, so
-            // 4.9 from 212 reviews outranks 5.0 from 4. Each pro's rating is
-            // pulled toward the average of this result set by PRIOR_WEIGHT
-            // phantom reviews; with many reviews that pull becomes negligible.
-            var PRIOR_WEIGHT = 10;
-            var rated = businesses.filter(function (b) { return num(b.rating) > 0; });
-            var avgRating = rated.length
-                ? rated.reduce(function (t, b) { return t + num(b.rating); }, 0) / rated.length
-                : 4.5;
-            var keys = {
-                match:   function (b) {
-                    var v = num(b.numberOfReviews);
-                    return (num(b.rating) * v + avgRating * PRIOR_WEIGHT) / (v + PRIOR_WEIGHT);
-                },
-                rating:  function (b) { return num(b.rating); },
-                reviews: function (b) { return num(b.numberOfReviews); },
-                years:   function (b) { return num(b.yearsInBusiness); },
-                hires:   function (b) { return num(b.numberOfHires); }
-            };
-            // Ties fall back to rating, then review count, so order stays stable
-            function compare(key) {
-                return function (a, b) {
-                    return keys[key](b) - keys[key](a)
-                        || keys.rating(b) - keys.rating(a)
-                        || keys.reviews(b) - keys.reviews(a);
-                };
-            }
-
-            // Cards render once, in "best match" order (rating weighted by
-            // how many reviews back it up).
-            var list = businesses.slice().sort(compare('match'));
+            // Cards render in the exact order the Thumbtack API returned them.
             setContent(elGrid,
                 '<div class="brh-grid">'
-                + list.map(function (biz, i) { return bizCard(biz, i); }).join('')
+                + businesses.map(function (biz, i) { return bizCard(biz, i); }).join('')
                 + '</div>'
             );
             show(elGrid);
             revealReadMore();
+
+            // Auto-open the Thumbtack widget for the first contractor.
+            var first = businesses[0];
+            var firstURL = (first && first.widgets && first.widgets.requestFlowURL) || '';
+            if (firstURL && window.brhOpenPopup) {
+                window.brhOpenPopup(firstURL, first.businessName || '');
+            }
         })
         .catch(function (e) {
             hide(elLoading);
@@ -728,10 +704,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <style>
         @keyframes brhPopIn { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
-        @media (max-width: 660px) {
-            #brh-popup-backdrop { padding:0; align-items:flex-end; }
-            #brh-popup-card     { width:100%; border-radius:16px 16px 0 0; animation:brhSlideUp 0.25s ease; }
-            #brh-popup-iframe   { width:100% !important; height:90vh !important; }
+        /* Full-screen takeover on phones/tablets. "pointer:coarse" is included so it
+           still applies when the layout viewport is widened by an overflowing page. */
+        @media (max-width: 900px), (pointer: coarse) {
+            #brh-popup-backdrop { padding:0 !important; align-items:stretch !important; justify-content:stretch !important; background:#fff !important; }
+            #brh-popup-card     { width:100% !important; height:100vh !important; height:100dvh !important; max-width:100% !important; border-radius:0 !important; box-shadow:none !important; animation:brhSlideUp 0.25s ease; }
+            #brh-popup-iframe   { width:100% !important; height:100% !important; max-width:100% !important; }
         }
         @keyframes brhSlideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
     </style>
@@ -753,7 +731,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 window.dataLayer.push({ event: 'QuoteSubmitted', rfwData: msg.data || {} });
                 return;
             }
-            if (type.indexOf('resize') !== -1 && msg.height) {
+            if (type.indexOf('resize') !== -1 && msg.height && !window.matchMedia('(max-width: 900px), (pointer: coarse)').matches) {
                 iframeEl.style.height = msg.height + 'px';
                 iframeEl.setAttribute('height', msg.height);
             }
@@ -784,6 +762,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             iframeEl.src = '';
         }
 
+        window.brhOpenPopup = openPopup;
         backdrop.addEventListener('click', function (e) { if (e.target === backdrop) closePopup(); });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePopup(); });
 
