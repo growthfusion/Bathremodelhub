@@ -65,45 +65,43 @@
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .star-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
-        /* ── Confirmation banner — GOV.UK confirmation-page pattern ──────
-           A solid green panel states the outcome ("your matches are ready"),
-           kept brief with no interactive elements, then plain text below the
-           panel sets the next step. */
-        .brh-hero { background: var(--surface); }
+        /* ── Step-1 header — GOV.UK question-page pattern ────────────────
+           This page is the middle of the journey, not the end: the user still
+           answers project questions after picking a provider. So the header
+           says "providers found, here's your next step" — no green panel and
+           no completion language until the final form is submitted. */
+        .brh-hero {
+            background: var(--surface);
+            border-bottom: 1px solid var(--divider);
+        }
         .brh-hero-inner {
-            max-width: 820px;
+            max-width: 1152px;
             margin: 0 auto;
-            padding: 28px 24px 8px;
+            padding: 24px 24px 20px;
         }
-        .brh-panel {
-            background: #00703C;
-            color: #FFFFFF;
-            text-align: center;
-            padding: 32px 28px;
-            border-radius: 12px;
-        }
-        .brh-panel__title {
+        .brh-step {
+            display: inline-block;
             font-family: var(--font-body);
-            font-size: 34px;
+            font-size: 14px;
             font-weight: 700;
-            color: #FFFFFF;
+            letter-spacing: 0.02em;
+            color: var(--primary);
+            background: rgba(37,99,235,0.08);
+            border-radius: 6px;
+            padding: 4px 10px;
+            margin: 0 0 12px;
+        }
+        .brh-hero-title {
+            font-family: var(--font-body);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-heading);
             line-height: 1.15;
             letter-spacing: -0.02em;
             text-wrap: balance;
-            margin: 0;
+            margin: 0 0 10px;
         }
-        .brh-panel__title .highlight { color: #FFFFFF; }
-        .brh-panel__body {
-            font-family: var(--font-body);
-            font-size: 19px;
-            line-height: 1.4;
-            margin-top: 10px;
-            color: rgba(255,255,255,0.96);
-            /* reserved before results load, so the panel doesn't jump */
-            visibility: hidden;
-            min-height: 1.4em;
-        }
-        .brh-panel__body strong { font-weight: 700; color: #FFFFFF; }
+        .brh-hero-title .highlight { text-transform: capitalize; }
 
         /* Header — matches .va-hn on the landing pages so the logo is the
            same size and the bar the same height across the site. */
@@ -134,22 +132,24 @@
             header .brh-nav .brh-nav__logo img { height: var(--logo-height-mob); }
             .brh-foot__logo img { height: 26px; }
         }
-        /* Next step, plain text under the panel (confirmation-page pattern) */
+        /* Count + what happens next, left-aligned under the heading */
         .brh-hero-sub {
             font-family: var(--font-body);
             color: var(--text-body);
             font-size: 17px;
             line-height: var(--lh-4);
-            text-align: center;
-            max-width: 56ch;
-            margin: 16px auto 0;
+            max-width: 62ch;
+            margin: 0;
+            /* reserved before results load, so the header doesn't jump */
+            visibility: hidden;
+            min-height: 1.5em;
         }
+        .brh-hero-sub strong { font-weight: 700; color: var(--text-heading); }
         @media (max-width: 768px) {
-            .brh-hero-inner  { padding: 16px 16px 4px; }
-            .brh-panel       { padding: 24px 18px; border-radius: 10px; }
-            .brh-panel__title { font-size: 26px; }
-            .brh-panel__body  { font-size: 16px; }
-            .brh-hero-sub     { font-size: 15px; margin-top: 12px; }
+            .brh-hero-inner  { padding: 18px 20px 16px; }
+            .brh-hero-title  { font-size: 25px; }
+            .brh-hero-sub    { font-size: 15px; }
+            .brh-step        { font-size: 13px; margin-bottom: 10px; }
         }
 
         /* Highlight flags on standout cards */
@@ -286,6 +286,14 @@
         .brh-rating-num { font-weight: 700; font-size: 15px; color: var(--text-heading); }
         .brh-review-count { font-size: 14px; color: var(--text-body); white-space: nowrap; }
 
+        /* Under-button reassurance: the journey continues, nothing is owed */
+        .brh-cta-note {
+            margin: -10px 18px 14px;
+            text-align: center;
+            font-family: var(--font-body);
+            font-size: 13px;
+            color: var(--text-body);
+        }
         /* CTA — same pressed-edge primary button as the home page */
         .brh-cta {
             display: block;
@@ -346,17 +354,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- Hero Banner -->
     <!-- Confirmation banner (GOV.UK confirmation-page pattern) -->
+    <!-- Step 1 of 2: pick a provider. Completion language is reserved for
+         after the project-details form is submitted. -->
     <div id="results-banner" class="brh-hero">
         <div class="brh-hero-inner">
-            <div class="brh-panel">
-                <h1 class="brh-panel__title">
-                    Your <span id="brh-query" class="highlight">bathroom remodeling</span> matches are ready
-                </h1>
-                <div class="brh-panel__body" id="brh-match-chip">
-                    <strong id="brh-match-text">Matches found</strong><span id="brh-zip-badge" style="display:none;"> near <strong id="brh-zip-text"></strong></span>
-                </div>
-            </div>
-            <p class="brh-hero-sub">Next: compare 2 or 3 quotes &mdash; every quote is free, with no obligation to hire.</p>
+            <p class="brh-step">Step 1 of 2 &mdash; choose a provider</p>
+            <h1 class="brh-hero-title">
+                <span id="brh-query" class="highlight">Bathroom remodeling</span> providers near you
+            </h1>
+            <p class="brh-hero-sub" id="brh-match-chip">
+                We found <strong id="brh-match-text">providers</strong><span id="brh-zip-badge" style="display:none;"> near <strong id="brh-zip-text"></strong></span>.
+                Next, answer a few quick questions so your provider understands the project &mdash; quotes are free.
+            </p>
         </div>
     </div>
 
@@ -562,7 +571,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 + introEl
                 + statsEl
                 + '</div>'
-                + '<button class="brh-cta js-card-cta vc-btn">Compare Quotes</button>'
+                + '<button class="brh-cta js-card-cta vc-btn">Continue to project details</button>'
+                + '<p class="brh-cta-note">A few quick questions &mdash; free, no obligation</p>'
                 + '</div>';
         }
 
@@ -643,8 +653,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var matchText = document.getElementById('brh-match-text');
             if (matchText) {
                 matchText.textContent = businesses.length === 1
-                    ? '1 local pro is ready to quote'
-                    : businesses.length + ' local pros are ready to quote';
+                    ? '1 provider'
+                    : businesses.length + ' providers';
             }
             var matchChip = document.getElementById('brh-match-chip');
             if (matchChip) matchChip.style.visibility = 'visible';
