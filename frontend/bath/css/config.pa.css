@@ -62,9 +62,10 @@
     --border:   1.5px solid #E2E8F0;
     --focus:    0 0 0 3px rgba(59,130,246,0.20);
 
-    /* Typography */
-    --font-body: 'Poppins', ui-sans-serif, system-ui, -apple-system, sans-serif;
-    --font-mono: 'Poppins', ui-monospace, monospace;
+    /* Typography — Inter sitewide; tokens.css is the source of truth and
+       this must match it, since this file loads later and would win. */
+    --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Code', monospace;
 
     /* Legacy violet aliases */
     --violet-950:  #0F172A;

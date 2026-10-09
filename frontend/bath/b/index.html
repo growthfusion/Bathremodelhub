@@ -22,6 +22,7 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 
     <!-- Core CSS -->
+    <link rel="stylesheet" href="/bath/css/tokens.css">
     <link rel="stylesheet" href="/bath/css/fonts.css">
     <link rel="stylesheet" href="/bath/css/style.service.css">
     <link rel="stylesheet" href="/bath/css/index.css">
@@ -53,9 +54,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="sticky-zip-bar" class="sticky-zip-bar" aria-hidden="true">
         <div class="sticky-zip-bar__inner">
             <form id="sticky-zip-form" data-search-query="bathroom remodeling">
+                <label class="va-field-label--sr" for="sticky-zip-input">ZIP code</label>
                 <div class="sticky-zip-field">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <input id="sticky-zip-input" type="text" inputmode="numeric" maxlength="5" pattern="\d*" placeholder="Enter ZIP For Free Quote" autocomplete="postal-code" />
+                    <input id="sticky-zip-input" type="text" inputmode="numeric" autocomplete="postal-code" spellcheck="false" placeholder="Enter ZIP For Free Quote" />
                     <button type="submit" class="sticky-zip-btn zip-btn" aria-label="Get quotes">
                         Get Quote
                     </button>
@@ -71,11 +73,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="va-hn-wrap">
             <div class="va-hn">
                 <a href="/" class="va-hn-logo">
-                    <img src="/bath/images/blue_version.png" alt="BathRemodelHub" style="border-radius:8px;">
-                    BathRemodelHub
+                    <img src="/bath/images/new_logo.png" alt="BathRemodelHub">
                 </a>
             </div>
         </div>
+
+        <!-- Decorative photo band (mobile only) -->
+        <div class="va-hero-photo" role="presentation"></div>
 
         <!-- HERO CONTENT -->
         <div id="landingHeroContent" class="hero-variant-a">
@@ -83,17 +87,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <!-- LEFT text + form -->
                 <div class="va-hero-left">
-                    <h1 id="landingHeroTitle">Get Your Free Bathroom Quote Today Local Pros Available Now</h1>
-                    <p id="landingHeroSubtitle">See Today's Bathroom Installation Costs in Your Area — Free Estimate.</p>
+                    <h1 id="landingHeroTitle">Get bathroom remodel quotes near you</h1>
+                    <p id="landingHeroSubtitle">Compare free estimates from pre-screened local remodelers. No obligation, and it takes about a minute.</p>
 
                     <form id="ip-hero-form" data-search-query="bathroom remodeling" action="" method="get">
                         <div class="va-cta-wrap">
+                            <label class="va-field-label--sr" for="landingZipInput">ZIP code</label>
                             <div class="va-zip-field">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                <input id="landingZipInput" name="zip" type="text" inputmode="numeric" maxlength="5" autocomplete="postal-code" pattern="\d*" placeholder="Enter ZIP For Free Quote" />
-                                <a id="vaZipSubmit" href="#" role="button" aria-label="Get quotes" class="zip-btn">
+                                <input id="landingZipInput" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" spellcheck="false" class="va-input--width-zip" placeholder="Enter ZIP For Free Quote" />
+                                <button id="vaZipSubmit" type="submit" class="zip-btn">
                                     Get Quote
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -113,11 +118,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="ip2-intro">
         <div class="ip2-intro__split">
 
-            <!-- LEFT — rounded image -->
+            <!-- LEFT — rounded photo (desktop) -->
             <div class="ip2-intro__img-wrap">
                 <picture>
                     <source srcset="/bath/images/bathtub_01.webp" type="image/webp">
                     <img src="/bath/images/bathtub_01.png" alt="Beautiful bathroom remodel" loading="lazy" decoding="async" width="800" height="600">
+                </picture>
+            </div>
+
+            <!-- LEFT — line illustration (mobile) -->
+            <div class="ip2-intro__illus" aria-hidden="true">
+                <picture>
+                    <source srcset="/bath/images/pro.webp" type="image/webp">
+                    <img src="/bath/images/pro.png" alt="" loading="lazy" decoding="async" width="480" height="560">
                 </picture>
             </div>
 
@@ -245,7 +258,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <!-- LEFT — content -->
             <div class="ip2-why__content">
                 <p class="ip2-why__eyebrow">Why hire a pro?</p>
-                <h2 class="ip2-why__title">Skip the Stress &mdash;<br>Get It Done Right</h2>
+                <h2 class="ip2-why__title">Skip the stress &mdash; get it done right</h2>
                 <p class="ip2-why__lead">While DIY bathroom projects can seem appealing, professional remodelers ensure the job meets code, looks stunning, and lasts for years. Pros handle plumbing, waterproofing, and tiling with precision &mdash; and leave your space spotless when they&rsquo;re done.</p>
                 <ul class="ip2-why__list">
                     <li>
@@ -289,12 +302,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- ④ FAQ ACCORDION -->
     <section class="ip2-faq">
         <div class="ip2-faq__inner">
-            <h2>All You Need, All in One Place</h2>
+            <h2>Common questions</h2>
             <div class="ip2-acc">
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Customer-Friendly & Trust-Building</span>
+                        <span>How do I compare bathroom remodel quotes?</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
@@ -304,7 +317,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Practical & Clear  </span>
+                        <span>How should I plan my bathroom remodel?</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
@@ -314,7 +327,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Value‑Focused</span>
+                        <span>Is a bathroom remodel worth the cost?</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
@@ -324,7 +337,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Balanced & Informative</span>
+                        <span>What can I do myself, and what needs a pro?</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
@@ -334,7 +347,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Professional & Trust‑Building</span>
+                        <span>Why hire a professional remodeler?</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
@@ -347,13 +360,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <footer class="ip2-footer">
+        <div class="ip2-footer__top">
+            <div class="ip2-footer__brand-block">
+                <a href="/" class="ip2-footer__brand">
+                    <img src="/bath/images/logo_white.webp" alt="BathRemodelHub" width="900" height="98">
+                </a>
+                <p class="ip2-footer__blurb">Free, no-obligation quotes from pre-screened bathroom remodeling pros in your area.</p>
+            </div>
+
+            <div class="ip2-footer__col">
+                <h2 class="ip2-footer__col-title">Company</h2>
+                <ul>
+                    <li><a href="/about.html">About Us</a></li>
+                    <li><a href="/#cta-search">Get a Quote</a></li>
+                </ul>
+            </div>
+
+            <div class="ip2-footer__col">
+                <h2 class="ip2-footer__col-title">Legal</h2>
+                <ul>
+                    <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="/terms-of-use.html">Terms of Use</a></li>
+                </ul>
+            </div>
+        </div>
+
         <div class="ip2-footer__bottom">
             <p class="ip2-footer__copy">&copy; 2026 BathRemodelHub &mdash; All Rights Reserved.</p>
-            <div class="ip2-footer__links">
-                <a href="/about.html">About Us</a>
-                <a href="/privacy-policy.html">Privacy Policy</a>
-                <a href="/terms-of-use.html">Terms of Use</a>
-            </div>
         </div>
     </footer>
 
@@ -380,6 +413,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 })();
 </script>
 
+<!-- Localized hero headline -->
+<script>
+(function () {
+    var title = document.getElementById('landingHeroTitle');
+    if (!title) return;
+
+    fetch('/api/location')
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            if (!d || !d.city) return;
+            var place = d.state ? d.city + ', ' + d.state : d.city;
+            title.textContent = 'Get bathroom remodel quotes in ' + place;
+        })
+        .catch(function () {});
+})();
+</script>
+
 <script src="/bath/quotes-api.js" defer></script>
 <script>
 (function () {
@@ -394,12 +444,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     document.addEventListener('DOMContentLoaded', function () {
         var heroForm = document.getElementById('ip-hero-form');
-        var submitBtn = document.getElementById('vaZipSubmit');
 
         function handleSubmit(e) {
             e.preventDefault();
-            var zip = (document.getElementById('landingZipInput').value || '').trim();
-            if (!/^\d{5}$/.test(zip)) { document.getElementById('landingZipInput').focus(); return; }
+            var input = document.getElementById('landingZipInput');
+            var zip = (input.value || '').trim();
+            if (!/^\d{5}$/.test(zip)) {
+                input.setAttribute('aria-invalid', 'true');
+                input.focus();
+                return;
+            }
+            input.removeAttribute('aria-invalid');
 
             // 1. Push to GTM DataLayer
             window.dataLayer = window.dataLayer || [];
@@ -412,7 +467,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         if (heroForm) heroForm.addEventListener('submit', handleSubmit);
-        if (submitBtn) submitBtn.addEventListener('click', handleSubmit);
     });
 })();
 </script>

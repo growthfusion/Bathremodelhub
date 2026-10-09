@@ -23,15 +23,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style"
-          href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
           onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" as="style"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     </noscript>
+
+    <!-- Shared design tokens — same file the landing pages load.
+         Must sit outside <noscript>, or it never loads in a real browser. -->
+    <link rel="stylesheet" href="/bath/css/tokens.css">
 
     <script>
         window.tailwind = {
@@ -45,7 +49,7 @@
                             "brand-light":  "#f0f7ff",
                         },
                         fontFamily: {
-                            headline: ["Manrope", "sans-serif"],
+                            headline: ["Inter", "sans-serif"],
                             body:     ["Inter",   "sans-serif"],
                         }
                     }
@@ -56,99 +60,129 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 
     <style>
-        body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #f4f6fa; }
-        .font-headline { font-family: Manrope, ui-sans-serif, system-ui, sans-serif; }
+        body { font-family: var(--font-body); background: var(--surface); }
+        .font-headline { font-family: var(--font-body); }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .star-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
         /* ── Hero Banner ─────────────────────────────────────────────────── */
+        /* Flat band, no illustration — a thin brand rule carries the accent
+           and the copy sits on a solid surface, so contrast never depends
+           on whatever a photo happens to show underneath. */
         .brh-hero {
             position: relative;
             overflow: hidden;
-            background-image: url('/bath/images/brh-desk.png');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            min-height: 300px;
-        }
-        .brh-hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, rgba(207,232,247,0.92) 0%, rgba(207,232,247,0.65) 50%, rgba(207,232,247,0.08) 100%);
-            z-index: 1;
-            pointer-events: none;
+            background: var(--surface);
+            border-bottom: 1px solid var(--divider);
+            box-shadow: inset 0 3px 0 var(--primary);
+            min-height: 0;
         }
         .brh-hero-inner {
             position: relative;
             z-index: 2;
-            max-width: 1200px;
+            max-width: 1152px;
             margin: 0 auto;
-            padding: 56px 48px;
+            padding: 36px 24px;
         }
-        .brh-hero-text { max-width: 600px; }
-        .brh-congrats {
+        .brh-hero-text { max-width: 44ch; }
+        /* Status line — sentence case, not a shouty uppercase banner */
+        /* Meta row sits under the heading: status first, then the ZIP it
+           searched — the context a user checks after the headline, not before. */
+        .brh-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 16px;
+            margin-top: 18px;
+        }
+        .brh-meta__item {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            color: #059669;
-            font-weight: 700;
-            font-size: 0.9rem;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            margin-bottom: 16px;
+            gap: 7px;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 15px;
+            line-height: var(--lh-4);
+            color: var(--text-body);
         }
-        .brh-congrats-icon {
-            width: 22px; height: 22px;
-            background: #059669;
+        .brh-meta__item--ok { color: var(--success); }
+        .brh-meta__item svg { flex: 0 0 15px; color: var(--text-placeholder); }
+        /* Same specificity guard as the logo — Tailwind preflight loads later */
+        .brh-meta .brh-congrats-icon {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            max-width: none;
+            background: var(--success);
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-            color: #fff;
-            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 18px;
+            color: #FFFFFF;
+            font-size: 11px;
             font-weight: 700;
             line-height: 1;
+            box-sizing: border-box;
         }
         .brh-hero-title {
-            font-family: Manrope, sans-serif;
-            font-size: clamp(1.7rem, 3vw, 2.6rem);
-            font-weight: 800;
-            color: #0f2744;
-            line-height: 1.18;
-            margin-bottom: 14px;
-            letter-spacing: -0.02em;
-        }
-        .brh-hero-title .highlight { color: #3b82f6; }
-        .brh-hero-sub {
-            color: #4b5563;
-            font-size: 1.05rem;
-            margin-bottom: 22px;
-            line-height: 1.6;
-        }
-        .brh-zip-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.95);
-            border: 1.5px solid #bfdbfe;
-            border-radius: 12px;
-            padding: 8px 18px;
+            font-family: var(--font-body);
+            font-size: 36px;
             font-weight: 700;
-            font-size: 0.9rem;
-            color: #1a3a5c;
-            box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+            color: var(--text-heading);
+            line-height: 1.15;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+            text-wrap: balance;
+        }
+        /* The service name is the answer to the user's search — weight, not a
+           second colour, keeps one accent on the page. */
+        .brh-hero-title .highlight { color: var(--text-heading); }
+
+        /* Header — matches .va-hn on the landing pages so the logo is the
+           same size and the bar the same height across the site. */
+        .brh-nav {
+            max-width: 1152px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        .brh-nav__logo { display: inline-flex; align-items: center; text-decoration: none; }
+        /* Tailwind's CDN injects preflight at runtime, after this block, so its
+           `img` reset would otherwise win. Extra specificity keeps the logo sized. */
+        header .brh-nav .brh-nav__logo img {
+            height: 28px;
+            height: var(--logo-height, 28px);
+            width: auto;
+            max-width: 100%;
+            display: block;
+        }
+        /* Footer logo — matches .ip2-footer__brand on the landing pages */
+        .brh-foot__logo img { height: 30px; width: auto; display: block; margin: 0 auto; }
+        @media (max-width: 640px) {
+            .brh-nav { height: var(--nav-height-mob); padding: 0 20px; }
+            header .brh-nav .brh-nav__logo img { height: var(--logo-height-mob); }
+            .brh-foot__logo img { height: 26px; }
+        }
+        .brh-hero-sub {
+            font-family: var(--font-body);
+            color: var(--text-body);
+            font-size: var(--fs-body);
+            max-width: var(--measure-1);
+            margin-bottom: 0;
+            line-height: var(--lh-4);
         }
         @media (max-width: 768px) {
-            .brh-hero {
-                background-image: url('/bath/images/brh-mobile.png');
-                background-color: #dbeafe;
-                min-height: 220px;
-            }
-            .brh-hero::before {
-                background: linear-gradient(180deg, rgba(219,234,254,0.92) 0%, rgba(219,234,254,0.60) 100%);
-            }
-            .brh-hero-inner { padding: 36px 24px; }
-            .brh-hero-title { font-size: 1.5rem; }
+            .brh-hero-inner { padding: 24px 20px; }
+            .brh-hero-text  { max-width: 100%; }
+            .brh-hero-title { font-size: var(--fs-h2-mob); margin-bottom: 8px; }
+            .brh-hero-sub   { font-size: var(--fs-body-mob); margin-bottom: 0; }
+            .brh-meta       { margin-top: 14px; gap: 8px 14px; }
+            .brh-meta__item { font-size: 14px; }
         }
 
         /* ── Cards Grid ──────────────────────────────────────────────────── */
@@ -198,9 +232,9 @@
         /* Name + badge row */
         .brh-name-row { display: flex; align-items: flex-start; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
         .brh-name {
-            font-family: Manrope, sans-serif;
+            font-family: var(--font-body);
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 17px;
             color: #0f2744;
             line-height: 1.3;
             cursor: pointer;
@@ -212,7 +246,7 @@
             border: 1px solid #FDE68A;
             border-radius: 20px;
             padding: 3px 9px;
-            font-size: 0.72rem;
+            font-size: 14px;
             font-weight: 700;
             white-space: nowrap;
             flex-shrink: 0;
@@ -220,7 +254,7 @@
 
         /* Intro text with read more */
         .brh-intro {
-            font-size: 0.83rem;
+            font-size: 14px;
             color: #4B5563;
             line-height: 1.65;
             margin-bottom: 12px;
@@ -238,7 +272,7 @@
         .brh-read-more {
             color: #3b82f6;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 14px;
             cursor: pointer;
             user-select: none;
             display: inline-block;
@@ -250,7 +284,7 @@
         .brh-stats { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
         .brh-stat {
             display: flex; align-items: center; gap: 7px;
-            font-size: 0.82rem; color: #6B7280;
+            font-size: 14px; color: #6B7280;
         }
         .brh-stat .material-symbols-outlined { font-size: 15px; color: #93c5fd; }
 
@@ -260,12 +294,12 @@
             margin-bottom: 12px;
         }
         .brh-stars { display: flex; align-items: center; gap: 1px; }
-        .brh-rating-num { font-weight: 700; font-size: 0.88rem; color: #111827; }
-        .brh-review-count { font-size: 0.78rem; color: #9CA3AF; }
+        .brh-rating-num { font-weight: 700; font-size: 15px; color: #111827; }
+        .brh-review-count { font-size: 14px; color: #9CA3AF; }
 
         /* Quote / testimonial */
         .brh-quote {
-            font-size: 0.81rem;
+            font-size: 14px;
             color: #4b5563;
             line-height: 1.65;
             font-style: italic;
@@ -278,11 +312,12 @@
         .brh-cta {
             display: block;
             width: 100%;
-            background: #3b82f6;
+            /* #3b82f6 gave white text only 3.68:1; #2563EB reaches 5.17:1 */
+            background: var(--primary);
             color: #fff;
-            font-family: Manrope, sans-serif;
+            font-family: var(--font-body);
             font-weight: 700;
-            font-size: 0.93rem;
+            font-size: 16px;
             padding: 16px 16px;
             border: none;
             border-top: 1px solid rgba(59,130,246,0.15);
@@ -318,10 +353,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- Navbar -->
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50" style="box-shadow:0 1px 4px rgba(0,0,0,0.06)">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="/" class="flex items-center gap-2 no-underline">
-                <img src="/bath/images/blue_version.png" alt="BathRemodelHub" style="width:34px;height:34px;border-radius:8px;object-fit:cover;">
-                <span class="font-headline font-extrabold text-xl" style="color:#1E293B;">Bath<span style="color:#3b82f6;">RemodelHub</span></span>
+        <div class="brh-nav">
+            <a href="/" class="brh-nav__logo">
+                <img src="/bath/images/new_logo.png" alt="BathRemodelHub">
             </a>
         </div>
     </header>
@@ -330,49 +364,50 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="results-banner" class="brh-hero">
         <div class="brh-hero-inner">
             <div class="brh-hero-text">
-                <div class="brh-congrats">
-                    <div class="brh-congrats-icon">&#10003;</div>
-                    Congratulations!
-                </div>
                 <h1 class="brh-hero-title">
-                    We Found Trusted
-                    <span id="brh-query" class="highlight">Bathroom Remodeling</span>
-                    Pros Near You
+                    Trusted <span id="brh-query" class="highlight">bathroom remodeling</span> pros near you
                 </h1>
                 <p class="brh-hero-sub">Compare local pros and get your best quote in minutes.</p>
-                <div id="brh-zip-badge" class="brh-zip-badge" style="display:none;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="#3b82f6" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                    <span id="brh-zip-text"></span>
+
+                <div class="brh-meta">
+                    <span id="brh-match-chip" class="brh-meta__item brh-meta__item--ok">
+                        <span class="brh-congrats-icon" aria-hidden="true">&#10003;</span>
+                        Match found
+                    </span>
+                    <span id="brh-zip-badge" class="brh-meta__item" style="display:none;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        <span id="brh-zip-text"></span>
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Main -->
-    <main id="results-main" class="max-w-7xl mx-auto px-4 pt-6 pb-8" style="min-height:60vh">
+    <main id="results-main" class="max-w-7xl mx-auto px-4 pt-6 pb-8">
 
         <!-- Loading -->
-        <div id="results-loading" class="flex flex-col items-center justify-center py-24">
+        <div id="results-loading" class="flex flex-col items-center justify-center" style="padding:48px 20px;">
             <div class="flex items-center gap-2 mb-6">
                 <div class="loading-dot"></div>
                 <div class="loading-dot"></div>
                 <div class="loading-dot"></div>
             </div>
             <p class="text-gray-700 text-base font-bold mb-1">Finding local bathroom pros near you&hellip;</p>
-            <p class="text-gray-400 text-sm">This usually takes just a second</p>
+            <p class="text-sm" style="color:#475569;">This usually takes just a second</p>
         </div>
 
         <!-- Results Grid -->
         <div id="results-grid" class="hidden"></div>
 
         <!-- Error -->
-        <div id="results-error" class="hidden flex flex-col items-center justify-center py-24 text-center">
-            <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5" style="background:rgba(59,130,246,0.08)">
-                <span class="material-symbols-outlined text-4xl" style="color:#3b82f6">search_off</span>
+        <div id="results-error" class="hidden flex flex-col items-center justify-center text-center" style="padding:48px 20px;">
+            <div class="w-16 h-16 rounded-lg flex items-center justify-center mb-5" style="background:rgba(37,99,235,0.08)">
+                <span class="material-symbols-outlined text-4xl" style="color:#2563EB">search_off</span>
             </div>
-            <p id="results-error-msg" class="text-gray-700 font-bold text-lg mb-2">Something went wrong</p>
-            <p class="text-gray-400 text-sm mb-6">Please go back and try again.</p>
-            <button onclick="history.back()" class="font-bold px-6 py-3 rounded-xl transition-colors text-sm text-white" style="background:#3b82f6;">Go Back</button>
+            <p id="results-error-msg" class="font-bold mb-2" style="color:#0F172A;font-size:20px;line-height:1.25;">We couldn't load pros for that area</p>
+            <p class="mb-6" style="color:#334155;font-size:17px;line-height:1.5;">Check your ZIP code and try again.</p>
+            <button onclick="history.back()" class="font-semibold px-6 rounded-lg transition-colors text-white" style="background:#2563EB;min-height:48px;font-size:16px;box-shadow:0 3px 0 #0B1F4D;">Go Back</button>
         </div>
 
         <!-- Empty -->
@@ -381,21 +416,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <span class="material-symbols-outlined text-4xl" style="color:#ff6b35">person_search</span>
             </div>
             <p class="text-gray-700 font-bold text-lg mb-2">No pros found in this area</p>
-            <p class="text-gray-400 text-sm mb-6">Try a different service or ZIP code.</p>
+            <p class="text-sm mb-6" style="color:#475569;">Try a different service or ZIP code.</p>
             <button onclick="history.back()" class="text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm" style="background:#ff6b35;">Change Search</button>
         </div>
 
     </main>
 
     <!-- Footer -->
-    <footer class="text-white py-8 px-4 mt-8" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+    <footer class="py-8 px-4 mt-8" style="background:#0F172A;">
         <div class="max-w-5xl mx-auto text-center">
-            <div class="flex flex-wrap justify-center gap-6 text-sm mb-4">
-                <a href="/privacy-policy.html" class="footer-link hover:text-white transition-colors">Privacy Policy</a>
-                <span style="color:rgba(255,255,255,0.4)">|</span>
-                <a href="/terms-of-use.html" class="footer-link hover:text-white transition-colors">Terms of Use</a>
+            <a href="/" class="brh-foot__logo inline-block mb-4">
+                <img src="/bath/images/logo_white.webp" alt="BathRemodelHub">
+            </a>
+            <div class="flex flex-wrap justify-center gap-6 mb-4" style="font-size:14px;">
+                <a href="/privacy-policy.html" style="color:#CBD5E1;" class="transition-colors">Privacy Policy</a>
+                <a href="/terms-of-use.html" style="color:#CBD5E1;" class="transition-colors">Terms of Use</a>
             </div>
-            <p style="color:rgba(255,255,255,0.65);font-size:0.75rem;">&copy; 2026 BathRemodelHub &ndash; All Rights Reserved.</p>
+            <p style="color:#CBD5E1;font-size:14px;">&copy; 2026 BathRemodelHub &ndash; All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -547,9 +584,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 + '</div>';
         }
 
+        // The hero's success chip must not sit above a failure message
+        function hideMatchChip() {
+            var chip = document.getElementById('brh-match-chip');
+            if (chip) chip.style.display = 'none';
+        }
+
         if (!searchQuery || !zipCode) {
             hide(elLoading);
             show(elError);
+            hideMatchChip();
             elErrMsg.textContent = 'Missing search parameters.';
             return;
         }
@@ -608,7 +652,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         .catch(function (e) {
             hide(elLoading);
             show(elError);
-            elErrMsg.textContent = e.message || 'Could not load results.';
+            hideMatchChip();
+            // Server exception text can name internal config (env vars, hosts),
+            // so it goes to the console for debugging, never to the visitor.
+            console.error('[results]', e);
+            elErrMsg.textContent = "We couldn't load pros for that area";
         });
 
     })();

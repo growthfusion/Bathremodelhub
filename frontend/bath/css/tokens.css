@@ -1,0 +1,70 @@
+/* ===================================================================
+   DESIGN TOKENS — single source of truth for every BathRemodelHub page.
+   Loaded by the landing pages and results.html alike; change a value
+   here and it changes everywhere, so the pages cannot drift apart.
+   =================================================================== */
+
+:root {
+    /* Text */
+    --text-heading:     #0F172A;
+    --text-body:        #334155;
+    --text-secondary:   #475569;
+    --text-placeholder: #64748B;
+
+    /* Surfaces */
+    --surface:          #FFFFFF;
+    --surface-muted:    #F8FAFC;
+    --surface-tint:     #DAEAF8;  /* hero wash */
+    --surface-dark:     #0F172A;  /* footers   */
+
+    /* Brand */
+    --primary:          #2563EB;
+    --primary-hover:    #1D4ED8;
+    --primary-edge:     #0B1F4D;  /* pressed-button base edge */
+    --on-primary:       #FFFFFF;
+
+    /* State */
+    --focus-ring:       #FFBF47;
+    --error:            #B91C1C;
+    --success:          #166534;
+
+    /* Lines */
+    --field-border:     #64748B;
+    --divider:          #E2E8F0;
+
+    /* Type */
+    --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+    /* Type scale */
+    --fs-h1:       44px;  /* hero heading, desktop  */
+    --fs-h1-mob:   34px;
+    --fs-h2:       32px;  /* section heading        */
+    --fs-h2-mob:   26px;
+    --fs-h3:       20px;  /* card title, FAQ question */
+    --fs-body:     18px;
+    --fs-body-mob: 17px;
+    --fs-ui:       16px;  /* labels, inputs, buttons */
+    --fs-small:    14px;  /* supporting text — floor */
+
+    /* Line height (USWDS tokens) */
+    --lh-1: 1;      /* buttons, nav, text that must not wrap           */
+    --lh-2: 1.15;   /* headings, short lead text                       */
+    --lh-3: 1.35;   /* captions, sub-paragraph text, very long lines   */
+    --lh-4: 1.5;    /* running text, 1-2 paragraphs, short measures    */
+    --lh-5: 1.62;   /* most reading text, extended reading             */
+
+    /* Measure — target 45-90 characters per line */
+    --measure-1: 44ch;  /* helper text, subheadings, intro text */
+    --measure-2: 66ch;  /* target for long-form reading         */
+    --measure-5: 88ch;  /* upper bound                          */
+
+    /* Shape */
+    --radius:    8px;
+    --radius-sm: 4px;
+
+    /* Chrome */
+    --nav-height:     64px;
+    --nav-height-mob: 56px;
+    --logo-height:     28px;
+    --logo-height-mob: 22px;
+}

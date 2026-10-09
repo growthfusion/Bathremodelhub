@@ -184,8 +184,9 @@ router.post('/businesses', async function (req, res) {
         res.json(result);
     } catch (err) {
         await settleWithin(track(''), 3000);   // no-op if already logged; keeps failed searches in the table
+        // err.message can name env vars and upstream hosts — log it, don't ship it.
         console.error('[businesses]', err.message);
-        res.status(502).json({ error: err.message });
+        res.status(502).json({ error: 'Could not load pros right now. Please try again.' });
     }
 });
 
@@ -265,26 +266,31 @@ router.get('/location', async function (req, res) {
         try {
             var geocodeUrl = 'https://maps.googleapis.com/maps/api/geocode/json' +
                 '?latlng=' + lat + ',' + lng +
-                '&result_type=postal_code' +
+                '&result_type=postal_code|locality' +
                 '&key=' + encodeURIComponent(process.env.GOOGLE_GEOCODING_KEY || '');
             var geocodeRes = await fetch(geocodeUrl, {
                 headers: { 'User-Agent': 'bathremodelhub/1.0' },
                 signal: AbortSignal.timeout(4000)
             });
-            if (!geocodeRes.ok) return res.json({ zip: null });
+            if (!geocodeRes.ok) return res.json({ zip: null, city: null, state: null });
             var geocodeData = await geocodeRes.json();
             if (geocodeData.status === 'OK' && geocodeData.results && geocodeData.results.length) {
-                var components = geocodeData.results[0].address_components || [];
-                for (var i = 0; i < components.length; i++) {
-                    if (components[i].types.indexOf('postal_code') !== -1) {
-                        return res.json({ zip: components[i].long_name });
+                var found = { zip: null, city: null, state: null };
+                for (var r = 0; r < geocodeData.results.length; r++) {
+                    var components = geocodeData.results[r].address_components || [];
+                    for (var i = 0; i < components.length; i++) {
+                        var types = components[i].types;
+                        if (!found.zip   && types.indexOf('postal_code') !== -1)                 found.zip   = components[i].long_name;
+                        if (!found.city  && types.indexOf('locality') !== -1)                    found.city  = components[i].long_name;
+                        if (!found.state && types.indexOf('administrative_area_level_1') !== -1) found.state = components[i].short_name;
                     }
                 }
+                return res.json(found);
             }
-            return res.json({ zip: null });
+            return res.json({ zip: null, city: null, state: null });
         } catch (err) {
             console.error('[location/google]', err.message);
-            return res.json({ zip: null });
+            return res.json({ zip: null, city: null, state: null });
         }
     }
 
@@ -299,13 +305,16 @@ router.get('/location', async function (req, res) {
             headers: { 'User-Agent': 'bathremodelhub/1.0' },
             signal: AbortSignal.timeout(4000)
         });
-        if (!ipapiRes.ok) return res.json({ zip: null });
+        if (!ipapiRes.ok) return res.json({ zip: null, city: null, state: null });
         var ipapiData = await ipapiRes.json();
-        var zip = (ipapiData.postal && ipapiData.postal.trim()) ? ipapiData.postal.trim() : null;
-        return res.json({ zip: zip });
+        return res.json({
+            zip:   (ipapiData.postal      && ipapiData.postal.trim())      ? ipapiData.postal.trim()      : null,
+            city:  (ipapiData.city        && ipapiData.city.trim())        ? ipapiData.city.trim()        : null,
+            state: (ipapiData.region_code && ipapiData.region_code.trim()) ? ipapiData.region_code.trim() : null
+        });
     } catch (err) {
         console.error('[location/ipapi]', err.message);
-        return res.json({ zip: null });
+        return res.json({ zip: null, city: null, state: null });
     }
 });
 

@@ -21,6 +21,7 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 
     <!-- Core CSS -->
+    <link rel="stylesheet" href="/bath/css/tokens.css">
     <link rel="stylesheet" href="/bath/css/fonts.css">
     <link rel="stylesheet" href="/bath/css/style.service.css">
     <link rel="stylesheet" href="/bath/css/index.css">
@@ -40,32 +41,100 @@
     <!-- End Google Tag Manager -->
     <script src="/js/posthog-init.js" defer></script>
     <style>
-    /* ── HERO LEAD FIELDS (email + phone above ZIP) — desktop + mobile ── */
-    .va-lead-fields { display: flex; flex-direction: column; gap: 8px; }
-    .va-lead-fields input {
-        width: 100%; box-sizing: border-box; height: 52px; padding: 0 16px;
-        font-size: 16px; font-weight: 500; font-family: 'Inter', sans-serif;
-        color: #0f172a; background: #ffffff;
-        border: 1px solid #e2e8f0; border-radius: 0.625rem; outline: none;
-        transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    /* ── ZIP CARD ── white panel holding just the field and its button ── */
+    .va-zip-card {
+        background: var(--surface);
+        border: 1px solid var(--divider);
+        border-radius: 14px;
+        box-shadow: 0 8px 28px rgba(15,23,42,0.12);
+        padding: 24px;
+        box-sizing: border-box;
+        max-width: 420px;
     }
-    .va-lead-fields input::placeholder { color: #94a3b8; font-weight: 400; }
-    .va-lead-fields input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
-    .va-lead-fields input.is-invalid { border-color: #dc2626; }
-    .va-lead-error { margin: 0; padding: 0 4px; font-size: 13px; font-weight: 600; color: #dc2626; text-align: left; font-family: 'Inter', sans-serif; }
-    /* ZIP box gets the same visible border as email/phone (overrides transparent border in bath-v2.css) */
-    #ip-hero-form #landingZipInput { border: 1px solid #cbd5e1; }
-    #ip-hero-form #landingZipInput:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
-    .va-lead-fields input { border-color: #cbd5e1; }
-    /* Desktop: email + phone side by side */
-    @media (min-width: 641px) {
-        .va-lead-fields { flex-direction: row; }
-        .va-lead-fields input { flex: 1; min-width: 0; }
+    .va-zip-card .va-cta-wrap {
+        background: none;
+        border: 0;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
     }
-    /* Mobile: stacked, slightly more compact */
+    /* Home page only — centre the headline and lighten the photo behind it
+       so the dark copy reads cleanly across the whole band. */
+    #landingHeroTitle {
+        text-align: center;
+        justify-content: center;
+    }
     @media (max-width: 640px) {
-        .va-lead-fields input { height: 50px; }
+        #landingHeroTitle {
+            background-image:
+                linear-gradient(to bottom,
+                    rgba(255,255,255,0.08) 0%,
+                    rgba(255,255,255,0.16) 55%,
+                    rgba(255,255,255,0.22) 100%),
+                url('/bath/images/header_image.webp');
+            background-size: cover, cover;
+            background-position: center center, center 30%;
+            background-repeat: no-repeat, no-repeat;
+        }
     }
+
+    .va-zip-card { text-align: left; }
+    /* Button stacks under the field instead of sitting inside it, so both
+       span the card's full width. */
+    /* The field keeps `position: relative` so the pin stays anchored inside
+       it; only the button is pulled out of the overlay into the stack. */
+    .va-zip-card .va-zip-field { position: relative; }
+    .va-zip-card #landingZipInput {
+        padding: 16px 16px 16px 44px;
+        min-height: 54px;
+    }
+    .va-zip-card .va-zip-field svg:first-child {
+        display: block;
+        position: absolute;
+        left: 14px;
+        top: 27px;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        color: var(--text-placeholder);
+        pointer-events: none;
+        z-index: 3;
+    }
+    .va-zip-card #vaZipSubmit {
+        position: static !important;
+        transform: none;
+        right: auto;
+        top: auto;
+        width: 100%;
+        height: 54px;
+        margin-top: 12px;
+        font-size: var(--fs-ui);
+    }
+    .va-zip-card #vaZipSubmit:hover  { transform: none; }
+    .va-zip-card #vaZipSubmit:active { transform: translateY(3px); box-shadow: 0 0 0 var(--primary-edge); }
+    @media (max-width: 640px) {
+        /* A white card on a white page has no visible edge. Tint the band it
+           sits in so the card reads as a separate panel. */
+        #landingHeroContent.hero-variant-a {
+            background: var(--surface-muted);
+            border-top: 1px solid var(--divider);
+            padding: 20px 16px 28px;
+        }
+        .va-zip-card { padding: 20px; max-width: 100%; }
+    }
+
+    /* Error message — icon plus text, never colour alone */
+    .va-lead-error {
+        margin: 0 0 6px; padding: 0; font-size: 16px; font-weight: 700;
+        color: #B91C1C; text-align: left; font-family: var(--font-body);
+        line-height: 1.25; display: flex; align-items: center; gap: 6px;
+    }
+    /* `display:flex` overrides the [hidden] attribute, so the empty element
+       and its warning glyph would otherwise show on a clean page load. */
+    .va-lead-error[hidden] { display: none; }
+    .va-lead-error::before { content: "\26A0"; font-size: 15px; }
     </style>
 </head>
 
@@ -81,9 +150,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="sticky-zip-bar" class="sticky-zip-bar" aria-hidden="true">
         <div class="sticky-zip-bar__inner">
             <form id="sticky-zip-form" data-search-query="bathroom remodeling">
+                <label class="va-field-label--sr" for="sticky-zip-input">ZIP code</label>
                 <div class="sticky-zip-field">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <input id="sticky-zip-input" type="text" inputmode="numeric" maxlength="5" pattern="\d*" placeholder="Enter ZIP For Free Quote" autocomplete="postal-code" />
+                    <input id="sticky-zip-input" type="text" inputmode="numeric" autocomplete="postal-code" spellcheck="false" placeholder="Enter ZIP For Free Quote" />
                     <button type="submit" class="sticky-zip-btn zip-btn" aria-label="Get quotes">
                         Get Quote
                     </button>
@@ -99,11 +169,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="va-hn-wrap">
             <div class="va-hn">
                 <a href="/" class="va-hn-logo">
-                    <img src="/bath/images/blue_version.png" alt="BathRemodelHub" style="border-radius:8px;">
-                    BathRemodelHub
+                    <img src="/bath/images/new_logo.png" alt="BathRemodelHub">
                 </a>
             </div>
         </div>
+
+        <!-- Decorative photo band (mobile only) -->
+        <div class="va-hero-photo" role="presentation"></div>
 
         <!-- HERO CONTENT -->
         <div id="landingHeroContent" class="hero-variant-a">
@@ -111,22 +183,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <!-- LEFT text + form -->
                 <div class="va-hero-left">
-                    <h1 id="landingHeroTitle">Get Your Free Bathroom Quote Today Local Pros Available Now</h1>
-                    <p id="landingHeroSubtitle">See Today's Bathroom Installation Costs in Your Area — Free Estimate.</p>
-
-                    <form id="ip-hero-form" data-search-query="bathroom remodeling" action="" method="get">
+                    <h1 id="landingHeroTitle">Get bathroom remodel quotes near you</h1>
+                    <form id="ip-hero-form" class="va-zip-card" data-search-query="bathroom remodeling" action="" method="get">
                         <div class="va-cta-wrap">
-                            <div class="va-lead-fields">
-                                <input id="hero-email" name="email" type="email" autocomplete="email" placeholder="Email Address" aria-label="Email address" required />
-                                <input id="hero-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="14" placeholder="Phone Number" aria-label="Phone number" required />
-                            </div>
                             <p id="hero-lead-error" class="va-lead-error" role="alert" hidden></p>
+                            <label class="va-field-label--sr" for="landingZipInput">ZIP code</label>
                             <div class="va-zip-field">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                <input id="landingZipInput" name="zip" type="text" inputmode="numeric" maxlength="5" autocomplete="postal-code" pattern="\d*" placeholder="Enter ZIP For Free Quote" />
-                                <a id="vaZipSubmit" href="#" role="button" aria-label="Get quotes" class="zip-btn">
+                                <input id="landingZipInput" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" spellcheck="false" class="va-input--width-zip" placeholder="Enter your ZIP code" />
+                                <button id="vaZipSubmit" type="submit" class="zip-btn">
                                     Get Quote
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -146,11 +213,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <section class="ip2-intro">
         <div class="ip2-intro__split">
 
-            <!-- LEFT — rounded image -->
+            <!-- LEFT — rounded photo (desktop) -->
             <div class="ip2-intro__img-wrap">
                 <picture>
                     <source srcset="/bath/images/bathtub_01.webp" type="image/webp">
                     <img src="/bath/images/bathtub_01.png" alt="Beautiful bathroom remodel" loading="lazy" decoding="async" width="800" height="600">
+                </picture>
+            </div>
+
+            <!-- LEFT — line illustration (mobile) -->
+            <div class="ip2-intro__illus" aria-hidden="true">
+                <picture>
+                    <source srcset="/bath/images/pro.webp" type="image/webp">
+                    <img src="/bath/images/pro.png" alt="" loading="lazy" decoding="async" width="480" height="560">
                 </picture>
             </div>
 
@@ -278,7 +353,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <!-- LEFT — content -->
             <div class="ip2-why__content">
                 <p class="ip2-why__eyebrow">Why hire a pro?</p>
-                <h2 class="ip2-why__title">Skip the Stress &mdash;<br>Get It Done Right</h2>
+                <h2 class="ip2-why__title">Skip the stress &mdash; get it done right</h2>
                 <p class="ip2-why__lead">While DIY bathroom projects can seem appealing, professional remodelers ensure the job meets code, looks stunning, and lasts for years. Pros handle plumbing, waterproofing, and tiling with precision &mdash; and leave your space spotless when they&rsquo;re done.</p>
                 <ul class="ip2-why__list">
                     <li>
@@ -322,12 +397,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- ④ FAQ ACCORDION -->
     <section class="ip2-faq">
         <div class="ip2-faq__inner">
-            <h2>All You Need, All in One Place</h2>
+            <h2>Common questions</h2>
             <div class="ip2-acc">
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Customer-Friendly & Trust-Building</span>
+                        <span>How do I compare bathroom remodel quotes?</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
@@ -337,7 +412,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Practical & Clear  </span>
+                        <span>How should I plan my bathroom remodel?</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
@@ -347,7 +422,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Value‑Focused</span>
+                        <span>Is a bathroom remodel worth the cost?</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
@@ -357,7 +432,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Balanced & Informative</span>
+                        <span>What can I do myself, and what needs a pro?</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
@@ -367,7 +442,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 <div class="ip2-acc__item">
                     <button class="ip2-acc__btn" aria-expanded="false">
-                        <span>Professional & Trust‑Building</span>
+                        <span>Why hire a professional remodeler?</span>
                         <span class="ip2-acc__icon">+</span>
                     </button>
                     <div class="ip2-acc__body">
@@ -380,13 +455,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <footer class="ip2-footer">
+        <div class="ip2-footer__top">
+            <div class="ip2-footer__brand-block">
+                <a href="/" class="ip2-footer__brand">
+                    <img src="/bath/images/logo_white.webp" alt="BathRemodelHub" width="900" height="98">
+                </a>
+                <p class="ip2-footer__blurb">Free, no-obligation quotes from pre-screened bathroom remodeling pros in your area.</p>
+            </div>
+
+            <div class="ip2-footer__col">
+                <h2 class="ip2-footer__col-title">Company</h2>
+                <ul>
+                    <li><a href="/about.html">About Us</a></li>
+                    <li><a href="/#cta-search">Get a Quote</a></li>
+                </ul>
+            </div>
+
+            <div class="ip2-footer__col">
+                <h2 class="ip2-footer__col-title">Legal</h2>
+                <ul>
+                    <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="/terms-of-use.html">Terms of Use</a></li>
+                </ul>
+            </div>
+        </div>
+
         <div class="ip2-footer__bottom">
             <p class="ip2-footer__copy">&copy; 2026 BathRemodelHub &mdash; All Rights Reserved.</p>
-            <div class="ip2-footer__links">
-                <a href="/about.html">About Us</a>
-                <a href="/privacy-policy.html">Privacy Policy</a>
-                <a href="/terms-of-use.html">Terms of Use</a>
-            </div>
         </div>
     </footer>
 
@@ -413,6 +508,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 })();
 </script>
 
+<!-- Localized hero headline -->
+<script>
+(function () {
+    var title = document.getElementById('landingHeroTitle');
+    if (!title) return;
+
+    fetch('/api/location')
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            if (!d || !d.city) return;
+            var place = d.state ? d.city + ', ' + d.state : d.city;
+            title.textContent = 'Get bathroom remodel quotes in ' + place;
+        })
+        .catch(function () {});
+})();
+</script>
+
 <script src="/bath/quotes-api.js" defer></script>
 <script>
 (function () {
@@ -427,24 +539,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     document.addEventListener('DOMContentLoaded', function () {
         var heroForm = document.getElementById('ip-hero-form');
-        var submitBtn = document.getElementById('vaZipSubmit');
 
-        var email = document.getElementById('hero-email');
-        var phone = document.getElementById('hero-phone');
-        var err   = document.getElementById('hero-lead-error');
-
-        // Format phone as (555) 123-4567 while typing
-        phone.addEventListener('input', function () {
-            var d = phone.value.replace(/\D/g, '').slice(0, 10);
-            var out = d;
-            if (d.length > 6)      out = '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6);
-            else if (d.length > 3) out = '(' + d.slice(0, 3) + ') ' + d.slice(3);
-            else if (d.length > 0) out = '(' + d;
-            phone.value = out;
-        });
+        var err = document.getElementById('hero-lead-error');
 
         function fail(el, msg) {
             el.classList.add('is-invalid');
+            el.setAttribute('aria-invalid', 'true');
             err.textContent = msg;
             err.hidden = false;
             el.focus();
@@ -455,34 +555,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             e.preventDefault();
             if (submitting) return;
 
-            email.classList.remove('is-invalid');
-            phone.classList.remove('is-invalid');
-            document.getElementById('landingZipInput').classList.remove('is-invalid');
+            var zipEl = document.getElementById('landingZipInput');
+            zipEl.classList.remove('is-invalid');
+            zipEl.removeAttribute('aria-invalid');
             err.hidden = true;
 
-            var emailVal = email.value.trim();
-            var phoneVal = phone.value.replace(/\D/g, '');
-            var zip = (document.getElementById('landingZipInput').value || '').trim();
+            var zip = (zipEl.value || '').trim();
 
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailVal)) { fail(email, 'Please enter a valid email address.'); return; }
-            if (!/^[2-9]\d{9}$/.test(phoneVal))                  { fail(phone, 'Please enter a valid 10-digit phone number.'); return; }
-            if (!/^\d{5}$/.test(zip)) { document.getElementById('landingZipInput').focus(); return; }
+            if (!zip)                 { fail(zipEl, 'Enter your ZIP code'); return; }
+            if (!/^\d{5}$/.test(zip)) { fail(zipEl, 'Enter a ZIP code in the correct format, like 90210'); return; }
             submitting = true;
-
-            // Kept in sessionStorage for results.html (never put in the URL)
-            try {
-                sessionStorage.setItem('brh_email', emailVal);
-                sessionStorage.setItem('brh_phone', phoneVal);
-            } catch (x) {}
 
             // Save straight to the backend now — doesn't depend on the results page loading
             if (typeof window.hcCaptureLead === 'function') {
-                window.hcCaptureLead({ zipCode: zip, email: emailVal, phone: phoneVal, searchQuery: QUERY });
+                window.hcCaptureLead({ zipCode: zip, searchQuery: QUERY });
             }
 
             // 1. Push to GTM DataLayer
             window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({ event: 'lead_contact_capture', email: emailVal, phone: phoneVal });
             window.dataLayer.push({ event: 'Search', Search: QUERY, zipCode: zip });
 
             // 3. Delay redirect 400ms so pixels have time to fire
@@ -492,12 +582,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
 
         if (heroForm) heroForm.addEventListener('submit', handleSubmit);
-        if (submitBtn) submitBtn.addEventListener('click', handleSubmit);
-
-        // Three text inputs + no real submit button = Enter would do nothing, so wire it up
-        [email, phone, document.getElementById('landingZipInput')].forEach(function (el) {
-            el.addEventListener('keydown', function (e) { if (e.key === 'Enter') handleSubmit(e); });
-        });
     });
 })();
 </script>
@@ -532,18 +616,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             var zip = (stickyInput.value || '').trim();
             if (!/^\d{5}$/.test(zip)) { stickyInput.focus(); return; }
 
-            // This variant needs email + phone: if they haven't been captured yet,
-            // hand the ZIP to the hero form and bring the visitor back up to it.
-            var haveLead = false;
-            try { haveLead = !!(sessionStorage.getItem('brh_email') && sessionStorage.getItem('brh_phone')); } catch (x) {}
-            if (!haveLead) {
-                var heroZip = document.getElementById('landingZipInput');
-                if (heroZip) heroZip.value = zip;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                var heroEmail = document.getElementById('hero-email');
-                if (heroEmail) setTimeout(function () { heroEmail.focus({ preventScroll: true }); }, 350);
-                return;
-            }
             var trail = (typeof window.hcTrackingParams === 'function') ? window.hcTrackingParams() : '';
 
             // 1. Push to GTM DataLayer
