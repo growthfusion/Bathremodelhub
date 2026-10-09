@@ -1,3 +1,14 @@
+/* Arial resized to Inter's metrics. Text is laid out with this while Inter
+   downloads, so when Inter swaps in nothing reflows and nothing jumps. */
+@font-face {
+    font-family: 'Inter Fallback';
+    src: local('Arial');
+    size-adjust: 107.4%;
+    ascent-override: 90.2%;
+    descent-override: 22.48%;
+    line-gap-override: 0%;
+}
+
 /* ===================================================================
    DESIGN TOKENS — single source of truth for every BathRemodelHub page.
    Loaded by the landing pages and results.html alike; change a value
@@ -33,7 +44,7 @@
     --divider:          #E2E8F0;
 
     /* Type */
-    --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-body: 'Inter', 'Inter Fallback', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
     /* Type scale */
     --fs-h1:       44px;  /* hero heading, desktop  */

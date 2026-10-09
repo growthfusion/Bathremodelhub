@@ -68,6 +68,12 @@
         text-align: center;
         justify-content: center;
     }
+    @media (min-width: 1024px) {
+        /* 3 lines of the 44px / 1.15 headline: the localized text
+           ("...in San Francisco, CA") wraps to a third line, and without this
+           the form below jumps down when it arrives. */
+        #landingHeroTitle { min-height: calc(3 * 1.15 * var(--fs-h1, 44px)); }
+    }
     @media (max-width: 640px) {
         #landingHeroTitle {
             background-image:
@@ -520,6 +526,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         .then(function (r) { return r.json(); })
         .then(function (d) {
             if (!d || !d.city) return;
+            // Never rewrite the headline once the visitor is interacting with
+            // the form: the change can add a line, shift the button down and
+            // make the click land on empty space.
+            var zipEl = document.getElementById('landingZipInput');
+            if (zipEl && (zipEl.value || document.activeElement === zipEl)) return;
             var place = d.state ? d.city + ', ' + d.state : d.city;
             title.textContent = 'Get bathroom remodel quotes in ' + place;
         })
