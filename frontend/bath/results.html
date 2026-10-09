@@ -152,30 +152,6 @@
             .brh-hero-sub     { font-size: 15px; margin-top: 12px; }
         }
 
-        /* -- Sort & filter bar ------------------------------------------------ */
-        .brh-filters { display: flex; flex-direction: column; gap: 0; margin-bottom: 10px; }
-        .brh-filters__row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .brh-filters__label { font-size: 14px; font-weight: 600; color: var(--text-body); white-space: nowrap; flex-shrink: 0; }
-        /* Native select — keeps OS keyboard,
-           screen-reader and mobile-picker behaviour for free. */
-        .brh-sort-wrap { position: relative; flex-shrink: 0; }
-        .brh-sort {
-            appearance: none; -webkit-appearance: none;
-            min-height: 38px; padding: 0 32px 0 12px;
-            background: var(--surface); color: var(--text-heading);
-            border: 1px solid var(--divider); border-radius: 10px;
-            font-family: var(--font-body); font-size: 14px; font-weight: 600;
-            cursor: pointer;
-        }
-        .brh-sort:hover { border-color: var(--primary); }
-        .brh-sort:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
-        .brh-sort-arrow {
-            position: absolute; right: 8px; top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px !important; color: var(--text-body);
-            pointer-events: none;
-        }
-
         /* Highlight flags on standout cards */
         .brh-flags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
         .brh-flag {
@@ -396,23 +372,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <p class="text-gray-700 text-base font-bold mb-1">Finding local bathroom pros near you&hellip;</p>
             <p class="text-sm" style="color:#475569;">This usually takes just a second</p>
-        </div>
-
-        <!-- Sort & filter -->
-        <div id="brh-filters" class="brh-filters hidden" role="group" aria-label="Sort and filter pros">
-            <div class="brh-filters__row">
-                <label class="brh-filters__label" for="brh-sort">Sort by</label>
-                <div class="brh-sort-wrap">
-                    <select id="brh-sort" class="brh-sort">
-                        <option value="match" selected>Best match</option>
-                        <option value="rating">Highest rated</option>
-                        <option value="reviews">Most reviews</option>
-                        <option value="years">Most experienced</option>
-                        <option value="hires">Most hired</option>
-                    </select>
-                    <span class="material-symbols-outlined brh-sort-arrow" aria-hidden="true">expand_more</span>
-                </div>
-            </div>
         </div>
 
         <!-- Results Grid -->
@@ -727,29 +686,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             // A 5.0 from 4 reviews shouldn't wear the "Highest rated" trophy: require 10+ reviews
             best = { rating: leader('rating', 10), reviews: leader('reviews'), years: leader('years') };
 
-            var state = { sort: 'match' };
-            var elFilters = document.getElementById('brh-filters');
-
-            function renderList() {
-                var list = businesses.slice().sort(compare(state.sort));
-
-
-                setContent(elGrid, list.length
-                    ? '<div class="brh-grid">' + list.map(function (biz, i) { return bizCard(biz, i); }).join('') + '</div>'
-                    : '<div class="text-center" style="padding:40px 20px;color:#475569;">No pros to show.</div>'
-                );
-                revealReadMore();
-            }
-
-            var elSort = document.getElementById('brh-sort');
-            elSort.addEventListener('change', function () {
-                state.sort = elSort.value;
-                renderList();
-            });
-
-            show(elFilters);
+            // Cards render once, in "best match" order (rating weighted by
+            // how many reviews back it up).
+            var list = businesses.slice().sort(compare('match'));
+            setContent(elGrid,
+                '<div class="brh-grid">'
+                + list.map(function (biz, i) { return bizCard(biz, i); }).join('')
+                + '</div>'
+            );
             show(elGrid);
-            renderList();
+            revealReadMore();
         })
         .catch(function (e) {
             hide(elLoading);
