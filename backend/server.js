@@ -8,10 +8,21 @@ const { blockSensitiveFiles } = require('./middleware/security');
 const apiRouter               = require('./routes/api');
 
 const app      = express();
+
+// Behind a reverse proxy / load balancer (stage, production) req.ip is the
+// PROXY's address unless Express is told how many hops to trust. Without this,
+// every visitor looks like the same IP: location lookup resolves the wrong
+// place and the per-IP lead rate limit becomes one shared site-wide bucket.
+// Default 1 hop; set TRUST_PROXY=2 behind CDN + load balancer, 0 for no proxy.
+const proxyHops = process.env.TRUST_PROXY === undefined ? 1 : Number(process.env.TRUST_PROXY);
+app.set('trust proxy', Number.isNaN(proxyHops) ? 1 : proxyHops);
 const PORT     = process.env.PORT || 3000;
 const FRONTEND = path.join(__dirname, '..', 'frontend');
 
 // ── Core middleware ───────────────────────────────────────────────────────────
+// Gzip every compressible response (HTML/CSS/JS/JSON). Images are already
+// compressed formats and are skipped by the default filter.
+app.use(require('compression')());
 app.use(express.json());
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 app.use(blockSensitiveFiles);
@@ -46,7 +57,15 @@ app.get('/js/posthog-init.js', function (req, res) {
 app.use(express.static(FRONTEND, {
     setHeaders(res, filePath) {
         if (filePath.endsWith('.html')) {
+            // Pages must revalidate — copy changes ship without a deploy bump
             res.setHeader('Cache-Control', 'no-cache');
+        } else if (/\.(webp|png|jpe?g|gif|svg|ico|woff2?)$/i.test(filePath)) {
+            // Images/fonts are content-stable; new art ships under a new name
+            res.setHeader('Cache-Control', 'public, max-age=2592000, stale-while-revalidate=86400');
+        } else if (/\.(css|js)$/i.test(filePath)) {
+            // Unversioned filenames, so keep the window short: an hour stale
+            // at most, refreshed in the background on the next visit
+            res.setHeader('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
         }
     }
 }));

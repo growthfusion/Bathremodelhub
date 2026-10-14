@@ -184,8 +184,9 @@ router.post('/businesses', async function (req, res) {
         res.json(result);
     } catch (err) {
         await settleWithin(track(''), 3000);   // no-op if already logged; keeps failed searches in the table
+        // err.message can name env vars and upstream hosts — log it, don't ship it.
         console.error('[businesses]', err.message);
-        res.status(502).json({ error: err.message });
+        res.status(502).json({ error: 'Could not load pros right now. Please try again.' });
     }
 });
 
@@ -255,6 +256,19 @@ router.get('/info', function (req, res) {
     });
 });
 
+// Successful geo lookups, keyed by IP. 6h TTL; bounded so it can't grow
+// without limit under address-scanning traffic.
+var geoCache = new Map();
+var GEO_TTL_MS = 6 * 60 * 60 * 1000;
+function geoCachePut(ip, value) {
+    if (geoCache.size >= 5000) {
+        // drop the oldest insertions (Map preserves insertion order)
+        var drop = 500;
+        for (var k of geoCache.keys()) { geoCache.delete(k); if (--drop <= 0) break; }
+    }
+    geoCache.set(ip, { value: value, until: Date.now() + GEO_TTL_MS });
+}
+
 // GET /api/location  — returns ZIP from GPS coords (Google Geocoding) or IP (ipapi.co)
 router.get('/location', async function (req, res) {
     var lat = req.query.lat ? parseFloat(req.query.lat) : null;
@@ -265,32 +279,70 @@ router.get('/location', async function (req, res) {
         try {
             var geocodeUrl = 'https://maps.googleapis.com/maps/api/geocode/json' +
                 '?latlng=' + lat + ',' + lng +
-                '&result_type=postal_code' +
+                '&result_type=postal_code|locality' +
                 '&key=' + encodeURIComponent(process.env.GOOGLE_GEOCODING_KEY || '');
             var geocodeRes = await fetch(geocodeUrl, {
                 headers: { 'User-Agent': 'bathremodelhub/1.0' },
                 signal: AbortSignal.timeout(4000)
             });
-            if (!geocodeRes.ok) return res.json({ zip: null });
+            if (!geocodeRes.ok) return res.json({ zip: null, city: null, state: null });
             var geocodeData = await geocodeRes.json();
             if (geocodeData.status === 'OK' && geocodeData.results && geocodeData.results.length) {
-                var components = geocodeData.results[0].address_components || [];
-                for (var i = 0; i < components.length; i++) {
-                    if (components[i].types.indexOf('postal_code') !== -1) {
-                        return res.json({ zip: components[i].long_name });
+                var found = { zip: null, city: null, state: null };
+                for (var r = 0; r < geocodeData.results.length; r++) {
+                    var components = geocodeData.results[r].address_components || [];
+                    for (var i = 0; i < components.length; i++) {
+                        var types = components[i].types;
+                        if (!found.zip   && types.indexOf('postal_code') !== -1)                 found.zip   = components[i].long_name;
+                        if (!found.city  && types.indexOf('locality') !== -1)                    found.city  = components[i].long_name;
+                        if (!found.state && types.indexOf('administrative_area_level_1') !== -1) found.state = components[i].short_name;
                     }
                 }
+                return res.json(found);
             }
-            return res.json({ zip: null });
+            return res.json({ zip: null, city: null, state: null });
         } catch (err) {
             console.error('[location/google]', err.message);
-            return res.json({ zip: null });
+            return res.json({ zip: null, city: null, state: null });
         }
     }
 
     // IP fallback: no coordinates → ipapi.co
-    var ip = String(req.ip || '');
-    var isPrivate = !ip || /^(127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|::1|^$)/.test(ip);
+    // Location must never be cached by a CDN or browser — a cached response
+    // would hand one visitor's city to everyone who follows.
+    res.set('Cache-Control', 'private, no-store');
+
+    // Node reports IPv4 clients as "::ffff:1.2.3.4" on dual-stack sockets, which
+    // the private-range test below would otherwise treat as a public address.
+    function clean(v)     { return String(v || '').trim().replace(/^::ffff:/i, ''); }
+    function isPrivateIp(v) {
+        return !v || /^(127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|169\.254\.|::1$|f[cd])/i.test(v);
+    }
+
+    // Geolocation can't rely on req.ip: that depends on the trust-proxy hop
+    // count matching the real proxy chain, and when it doesn't (CDN added in
+    // front, extra load balancer), req.ip is some proxy's address — visitors
+    // then get the CDN edge's city (a Bangalore visitor was shown Marseille).
+    // For geo we instead take the first PUBLIC address in the forwarding chain:
+    // a definitive CDN header when present, else leftmost-public X-Forwarded-For.
+    // Spoofing this only changes the visitor's own headline, so it's safe here;
+    // the lead rate limiter stays on req.ip, which spoofing cannot move.
+    var ip = clean(req.headers['cf-connecting-ip'] || req.headers['x-real-ip']);
+    if (!ip || isPrivateIp(ip)) {
+        var chain = String(req.headers['x-forwarded-for'] || '').split(',').map(clean);
+        for (var ci = 0; ci < chain.length; ci++) {
+            if (chain[ci] && !isPrivateIp(chain[ci])) { ip = chain[ci]; break; }
+        }
+    }
+    if (!ip || isPrivateIp(ip)) ip = clean(req.ip);
+
+    var isPrivate = isPrivateIp(ip);
+    // A private address here means "no real client IP". Calling ipapi.co with no
+    // IP geolocates the SERVER, so every visitor would get the server's city.
+    // That is a handy dev shortcut (your laptop is the visitor) but wrong in prod.
+    if (isPrivate && process.env.NODE_ENV === 'production') {
+        return res.json({ zip: null, city: null, state: null });
+    }
     var ipapiUrl  = isPrivate
         ? 'https://ipapi.co/json/'
         : 'https://ipapi.co/' + encodeURIComponent(ip) + '/json/';
@@ -299,13 +351,20 @@ router.get('/location', async function (req, res) {
             headers: { 'User-Agent': 'bathremodelhub/1.0' },
             signal: AbortSignal.timeout(4000)
         });
-        if (!ipapiRes.ok) return res.json({ zip: null });
+        if (!ipapiRes.ok) return res.json({ zip: null, city: null, state: null });
         var ipapiData = await ipapiRes.json();
-        var zip = (ipapiData.postal && ipapiData.postal.trim()) ? ipapiData.postal.trim() : null;
-        return res.json({ zip: zip });
+        var out = {
+            zip:   (ipapiData.postal      && ipapiData.postal.trim())      ? ipapiData.postal.trim()      : null,
+            city:  (ipapiData.city        && ipapiData.city.trim())        ? ipapiData.city.trim()        : null,
+            state: (ipapiData.region_code && ipapiData.region_code.trim()) ? ipapiData.region_code.trim() : null
+        };
+        // Only successful answers are cached — a 429 or empty result must be
+        // retried next time, not remembered for six hours.
+        if (out.city || out.zip) geoCachePut(ip, out);
+        return res.json(out);
     } catch (err) {
         console.error('[location/ipapi]', err.message);
-        return res.json({ zip: null });
+        return res.json({ zip: null, city: null, state: null });
     }
 });
 
