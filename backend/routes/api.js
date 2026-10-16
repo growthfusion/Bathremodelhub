@@ -101,15 +101,8 @@ router.post('/businesses', async function (req, res) {
         // Whitelist of keys forwarded to Thumbtack.
         // utm_medium and utm_tt_session are explicitly disallowed by Thumbtack.
         const ALLOWED_UTM_KEYS = [
-            'utm_source',
-            'utm_campaign',
-            'utm_subid',
-            'utm_user_hash',
-            'utm_facebook_click_id',
-            'utm_google_click_id',
-            'utm_vertical',
-            'rt_ad',
-            'source_id'
+            'utm_source', 'utm_campaign', 'utm_content',
+            'utm_subid', 'utm_user_hash', 'utm_google_click_id'
         ];
 
         // Always force a valid utm_source (must match ^cma-[a-zA-Z0-9-_]+$, ≤48 chars).
