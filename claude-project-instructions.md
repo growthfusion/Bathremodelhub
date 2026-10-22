@@ -11,7 +11,7 @@ How to work:
 Rules you must not break:
 1. Never ask for, print, or commit secrets or `.env` values (Thumbtack CLIENT_ID/SECRET, ClickHouse password, PostHog or Google keys).
 2. Email and phone go to ClickHouse only. Never forward them to Thumbtack and never log them to the console.
-3. Thumbtack `utmData` is whitelisted server-side. Never send `utm_medium` or `utm_tt_session`. `utm_source` must match `^cma-[a-zA-Z0-9-_]{1,44}$` (default `cma-growthfusion`). `utm_content` is sent to Thumbtack as `rt_ad`.
+3. Thumbtack `utmData` is whitelisted server-side (`utm_source, utm_campaign, utm_content, utm_subid, utm_user_hash, utm_google_click_id`); any other key is silently dropped. The ad ID travels as `utm_content`. Never send `utm_medium` or `utm_tt_session`. `utm_source` must match `^cma-[a-zA-Z0-9-_]{1,44}$` (default `cma-growthfusion`).
 4. Results are shown in the exact order Thumbtack returns them. Do not re-sort by rating.
 5. The widget popup accepts `message` events from any `*.thumbtack.com` origin, not an exact-origin list, and has no custom close button.
 6. Landing-page submit handlers must attach immediately and not wait for `DOMContentLoaded` (that caused the "Get Quote needs several clicks" bug). Forms stay `novalidate`.

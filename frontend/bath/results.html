@@ -68,18 +68,18 @@
             if (!searchQuery || !zip) return;
             var sub1 = p.get('utm_subid') || p.get('sub1') || '';
             if (!sub1) { var m = document.cookie.match(/(?:^|;\s*)rtkclickid-store=([^;]+)/); sub1 = m ? decodeURIComponent(m[1]) : ''; }
-            var utm = { utm_source: p.get('utm_source') || 'cma-growthfusion', utm_vertical: 'BRH' };
+            // Keep this identical to the utmData the main script builds below, and to the
+            // backend ALLOWED_UTM_KEYS: any key the server doesn't whitelist is silently dropped.
+            var utm = { utm_source: p.get('utm_source') || 'cma-growthfusion' };
             var cid = p.get('utm_campaign') || p.get('rt_cid') || p.get('sub4') || '';
             var ad  = p.get('utm_content') || p.get('utm_rt_ad') || p.get('rt_ad') || '';
             var fb  = p.get('utm_user_hash') || p.get('utm_facebook_click_id') || p.get('fbclid') || p.get('sub11') || '';
             var gc  = p.get('gclid') || p.get('utm_google_click_id') || '';
-            var sid = p.get('source_id') || '';
             if (cid) utm.utm_campaign = cid;
-            if (ad)  utm.rt_ad = ad;
+            if (ad)  utm.utm_content = ad;
             if (sub1) utm.utm_subid = sub1;
             if (fb)  utm.utm_user_hash = fb;
             if (gc)  utm.utm_google_click_id = gc;
-            if (sid) utm.source_id = sid;
             var email = '', phone = '';
             try { email = sessionStorage.getItem('brh_email') || ''; phone = sessionStorage.getItem('brh_phone') || ''; } catch (e) {}
             window.__brhSearch = fetch('/api/businesses', {

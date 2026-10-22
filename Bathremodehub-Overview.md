@@ -75,20 +75,19 @@ Rules that must not be broken:
 Flow: landing URL params → `trackingParams()` in `quotes-api.js` appends them to the redirect →
 `results.html` reads them → `utmData` → `/api/businesses` → whitelisted → Thumbtack.
 
-Backend whitelist (`ALLOWED_UTM_KEYS`): `utm_source, utm_campaign, utm_subid, utm_user_hash,
-utm_facebook_click_id, utm_google_click_id, utm_vertical, rt_ad, source_id`. Values are trimmed to 200 chars.
-`utm_medium` and `utm_tt_session` are disallowed by Thumbtack — never send them.
+Backend whitelist (`ALLOWED_UTM_KEYS`, same list as HouseCrew): `utm_source, utm_campaign, utm_content,
+utm_subid, utm_user_hash, utm_google_click_id`. Values are trimmed to 200 chars. **Any other key is
+silently dropped by the server** — that is how the ad ID went missing once (the page sent `rt_ad`, the
+whitelist only allowed `utm_content`). `utm_medium` and `utm_tt_session` are disallowed by Thumbtack — never send them.
 
 | Sent to Thumbtack | Read from the URL |
 |---|---|
 | `utm_source` | `utm_source`, default `cma-growthfusion`. **Must match `^cma-[a-zA-Z0-9-_]{1,44}$`** or the server resets it. |
-| `utm_vertical` | hardcoded `BRH` |
 | `utm_campaign` | `utm_campaign` / `rt_cid` / `sub4` |
-| `rt_ad` | `utm_content` / `utm_rt_ad` / `rt_ad` (note: `utm_content` is renamed to `rt_ad`) |
+| `utm_content` (the **ad ID**, `{rt_aid}`) | `utm_content` / `utm_rt_ad` / `rt_ad` |
 | `utm_subid` | `utm_subid` / `sub1` / cookie `rtkclickid-store` (RedTrack click ID) |
 | `utm_user_hash` | `utm_user_hash` / `utm_facebook_click_id` / `fbclid` / `sub11` |
 | `utm_google_click_id` | `gclid` / `utm_google_click_id` |
-| `source_id` | `source_id` |
 
 Other tracking: GTM `GTM-M8VC8STX`; PostHog (key injected by the server at `/js/posthog-init.js`);
 RedTrack postbacks to `uo8b2.ttrk.io` (`startfunnel` on results load, `lead` when the widget opens).
