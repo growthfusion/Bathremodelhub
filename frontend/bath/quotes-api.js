@@ -50,7 +50,9 @@ window.detectAndFillZip = async function (fieldIds) {
 document.addEventListener('DOMContentLoaded', function () {
 
     // ── Load Material Symbols if not already on this page ────────────────────
-    if (!document.querySelector('link[href*="Material+Symbols"]')) {
+    // Pages that use no icons opt out with <html data-no-icons> (saves a Google Fonts round-trip).
+    if (!document.documentElement.hasAttribute('data-no-icons') &&
+        !document.querySelector('link[href*="Material+Symbols"]')) {
         var iconLink = document.createElement('link');
         iconLink.rel  = 'stylesheet';
         iconLink.href = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap';
